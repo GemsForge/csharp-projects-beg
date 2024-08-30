@@ -15,17 +15,24 @@ for (int i = 0; i <= 100; i++)
 {
     if (i % 3 == 0 && i % 5 == 0)
     {
-        Console.WriteLine($"{index}. {fb}");
+        Print(index, fb);
     }
     else if (i % 5 == 0)
     {
-        Console.WriteLine($"{index}. {buzz}");
+        Print(index, buzz);
     }
     else if (i % 3 == 0)
     {
-        Console.WriteLine($"{index}. {fizz}");
+        Print(index, buzz); 
     }
-    else { Console.WriteLine($"{index}. {i}"); }
+    else { Print(index, $"{i}"); }
     index++;
+}
+///<summary>
+///This method prints a formatted string
+///</summary>
+static void Print(int index, string text)
+{
+    Console.WriteLine($"{index}. {text}");
 }
   
