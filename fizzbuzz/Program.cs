@@ -1,6 +1,8 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 
+using System.Collections.Generic;
+
 var fizz = "Fizz";
 var buzz = "Buzz";
 var fb = fizz + buzz;
@@ -9,7 +11,21 @@ var fb = fizz + buzz;
 var index = 1;
 
 //Add a for loop to that loops to 100
-for (var i = 0; i < 10; i++)
+for (int i = 0; i <= 100; i++)
 {
-    Console.WriteLine($"{index++}. Let Play {fb}");
+    if (i % 3 == 0 && i % 5 == 0)
+    {
+        Console.WriteLine($"{index}. {fb}");
+    }
+    else if (i % 5 == 0)
+    {
+        Console.WriteLine($"{index}. {buzz}");
+    }
+    else if (i % 3 == 0)
+    {
+        Console.WriteLine($"{index}. {fizz}");
+    }
+    else { Console.WriteLine($"{index}. {i}"); }
+    index++;
 }
+  
