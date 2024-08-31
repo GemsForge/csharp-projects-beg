@@ -5,7 +5,7 @@ namespace TaskTracker.data
     /// <summary>
     /// Manages tasks and provides operations to add, update, delete, and retrieve tasks.
     /// </summary>
-    public class TaskManager
+    public class TaskManager : ITaskManager
     {
         private List<Task> _tasks;
         private readonly ITaskRepository _taskRepository;

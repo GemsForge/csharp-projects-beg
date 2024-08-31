@@ -9,13 +9,13 @@ namespace TaskTracker.services
     /// </summary>
     public class TaskService
     {
-        private readonly TaskManager _taskManager;
+        private readonly ITaskManager _taskManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskService"/> class.
         /// </summary>
         /// <param name="taskManager">The task manager responsible for data operations.</param>
-        public TaskService(TaskManager taskManager)
+        public TaskService(ITaskManager taskManager)
         {
             _taskManager = taskManager;
         }

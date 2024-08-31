@@ -1,9 +1,44 @@
-[
-  {
-    "id": 1,
-    "description": "Sample Task",
-    "status": "TODO",
-    "created_at": "0001-01-01T00:00:00",
-    "updated_at": "0001-01-01T00:00:00"
-  }
-]
+ [
+    {
+      "id": 1,
+      "description": "Write the project documentation... or at least start it and then procrastinate with coffee.",
+      "status": "TODO",
+      "created_at": "2024-08-25T10:00:00",
+      "updated_at": "2024-08-25T10:00:00"
+    },
+    {
+      "id": 2,
+      "description": "Review code for module A and pretend to understand every line like a pro.",
+      "status": "PENDING",
+      "created_at": "2024-08-26T14:30:00",
+      "updated_at": "2024-08-27T09:00:00"
+    },
+    {
+      "id": 3,
+      "description": "Test new features in module B. Brace yourself for a bug hunt adventure!",
+      "status": "COMPLETE",
+      "created_at": "2024-08-24T08:45:00",
+      "updated_at": "2024-08-25T16:20:00"
+    },
+    {
+      "id": 4,
+      "description": "Refactor code to be 10% more confusing but 100% more fun for future developers.",
+      "status": "TODO",
+      "created_at": "2024-08-27T11:00:00",
+      "updated_at": "2024-08-27T11:00:00"
+    },
+    {
+      "id": 5,
+      "description": "Optimize the application so it runs 0.01 seconds faster. Victory dance optional.",
+      "status": "PENDING",
+      "created_at": "2024-08-26T09:00:00",
+      "updated_at": "2024-08-28T14:00:00"
+    },
+    {
+      "id": 6,
+      "description": "Deploy the app to production and cross your fingers. Extra points for not breaking anything!",
+      "status": "TODO",
+      "created_at": "2024-08-25T12:00:00",
+      "updated_at": "2024-08-25T12:00:00"
+    }
+  ]
