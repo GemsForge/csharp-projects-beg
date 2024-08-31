@@ -1,6 +1,6 @@
 ﻿using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 using TaskTracker.model;
 using Task = TaskTracker.model.Task;
 
@@ -11,17 +11,23 @@ namespace TaskTracker.data
     /// </summary>
     public class TaskRepository
     {
-        private string _filePath = @"C:\Users\Diamond R. Brown\OneDrive\Gem.Professional 🎖️\02 💻 GemsCode\Git Repositories\CSharpProjects\TaskTracker\data\Tasks.json";
+        private readonly string _filePath;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskRepository"/> class.
         /// </summary>
         /// <param name="filePath">The path to the JSON file for storing tasks.</param>
-        public TaskRepository()
+        public TaskRepository(string filePath)
         {
-            _filePath = NormalizeAndGetFullPath(_filePath);
+            _filePath = NormalizeAndGetFullPath(filePath);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TaskRepository"/> class with the default file path.
+        /// </summary>
+        public TaskRepository() : this(@"C:\Users\Diamond R. Brown\OneDrive\Gem.Professional 🎖️\02 💻 GemsCode\Git Repositories\CSharpProjects\TaskTracker\data\Tasks.json")
+        {
+        }
         ///<summary>
         /// Normalizes the file path to handle special characters and Unicode correctly,
         /// and gets the full absolute path.
@@ -69,7 +75,7 @@ namespace TaskTracker.data
                 var options = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
-                    Converters = { new StatusEnumConverter() }  // Use the custom converter for enum
+                    Converters = { new JsonStringEnumConverter(), new StatusEnumConverter() }  // Use the custom converter for enum
                 };
                 //Return deserialize JSON into a list of Task objects
                 List<Task> taskList = JsonSerializer.Deserialize<List<Task>>(json, options) ?? new List<Task>();
@@ -129,13 +135,20 @@ namespace TaskTracker.data
         {
             try
             {
-                string json = JsonSerializer.Serialize(tasks, new JsonSerializerOptions { WriteIndented = true });
+                // Configure JSON options to use string values for enums
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                    Converters = { new JsonStringEnumConverter() }
+                };
+                string json = JsonSerializer.Serialize(tasks, options);
                 File.WriteAllText(_filePath, json);
                 Console.WriteLine("Tasks saved successfully to the file.");
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error saving tasks to file: {ex.Message}");
+                throw; throw; // Rethrow the exception to allow the test to catch it
             }
         }
     }
