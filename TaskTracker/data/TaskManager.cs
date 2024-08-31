@@ -7,43 +7,20 @@ namespace TaskTracker.data
     /// </summary>
     public class TaskManager
     {
-        private readonly List<Task> tasks;
-
+        private List<Task> _tasks;
+        private readonly TaskRepository _taskRepository;
+        
+            
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskManager"/> class.
         /// Pre-populates the task list with some sample tasks.
-        /// </summary>S
+        /// </summary>
+        /// <param name="filePath">The path to the JSON file for storing tasks.</param>
         public TaskManager()
         {
-            tasks = new List<Task>
-            {
-                new Task
-                {
-                    Id = 1,
-                    Description = "Complete project documentation",
-                    Status = Status.TODO,
-                    CreatedAt = DateTime.Now.AddDays(-2),
-                    UpdatedAt = DateTime.Now.AddDays(-2)
-                },
-                new Task
-                {
-                    Id = 2,
-                    Description = "Review code for module A",
-                    Status = Status.PENDING,
-                    CreatedAt = DateTime.Now.AddDays(-1),
-                    UpdatedAt = DateTime.Now
-                },
-                new Task
-                {
-                    Id = 3,
-                    Description = "Test new features in module B",
-                    Status = Status.COMPLETE,
-                    CreatedAt = DateTime.Now.AddDays(-3),
-                    UpdatedAt = DateTime.Now.AddDays(-1)
-                }
-            };
+            _taskRepository = new TaskRepository();
+            _tasks = _taskRepository.LoadTasksFromFile();  // Load tasks using TaskRepository
         }
-    
 
         /// <summary>
         /// Adds a new task to the task list.
@@ -52,7 +29,7 @@ namespace TaskTracker.data
         public void AddTask(Task newTask)
         {
             // Generate a new id
-            int newId = tasks.Count > 0 ? tasks.Max(t => t.Id) + 1 : 1;
+            int newId = _tasks.Count > 0 ? _tasks.Max(t => t.Id) + 1 : 1;
             DateTime now = DateTime.Now;
 
             // Create a new Task
@@ -66,7 +43,7 @@ namespace TaskTracker.data
             };
 
             // Add the new task to the list
-            tasks.Add(taskToAdd);
+            _tasks.Add(taskToAdd);
 
             // Output success message
             Console.WriteLine($"Task '{newTask.Description}' added successfully!");
@@ -85,7 +62,7 @@ namespace TaskTracker.data
             if (taskToDelete != null)
             {
                 // Remove task from list by id
-                tasks.Remove(taskToDelete);
+                _tasks.Remove(taskToDelete);
 
                 // Output DELETION message to console (Successful and Failure)
                 Console.WriteLine($"Task with ID {taskId} has been deleted successfully!");
@@ -139,7 +116,7 @@ namespace TaskTracker.data
         /// <returns>The task with the specified identifier, or null if not found.</returns>
         public Task GetTask(int taskId)
         {
-            var task = tasks.FirstOrDefault(existingTask => existingTask.Id == taskId);
+            var task = _tasks.FirstOrDefault(existingTask => existingTask.Id == taskId);
             return task;
         }
 
@@ -149,7 +126,7 @@ namespace TaskTracker.data
         /// <returns>An enumerable list of all tasks.</returns>
         public IEnumerable<Task> GetTasks()
         {
-            return tasks;
+            return _tasks;
         }
 
         /// <summary>
@@ -158,7 +135,7 @@ namespace TaskTracker.data
         public void PrintAllTasks()
         {
             Console.WriteLine("All Tasks:");
-            foreach (var task in tasks)
+            foreach (var task in _tasks)
             {
                 Console.WriteLine($"ID: {task.Id}, Description: {task.Description}, Status: {task.Status}, Created At: {task.CreatedAt}, Updated At: {task.UpdatedAt}");
             }

@@ -1,20 +1,46 @@
+using System.Text.Json.Serialization;
 
-namespace TaskTracker.model;
-
-public class Task
+namespace TaskTracker.model
 {
-    //id: A unique identifier for the task
-    public int Id { get; set; }
-    //description: A short description of the task
-    public required string Description { get; set; }
-    //status: The status of the task (todo, in-progress, done)
-    public Status Status { get; set; }
-    //createdAt: The date and time when the task was created
-    public DateTime CreatedAt { get; set; }
-    //updatedAt: The date and time when the task was last updated
-    public DateTime UpdatedAt { get; set; }
+    /// <summary>
+    /// Represents a task in the task tracker system.
+    /// </summary>
+    public class Task
+    {
+        /// <summary>
+        /// Gets or sets the task identifier.
+        /// </summary>
+        [JsonPropertyName("id")]
+        public int Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the task description.
+        /// </summary>
+        [JsonPropertyName("description")]
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets the status of the task.
+        /// </summary>
+        [JsonPropertyName("status")]
+        public Status Status { get; set; }
+
+        /// <summary>
+        /// Gets or sets the creation date and time of the task.
+        /// </summary>
+        [JsonPropertyName("created_at")]
+        public DateTime CreatedAt { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last updated date and time of the task.
+        /// </summary>
+        [JsonPropertyName("updated_at")]
+        public DateTime UpdatedAt { get; set; }
+    }
+    // Define a wrapper class to match the new JSON structure
+    public class TaskWrapper
+    {
+        [JsonPropertyName("tasks")]
+        public List<Task> Tasks { get; set; }
+    }
 }
-
-
-
-
