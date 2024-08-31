@@ -4,7 +4,7 @@ namespace TaskTracker.model;
 public class Task
 {
     //id: A unique identifier for the task
-    public required int Id { get; set; }
+    public int Id { get; set; }
     //description: A short description of the task
     public required string Description { get; set; }
     //status: The status of the task (todo, in-progress, done)
