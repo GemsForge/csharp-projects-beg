@@ -8,7 +8,7 @@ namespace TaskTracker.data
     public class TaskManager
     {
         private List<Task> _tasks;
-        private readonly TaskRepository _taskRepository;
+        private readonly ITaskRepository _taskRepository;
         
             
         /// <summary>
@@ -16,9 +16,9 @@ namespace TaskTracker.data
         /// Pre-populates the task list with some sample tasks.
         /// </summary>
         /// <param name="filePath">The path to the JSON file for storing tasks.</param>
-        public TaskManager()
+        public TaskManager(ITaskRepository taskRepository)
         {
-            _taskRepository = new TaskRepository();
+            _taskRepository = taskRepository;
             _tasks = _taskRepository.LoadTasksFromFile();  // Load tasks using TaskRepository
         }
 
