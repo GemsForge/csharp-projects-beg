@@ -1,4 +1,5 @@
-﻿using TaskTracker.dto;
+﻿using TaskTracker.data;
+using TaskTracker.dto;
 using Task = TaskTracker.model.Task;
 
 namespace TaskTracker.services
