@@ -75,7 +75,7 @@ namespace TaskTracker.data
                 var options = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
-                    Converters = { new JsonStringEnumConverter(), new StatusEnumConverter() }  // Use the custom converter for enum
+                    Converters = { new StatusEnumConverter() }  // Use the custom converter for enum
                 };
                 //Return deserialize JSON into a list of Task objects
                 List<Task> taskList = JsonSerializer.Deserialize<List<Task>>(json, options) ?? new List<Task>();
@@ -139,7 +139,7 @@ namespace TaskTracker.data
                 var options = new JsonSerializerOptions
                 {
                     WriteIndented = true,
-                    Converters = { new JsonStringEnumConverter() }
+                    Converters = { new StatusEnumConverter() }
                 };
                 string json = JsonSerializer.Serialize(tasks, options);
                 File.WriteAllText(_filePath, json);

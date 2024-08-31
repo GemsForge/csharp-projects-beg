@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using TaskTracker.data;
+using TaskTracker.model;
 using Task = TaskTracker.model.Task;
 
 namespace TaskTracker.Tests
@@ -56,7 +57,7 @@ namespace TaskTracker.Tests
 
             var options = new JsonSerializerOptions
             {
-                Converters = { new JsonStringEnumConverter() },
+                Converters = { new StatusEnumConverter() },
                 WriteIndented = true
             };
             File.WriteAllText(testFilePath, JsonSerializer.Serialize(tasks, options));
@@ -118,7 +119,7 @@ namespace TaskTracker.Tests
             string savedContent = File.ReadAllText(testFilePath);
             var options = new JsonSerializerOptions
             {
-                Converters = { new JsonStringEnumConverter() },
+                Converters = { new StatusEnumConverter() },
                 PropertyNameCaseInsensitive = true
             };
             List<Task> deserializedTasks = JsonSerializer.Deserialize<List<Task>>(savedContent, options);
