@@ -7,7 +7,7 @@ namespace TaskTracker.services
     /// <summary>
     /// Service class for managing tasks and business logic.
     /// </summary>
-    public class TaskService
+    public class TaskService : ITaskService
     {
         private readonly ITaskManager _taskManager;
 
@@ -85,7 +85,7 @@ namespace TaskTracker.services
         /// </summary>
         /// <param name="task">The task object to map.</param>
         /// <returns>A TaskDto object with formatted data.</returns>
-        private static TaskDto MapToDto(Task task)
+        public TaskDto MapToDto(Task task)
         {
             return new TaskDto
             {

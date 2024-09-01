@@ -7,13 +7,13 @@ namespace TaskTracker.ui
     /// </summary>
     public class TaskCLI
     {
-        private readonly TaskService _taskService;
+        private readonly ITaskService _taskService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskCLI"/> class.
         /// </summary>
         /// <param name="taskService">The task service responsible for business logic operations.</param>
-        public TaskCLI(TaskService taskService)
+        public TaskCLI(ITaskService taskService)
         {
             _taskService = taskService;
         }
@@ -56,51 +56,117 @@ namespace TaskTracker.ui
         /// <summary>
         /// Adds a new task via user input.
         /// </summary>
-        private void AddTask()
+        public void AddTask()
         {
             Console.Write("Enter task description: ");
             string description = Console.ReadLine();
 
-            Console.Write("Enter task status (0 = Todo, 1 = InProgress, 2 = Done): ");
-            Status status = (Status)Enum.Parse(typeof(Status), Console.ReadLine());
+            Status status;
+            while (true)
+            {
+                Console.Write($"Enter task status (0 = {Status.TODO}, 1 = {Status.PENDING}, 2 = {Status.COMPLETE}): ");
+                if (Enum.TryParse(Console.ReadLine(), out status) && Enum.IsDefined(typeof(Status), status))
+                {
+                    break;
+                }
+                Console.WriteLine("Invalid status. Please enter a valid number (0, 1, or 2).");
+            }
 
             _taskService.AddNewTask(description, status);
+            Console.WriteLine("Task added successfully.");
         }
 
         /// <summary>
         /// Updates an existing task via user input.
         /// </summary>
-        private void UpdateTask()
+        public void UpdateTask()
         {
             Console.Write("Enter task ID to update: ");
-            int taskId = int.Parse(Console.ReadLine());
+            if (!int.TryParse(Console.ReadLine(), out int taskId))
+            {
+                Console.WriteLine("Invalid task ID. Please enter a valid number.");
+                return;
+            }
 
-            Console.Write("Enter new task description: ");
+            var existingTask = _taskService.GetTaskById(taskId);
+            if (existingTask == null)
+            {
+                Console.WriteLine($"Task with ID {taskId} not found.");
+                return;
+            }
+
+            Console.Write($"Enter new task description (current: {existingTask.Description}): ");
             string newDescription = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(newDescription))
+            {
+                newDescription = existingTask.Description;  // Retain existing description if input is blank
+            }
 
-            Console.Write("Enter new task status (0 = Todo, 1 = InProgress, 2 = Done): ");
-            Status newStatus = (Status)Enum.Parse(typeof(Status), Console.ReadLine());
+            // Convert the string status from TaskDto to Status enum
+            if (!Enum.TryParse<Status>(existingTask.Status, true, out Status currentStatus))
+            {
+                Console.WriteLine("Invalid current status. Unable to update the task.");
+                return;
+            }
+
+            Status newStatus;
+            while (true)
+            {
+                Console.Write($"Enter new task status (0 = {Status.TODO}, 1 = {Status.PENDING}, 2 = {Status.COMPLETE}) (current: {currentStatus}): ");
+                string statusInput = Console.ReadLine();
+
+                if (string.IsNullOrWhiteSpace(statusInput))
+                {
+                    newStatus = currentStatus;  // Retain existing status if input is blank
+                    break;
+                }
+
+                // Attempt to parse the input as an integer
+                if (int.TryParse(statusInput, out int statusValue) &&
+                    Enum.IsDefined(typeof(Status), statusValue))
+                {
+                    newStatus = (Status)statusValue;  // Convert integer to enum value
+                    break;
+                }
+
+                Console.WriteLine("Invalid status. Please enter a valid number (0, 1, or 2).");
+            }
 
             _taskService.UpdateExistingTask(taskId, newDescription, newStatus);
+            Console.WriteLine("Task updated successfully.");
         }
+
 
         /// <summary>
         /// Deletes a task via user input.
         /// </summary>
-        private void DeleteTask()
+        public void DeleteTask()
         {
             Console.Write("Enter task ID to delete: ");
-            int taskId = int.Parse(Console.ReadLine());
+            if (!int.TryParse(Console.ReadLine(), out int taskId))
+            {
+                Console.WriteLine("Invalid task ID. Please enter a valid number.");
+                return;
+            }
 
             _taskService.DeleteTaskById(taskId);
+            Console.WriteLine("Task deleted successfully.");
         }
 
         /// <summary>
         /// Lists all tasks via user input.
         /// </summary>
-        private void ListTasks()
+        public void ListTasks()
         {
-            var tasks = _taskService.GetAllTasks();
+            var tasks = _taskService.GetAllTasks();  // Ensure this returns IEnumerable<TaskDto>
+
+            // Use .Count() method to count the number of elements in the IEnumerable
+            if (!tasks.Any())
+            {
+                Console.WriteLine("No tasks available.");
+                return;
+            }
+
             Console.WriteLine("All tasks:");
             foreach (var task in tasks)
             {

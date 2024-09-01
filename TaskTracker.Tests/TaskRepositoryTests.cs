@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Serialization;
 using TaskTracker.data;
 using TaskTracker.model;
 using Task = TaskTracker.model.Task;
@@ -9,9 +8,11 @@ namespace TaskTracker.Tests
     /// <summary>
     /// Unit tests for TaskRepository class methods.
     /// </summary>
-    public class TaskRepositoryTests
+    public class TaskRepositoryTests : IDisposable
     {
-        private readonly string testFilePath = @"test_tasks.json";
+        private readonly string _testFilePath = @"test_tasks.json";
+        private readonly StringWriter _consoleOutput;
+        private readonly JsonSerializerOptions _jsonOptions;
 
         /// <summary>
         /// Initializes a new instance of the TaskRepositoryTests class.
@@ -19,8 +20,18 @@ namespace TaskTracker.Tests
         public TaskRepositoryTests()
         {
             // Setup for a clean test environment
-            if (File.Exists(testFilePath))
-                File.Delete(testFilePath);
+            if (File.Exists(_testFilePath))
+                File.Delete(_testFilePath);
+
+            _consoleOutput = new StringWriter();
+            Console.SetOut(_consoleOutput);
+
+            _jsonOptions = new JsonSerializerOptions
+            {
+                Converters = { new StatusEnumConverter() },
+                WriteIndented = true,
+                PropertyNameCaseInsensitive = true
+            };
         }
 
         [Fact]
@@ -60,8 +71,8 @@ namespace TaskTracker.Tests
                 Converters = { new StatusEnumConverter() },
                 WriteIndented = true
             };
-            File.WriteAllText(testFilePath, JsonSerializer.Serialize(tasks, options));
-            var taskRepository = new TaskRepository(testFilePath); // Use the constructor with testFilePath
+            File.WriteAllText(_testFilePath, JsonSerializer.Serialize(tasks, options));
+            var taskRepository = new TaskRepository(_testFilePath); // Use the constructor with testFilePath
 
             // Act
             var result = taskRepository.LoadTasksFromFile();
@@ -77,22 +88,22 @@ namespace TaskTracker.Tests
         public void LoadTasksFromFile_FileDoesNotExist_ReturnsDefaultTasks()
         {
             // Arrange
-            var taskRepository = new TaskRepository(testFilePath); // Use the constructor with testFilePath
+            var taskRepository = new TaskRepository(_testFilePath); // Use the constructor with testFilePath
 
             // Act
             var result = taskRepository.LoadTasksFromFile();
 
             // Assert
             Assert.NotNull(result);
-            Assert.NotEmpty(result);
+            Assert.NotEmpty(result);  // Ensure default tasks are returned
         }
 
         [Fact]
         public void LoadTasksFromFile_InvalidJson_ReturnsEmptyList()
         {
             // Arrange
-            File.WriteAllText(testFilePath, "Invalid JSON Content");
-            var taskRepository = new TaskRepository(testFilePath); // Use the constructor with testFilePath
+            File.WriteAllText(_testFilePath, "Invalid JSON Content");
+            var taskRepository = new TaskRepository(_testFilePath); // Use the constructor with testFilePath
 
             // Act
             var result = taskRepository.LoadTasksFromFile();
@@ -110,13 +121,13 @@ namespace TaskTracker.Tests
             {
                 new Task { Id = 1, Description = "Sample Task", Status = Status.TODO }
             };
-            var taskRepository = new TaskRepository(testFilePath); // Use the constructor with testFilePath
+            var taskRepository = new TaskRepository(_testFilePath); // Use the constructor with testFilePath
 
             // Act
             taskRepository.SaveTasksToFile(tasks);
 
             // Assert
-            string savedContent = File.ReadAllText(testFilePath);
+            string savedContent = File.ReadAllText(_testFilePath);
             var options = new JsonSerializerOptions
             {
                 Converters = { new StatusEnumConverter() },
@@ -145,5 +156,17 @@ namespace TaskTracker.Tests
             Assert.NotNull(exception); // Assert that an exception occurs
         }
 
+
+        /// <summary>
+        /// Cleanup after each test to ensure a clean environment.
+        /// </summary>
+        public void Dispose()
+        {
+            if (File.Exists(_testFilePath))
+                File.Delete(_testFilePath);
+
+            _consoleOutput.Dispose();
+            Console.SetOut(Console.Out);  // Reset the console output to default
+        }
     }
 }
