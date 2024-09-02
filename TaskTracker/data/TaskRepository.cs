@@ -21,12 +21,13 @@ namespace TaskTracker.data
             _filePath = NormalizeAndGetFullPath(filePath);
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ITaskRepository"/> class with the default file path.
-        /// </summary>
-        public TaskRepository() : this(@"C:\Users\Diamond R. Brown\OneDrive\Gem.Professional 🎖️\02 💻 GemsCode\Git Repositories\CSharpProjects\TaskTracker\data\Tasks.json")
-        {
-        }
+        ///// <summary>
+        ///// Initializes a new instance of the <see cref="ITaskRepository"/> class with the default file path.
+        ///// </summary>
+        //public TaskRepository() : this(@"C:\Users\Diamond R. Brown\OneDrive\Gem.Professional 🎖️\02 💻 GemsCode\Git Repositories\CSharpProjects\TaskTracker\data\Tasks.json")
+        //{
+        //}
+
         ///<summary>
         /// Normalizes the file path to handle special characters and Unicode correctly,
         /// and gets the full absolute path.
@@ -43,12 +44,18 @@ namespace TaskTracker.data
                 // Get the full absolute path
                 return Path.GetFullPath(path);
             }
+            catch (ArgumentException ae)
+            {
+                Console.WriteLine($"Invalid path provided: {ae.Message}");
+                throw;  // Rethrow the exception to be handled by the caller or test case
+            }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error processing the file path: {ex.Message}");
                 throw;
             }
         }
+
 
         /// <summary>
         /// Loads tasks from the JSON file.
@@ -147,7 +154,7 @@ namespace TaskTracker.data
             catch (Exception ex)
             {
                 Console.WriteLine($"Error saving tasks to file: {ex.Message}");
-                throw; throw; // Rethrow the exception to allow the test to catch it
+                throw; // Rethrow the exception to allow the test to catch it
             }
         }
     }

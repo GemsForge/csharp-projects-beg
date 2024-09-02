@@ -20,10 +20,10 @@ namespace TaskTracker
         {
             // Display GemsCode Logo in console
             Logo.DisplayLogo();
-
+          
             string filePath = @"Tasks.json";
             // Instantiate TaskRepository which implements ITaskRepository
-            ITaskRepository taskRepo = new TaskRepository();
+            ITaskRepository taskRepo = new TaskRepository(filePath);
             // Initialize the TaskManager (Data Layer)
             TaskManager taskManager = new(taskRepo);
 

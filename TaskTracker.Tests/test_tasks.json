@@ -1,0 +1,16 @@
+﻿[
+  {
+    "id": 1,
+    "description": "SAMPLE TASK 1",
+    "status": "TODO",
+    "created_at": "2024-08-25T10:00:00",
+    "updated_at": "2024-08-25T10:00:00"
+  },
+  {
+    "id": 2,
+    "description": "SAMPLE TASK 2",
+    "status": "PENDING",
+    "created_at": "2024-08-26T14:30:00",
+    "updated_at": "2024-08-27T09:00:00"
+  }
+]
