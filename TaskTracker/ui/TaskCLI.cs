@@ -166,11 +166,19 @@ namespace TaskTracker.ui
                 Console.WriteLine("No tasks available.");
                 return;
             }
+            // Group tasks by status using LINQ
+            var groupedTasks = tasks.GroupBy(task => task.Status);
 
-            Console.WriteLine("All tasks:");
-            foreach (var task in tasks)
+            Console.WriteLine("All tasks grouped by status:");
+
+            foreach (var group in groupedTasks)
             {
-                Console.WriteLine($"ID: {task.Id}, Description: {task.Description}, Status: {task.Status}, Created At: {task.CreatedAt}, Updated At: {task.UpdatedAt}");
+                Console.WriteLine($"\nStatus: {group.Key}");  // Print the status heading
+
+                foreach (var task in group)
+                {
+                    Console.WriteLine($"ID: {task.Id}, Description: {task.Description}, Created At: {task.CreatedAt}, Updated At: {task.UpdatedAt}");
+                }
             }
         }
     }
