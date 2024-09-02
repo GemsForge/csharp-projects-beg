@@ -45,6 +45,9 @@ namespace TaskTracker.data
             // Add the new task to the list
             _tasks.Add(taskToAdd);
 
+            // Add the new task to the json file
+            UpdateTaskListJson();
+
             // Output success message
             Console.WriteLine($"Task '{newTask.Description}' added successfully!");
         }
@@ -63,6 +66,9 @@ namespace TaskTracker.data
             {
                 // Remove task from list by id
                 _tasks.Remove(taskToDelete);
+
+                // Remove task from the json file
+                UpdateTaskListJson();
 
                 // Output DELETION message to console (Successful and Failure)
                 Console.WriteLine($"Task with ID {taskId} has been deleted successfully!");
@@ -97,6 +103,8 @@ namespace TaskTracker.data
                     taskToUpdate.Status = updateTask.Status;
                     taskToUpdate.UpdatedAt = DateTime.Now;
 
+                    // Update the Task List JSON file
+                    UpdateTaskListJson();
                     // Output UPDATE message to console
                     Console.WriteLine($"Task with ID {taskId} has been updated successfully!");
                 }
@@ -127,6 +135,14 @@ namespace TaskTracker.data
         public IEnumerable<Task> GetTasks()
         {
             return _tasks;
+        }
+       /// <summary>
+       /// Update task list in JSON file.
+       /// </summary>
+       private void UpdateTaskListJson()
+        {
+            // Add the new task to the json file
+            _taskRepository.SaveTasksToFile(_tasks);
         }
 
         /// <summary>
