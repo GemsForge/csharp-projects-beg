@@ -1,4 +1,5 @@
-﻿using TaskTracker.data;
+﻿using TaskTracker.BrandLogo;
+using TaskTracker.data;
 using TaskTracker.services;
 using TaskTracker.ui;
 
@@ -17,6 +18,9 @@ namespace TaskTracker
         /// <param name="args">The command-line arguments.</param>
         public static void Main(string[] args)
         {
+            // Display GemsCode Logo in console
+            Logo.DisplayLogo();
+          
             string filePath = @"Tasks.json";
             // Instantiate TaskRepository which implements ITaskRepository
             ITaskRepository taskRepo = new TaskRepository(filePath);
