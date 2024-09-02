@@ -54,6 +54,27 @@ namespace TaskTracker.Tests
         }
 
         [Fact]
+        public void AddTask_ValidTask_AddsTaskToRepository()
+        {
+            // Arrange
+            var newTask = new Task
+            {
+                Description = "New Task",
+                Status = Status.TODO
+            };
+
+            //Act
+            _taskManager.AddTask(newTask);
+
+            // Assert
+            _mockTaskRepository.Verify(repo => repo.SaveTasksToFile(It.Is<List<Task>>(tasks =>
+                tasks.Count == 4 &&  // Ensure the count matches all tasks
+                tasks[3].Id == 4 && // Ensure that the task has a new task Id.
+                tasks[3].Description == "New Task" &&  // Ensure first task is updated
+                tasks[3].Status == Status.TODO)), Times.Once);
+        }
+
+        [Fact]
         public void UpdateTask_ValidTask_UpdatesTaskSuccessfully()
         {
             // Arrange
@@ -74,6 +95,28 @@ namespace TaskTracker.Tests
         }
 
         [Fact]
+        public void UpdateTask_ValidTask_UpdatesTaskInRepository()
+        {
+            // Arrange
+            var updatedTask = new Task
+            {
+                Id = 1,
+                Description = "Updated Task 1",
+                Status = Status.PENDING
+            };
+
+            // Act - Update a task 
+            _taskManager.UpdateTask(1, updatedTask);
+
+            // Assert
+            _mockTaskRepository.Verify(repo => repo.SaveTasksToFile(It.Is<List<Task>>(tasks =>
+                tasks.Count == 3 &&  // Ensure the count matches all tasks
+                tasks[0].Description == "Updated Task 1" &&  // Ensure first task is updated
+                tasks[0].Status == Status.PENDING)), Times.Once);
+        }
+
+
+        [Fact]
         public void DeleteTask_ValidTaskId_DeletesTaskSuccessfully()
         {
             // Act
@@ -84,6 +127,20 @@ namespace TaskTracker.Tests
             Assert.Equal(2, tasks.Count); // One task should be deleted
             Assert.DoesNotContain(tasks, t => t.Id == 2);
         }
+
+        [Fact]
+        public void DeleteTask_ValidTask_DeletesTaskFromRepository()
+        {
+            //Act - Delete task
+            _taskManager.DeleteTask(2);
+
+            // Assert
+            _mockTaskRepository.Verify(repo =>
+            repo.SaveTasksToFile(It.Is<List<Task>>(tasks =>
+                tasks.Count == 2
+                && tasks[1].Id == 3)), Times.Once);
+        }
+
 
         [Fact]
         public void GetTask_ValidTaskId_ReturnsCorrectTask()
