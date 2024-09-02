@@ -38,15 +38,17 @@ namespace TaskTracker.Tests
         }
 
         [Fact]
-        public void ListTasks_WithTasks_PrintsTaskList()
+        public void ListTasks_WithTasks_PrintsTasksGroupedByStatus()
         {
             // Arrange
             var tasks = new List<TaskDto>
-            {
-                new() { Id = 1, Description = "Test Task 1", Status = "TODO", CreatedAt = "2024-08-25 10:00:00", UpdatedAt = "2024-08-25 10:00:00" },
-                new() { Id = 2, Description = "Test Task 2", Status = "PENDING", CreatedAt = "2024-08-26 14:30:00", UpdatedAt = "2024-08-27 09:00:00" }
-           };
-            // Ensure the mock returns the expected list of tasks
+    {
+        new() { Id = 1, Description = "Task 1", Status = "TODO", CreatedAt = "2024-08-25 10:00:00", UpdatedAt = "2024-08-25 10:00:00" },
+        new() { Id = 2, Description = "Task 2", Status = "PENDING", CreatedAt = "2024-08-26 14:30:00", UpdatedAt = "2024-08-27 09:00:00" },
+        new() { Id = 3, Description = "Task 3", Status = "COMPLETE", CreatedAt = "2024-08-27 11:00:00", UpdatedAt = "2024-08-27 11:30:00" }
+    };
+
+            // Mock the service to return a list of TaskDto objects
             _mockTaskService.Setup(service => service.GetAllTasks()).Returns(tasks);
 
             // Inject the mock service into TaskCLI
@@ -57,13 +59,20 @@ namespace TaskTracker.Tests
 
             // Assert
             var output = _consoleOutput.ToString();
+
             // Debugging Output
             Console.WriteLine("Captured Output:");
             Console.WriteLine(output);
 
-            Assert.Contains("All tasks:", output);
-            Assert.Contains("ID: 1, Description: Test Task 1, Status: TODO, Created At: 2024-08-25 10:00:00, Updated At: 2024-08-25 10:00:00", output);
-            Assert.Contains("ID: 2, Description: Test Task 2, Status: PENDING, Created At: 2024-08-26 14:30:00, Updated At: 2024-08-27 09:00:00", output);
+            // Check for status group headers
+            Assert.Contains("Status: TODO", output);
+            Assert.Contains("Status: PENDING", output);
+            Assert.Contains("Status: COMPLETE", output);
+
+            // Check for tasks under their respective group headers
+            Assert.Contains("ID: 1, Description: Task 1, Created At: 2024-08-25 10:00:00, Updated At: 2024-08-25 10:00:00", output);
+            Assert.Contains("ID: 2, Description: Task 2, Created At: 2024-08-26 14:30:00, Updated At: 2024-08-27 09:00:00", output);
+            Assert.Contains("ID: 3, Description: Task 3, Created At: 2024-08-27 11:00:00, Updated At: 2024-08-27 11:30:00", output);
         }
 
         [Fact]
