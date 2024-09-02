@@ -99,15 +99,12 @@ namespace TaskTracker.ui
                 if (existingTask == null)
                 {
                     Console.WriteLine($"Task with ID {taskId} not found.");
-                    continue; // Continue the loop to prompt again
+                    return; // Return if task not found to avoid infinite loop in testing
                 }
 
                 break; // Exit the loop if a valid task ID is entered and the task is found
             }
 
-            // At this point, we are guaranteed to have a valid `existingTask` that is not null
-            //keep the update process running, but it was placed in a way that did not effectively solve the problem of retaining existingTask across both loops.
-            // It caused confusion because existingTask could still be null if not handled carefully.
             bool updating = true;
 
             // Main loop for updating task details
@@ -124,7 +121,7 @@ namespace TaskTracker.ui
                 if (!Enum.TryParse<Status>(existingTask.Status, true, out Status currentStatus))
                 {
                     Console.WriteLine("Invalid current status. Unable to update the task.");
-                    break;  // Exit the update loop
+                    return;  // Exit if the current status cannot be parsed
                 }
 
                 Status newStatus;
@@ -155,7 +152,7 @@ namespace TaskTracker.ui
                 // Update the task with the new description and status
                 _taskService.UpdateExistingTask(taskId, newDescription, newStatus);
                 Console.WriteLine("Task updated successfully.");
-                updating = false; // Exit the update loop after successful update
+                updating = false; // Exit the update loop after a successful update
             }
         }
 
@@ -166,12 +163,14 @@ namespace TaskTracker.ui
         public void DeleteTask()
         {
             int taskId;
-            TaskDto taskToBeDeleted = null;
+            int attempts = 0;  // Track the number of attempts
+            int maxAttempts = 5;  // Set a maximum number of attempts to prevent infinite loop
 
             // Loop to get a valid task ID and ensure the task exists
-            while (true)
+            while (attempts < maxAttempts)
             {
                 Console.Write("Enter task ID to delete: ");
+                attempts++;
 
                 // Validate task ID input
                 if (!int.TryParse(Console.ReadLine(), out taskId))
@@ -181,21 +180,24 @@ namespace TaskTracker.ui
                 }
 
                 // Retrieve task to check if it exists
-                taskToBeDeleted = _taskService.GetTaskById(taskId);
+                var taskToBeDeleted = _taskService.GetTaskById(taskId);
                 if (taskToBeDeleted == null)
                 {
                     Console.WriteLine($"Task ID {taskId} was not found. Enter another ID.");
                     continue; // Continue the loop to prompt again
                 }
 
-                // If task is found, break out of the loop
-                break;
+                // If task is found, delete it and break out of the loop
+                _taskService.DeleteTaskById(taskId);
+                Console.WriteLine("Task deleted successfully.");
+                return;  // Exit the method after a successful deletion
             }
 
-            // Delete the task
-            _taskService.DeleteTaskById(taskId);
-            Console.WriteLine("Task deleted successfully.");
+            // If max attempts exceeded, notify the user
+            Console.WriteLine("Exceeded maximum attempts. Task deletion aborted.");
         }
+
+
 
 
         /// <summary>

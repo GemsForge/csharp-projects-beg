@@ -17,8 +17,9 @@ namespace TaskTracker
         /// <param name="args">The command-line arguments.</param>
         public static void Main(string[] args)
         {
+            string filePath = @"Tasks.json";
             // Instantiate TaskRepository which implements ITaskRepository
-            ITaskRepository taskRepo = new TaskRepository();
+            ITaskRepository taskRepo = new TaskRepository(filePath);
             // Initialize the TaskManager (Data Layer)
             TaskManager taskManager = new(taskRepo);
 
