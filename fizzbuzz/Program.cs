@@ -1,9 +1,14 @@
 ﻿using FizzBuzz;
+using TaskTracker.BrandLogo;
 
 public class Program
 {
     private static void Main(string[] args)
     {
+        Logo.DisplayLogo();
+        // Display game rules to the console
+        DisplayGameRules();
+
         FizzBuzzService fbService = new FizzBuzzService();
 
         // Collect inputs
@@ -17,6 +22,23 @@ public class Program
 
         // Display the results
         Console.WriteLine($"Total Points: {fbService.TallyPoints()} (Fizz {fizzes}x | Buzz {buzzes}x | FizzBuzz {fizzBuzzes}x)");
+    }
+
+    /// <summary>
+    /// Displays the rules of the FizzBuzz game to the console.
+    /// </summary>
+    private static void DisplayGameRules()
+    {
+        Console.WriteLine("Welcome to the FizzBuzz Game!");
+        Console.WriteLine("Here are the rules:");
+        Console.WriteLine("1. You will enter 5 numbers between 1 and 100.");
+        Console.WriteLine("2. For each number:");
+        Console.WriteLine("   - If the number is divisible by 3 and 5, it's a 'FizzBuzz'. You earn 10 points.");
+        Console.WriteLine("   - If the number is divisible by 3 but not by 5, it's a 'Fizz'. You earn 5 points.");
+        Console.WriteLine("   - If the number is divisible by 5 but not by 3, it's a 'Buzz'. You earn 5 points.");
+        Console.WriteLine("   - If the number is not divisible by either 3 or 5, it's a 'Number'. You earn 1 point.");
+        Console.WriteLine("3. The goal is to accumulate as many points as possible!");
+        Console.WriteLine("Let's get started!\n");
     }
 
     /// <summary>
