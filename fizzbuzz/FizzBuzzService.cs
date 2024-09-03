@@ -40,33 +40,43 @@ namespace fizzbuzz
             _values = values;
         }
 
+        /// <summary>
+        /// Calculates the total points based on the values provided in the collection.
+        /// Points are awarded as follows:
+        /// - 10 points if the value is considered "FizzBuzz".
+        /// - 5 points if the value is considered "Fizz" (and not "FizzBuzz").
+        /// - 5 points if the value is considered "Buzz" (and not "Fizz" or "FizzBuzz").
+        /// - 1 point if the value is neither "Fizz", "Buzz", nor "FizzBuzz".
+        /// </summary>
+        /// <returns>The total calculated points.</returns>
         public int TalleyPoints()
         {
             int total = 0;
-            foreach(int value  in _values)
+            foreach (int value in _values)
             {
-                if (IsBuzz(value) == true)
+                // Add 10 pts if FizzBuzz
+                if (IsFizzBuzz(value))
+                {
+                    total += 10;
+                }
+                // Add 5 pts if Fizz (only if not FizzBuzz)
+                else if (IsFizz(value))
                 {
                     total += 5;
-                    continue;
                 }
-                if (IsFizzBuzz(value) == true)
+                // Add 5 pts if Buzz (only if not Fizz or FizzBuzz)
+                else if (IsBuzz(value))
                 {
                     total += 5;
-                    continue;
                 }
-                if (IsFizzBuzz(_value) == true)
-                {
-                    total+= 10;
-                }
+                // Add 1 pt if Number (only if not Fizz, Buzz, or FizzBuzz)
                 else
                 {
                     total++;
                 }
-
             }
             return total;
-
         }
+
     }
 }

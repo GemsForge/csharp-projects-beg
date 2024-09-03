@@ -37,16 +37,16 @@ public class Program
                 }
 
 
-                var isFizz = fbService.IsFizz(input);
-                if (isFizz == true)
+                
+                if (fbService.IsFizzBuzz(input))
                 {
                     fizzes++;
                 }
-                else if (fbService.IsBuzz(input) == true)
+                else if (fbService.IsBuzz(input))
                 {
                     buzzes++;
                 }
-                else if (fbService.IsFizzBuzz(input) == true)
+                else if (fbService.IsFizz(input))
                 {
                     fizzBuzzes++;
                 }
