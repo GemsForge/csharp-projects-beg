@@ -1,24 +1,22 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-
-using FizzBuzz;
+﻿using FizzBuzz;
 
 public class Program
 {
     private static void Main(string[] args)
     {
         FizzBuzzService fbService = new FizzBuzzService();
-        _ = new List<int>();
 
         // Collect inputs
         List<int> inputs = GetValidatedInputs(5);
 
-        // Count Fizz, Buzz, and FizzBuzz occurrences
-        (int fizzes, int buzzes, int fizzBuzzes) = CountFizzBuzzes(inputs, fbService);
-
         // Save inputs and display results
         fbService.SaveValueList(inputs);
-        Console.WriteLine($"Total Points: {fbService.TalleyPoints()} (Fizz {fizzes}x | Buzz {buzzes}x | FizzBuzzes {fizzBuzzes}x)");
+
+        // Count occurrences and tally points
+        var (fizzes, buzzes, fizzBuzzes) = CountFizzBuzzes(fbService);
+
+        // Display the results
+        Console.WriteLine($"Total Points: {fbService.TallyPoints()} (Fizz {fizzes}x | Buzz {buzzes}x | FizzBuzz {fizzBuzzes}x)");
     }
 
     /// <summary>
@@ -50,30 +48,29 @@ public class Program
     }
 
     /// <summary>
-    /// Counts the occurrences of Fizz, Buzz, and FizzBuzz in a list of integers.
+    /// Counts the occurrences of Fizz, Buzz, and FizzBuzz based on the saved FizzBuzz values.
     /// </summary>
-    /// <param name="inputs">The list of integers to evaluate.</param>
-    /// <param name="fbService">The FizzBuzz service used for evaluation.</param>
+    /// <param name="fbService">The FizzBuzz service that holds the saved values.</param>
     /// <returns>A tuple containing the counts of Fizz, Buzz, and FizzBuzz.</returns>
-    private static (int fizzes, int buzzes, int fizzBuzzes) CountFizzBuzzes(List<int> inputs, FizzBuzzService fbService)
+    private static (int fizzes, int buzzes, int fizzBuzzes) CountFizzBuzzes(FizzBuzzService fbService)
     {
         int fizzes = 0;
         int buzzes = 0;
         int fizzBuzzes = 0;
 
-        foreach (var input in inputs)
+        foreach (var fizzBuzz in fbService.GetSavedValues())
         {
-            if (fbService.IsFizzBuzz(input))
+            switch (fizzBuzz.Guess)
             {
-                fizzBuzzes++;
-            }
-            else if (fbService.IsBuzz(input))
-            {
-                buzzes++;
-            }
-            else if (fbService.IsFizz(input))
-            {
-                fizzes++;
+                case FizzBuzzGuess.FIZZ:
+                    fizzes++;
+                    break;
+                case FizzBuzzGuess.BUZZ:
+                    buzzes++;
+                    break;
+                case FizzBuzzGuess.FIZZBUZZ:
+                    fizzBuzzes++;
+                    break;
             }
         }
 
