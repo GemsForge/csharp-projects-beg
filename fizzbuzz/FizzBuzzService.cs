@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace fizzbuzz
+namespace FizzBuzz
 {
     /// <summary>
     /// Provides game service logic for the FizzBuzz program.

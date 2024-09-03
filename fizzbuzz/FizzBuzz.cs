@@ -1,4 +1,4 @@
-﻿namespace fizzbuzz
+﻿namespace FizzBuzz
 {
     public class FizzBuzz
     {

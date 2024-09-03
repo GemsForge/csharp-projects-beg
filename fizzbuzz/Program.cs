@@ -1,9 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 
-using fizzbuzz;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using FizzBuzz;
 
 public class Program
 {
