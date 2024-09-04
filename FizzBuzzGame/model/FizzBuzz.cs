@@ -1,4 +1,4 @@
-﻿namespace FizzBuzz
+﻿namespace FizzBuzzGame.model
 {
     /// <summary>
     /// Represents a FizzBuzz guess and its corresponding points.

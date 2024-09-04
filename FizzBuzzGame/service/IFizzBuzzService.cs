@@ -1,4 +1,6 @@
-﻿namespace FizzBuzz.service
+﻿using FizzBuzzGame.model;
+
+namespace FizzBuzzGame.service
 {
     /// <summary>
     /// Interface for the FizzBuzz game service.
