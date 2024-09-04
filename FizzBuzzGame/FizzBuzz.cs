@@ -16,6 +16,11 @@
         public FizzBuzzGuess Guess { get; private set; }
 
         /// <summary>
+        /// Gets the result of the FizzBuzz calculation as a string.
+        /// </summary>
+        public string Result => Guess.ToString(); // Converts the Guess enum to its string representation
+
+        /// <summary>
         /// Factory method to create a <see cref="FizzBuzz"/> instance based on a value.
         /// </summary>
         /// <param name="value">The integer value to evaluate.</param>
