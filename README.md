@@ -1,4 +1,4 @@
-﻿# C Sharp Projects for Begginners
+# C Sharp Projects for Begginners
 This repository contains basic projects including the popular FizzBuzz coding challenge.
 
 ## FizzBuzz Game - Divisibility Challange 🕹️
@@ -13,7 +13,7 @@ For each number:
 - Otherwise, 1 point.
 
 ### Preview of CLI
-![Preiew of FizzBuzz Game CLI](.fizzbuzz\images\fizzbuzz_game_preview-v1-03Sep2024.png)
+![Preiew of FizzBuzz Game CLI](https://github.com/Dbrown127/csharp-projects-beg/blob/fizzbuzz/FizzBuzzGame/images/fizzbuzz_game_preview-v1-03Sep2024.png)
 
 ### Tehnical Notes 💻
 - **Model Class (FizzBuzz):** Encapsulates game logic by determining "Fizz", "Buzz", "FizzBuzz", or "Number" with associated points.
