@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FizzBuzz.service;
 
 namespace FizzBuzz
 {
@@ -8,7 +7,7 @@ namespace FizzBuzz
     /// Points are awarded based on whether a number is "Fizz", "Buzz", or "FizzBuzz".
     /// Normal numbers are worth 1 point, "Fizz" or "Buzz" are worth 5 points, and "FizzBuzz" is worth 10 points.
     /// </summary>
-    public class FizzBuzzService
+    public class FizzBuzzService : IFizzBuzzService
     {
         private readonly List<FizzBuzz> _values;  // Use the FizzBuzz model to store values and their guesses
 
