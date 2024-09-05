@@ -9,13 +9,15 @@ namespace FizzBuzzGame.game
     public class FizzBuzzArcade
     {
         private readonly IFizzBuzzService _fbService;
+        private readonly IFizzBuzzDisplay _display;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FizzBuzzArcade"/> class.
         /// </summary>
-        public FizzBuzzArcade(IFizzBuzzService fizzBuzzService)
+        public FizzBuzzArcade(IFizzBuzzService fizzBuzzService, IFizzBuzzDisplay display)
         {
             _fbService = fizzBuzzService;
+            _display = display;
         }
 
         /// <summary>
@@ -23,11 +25,12 @@ namespace FizzBuzzGame.game
         /// </summary>
         public void StartGame()
         {
-            List<int> inputs = FizzBuzzDisplay.GetValidatedInputs(5);
+            _display.DisplayGameRules();
+            List<int> inputs = _display.GetValidatedInputs(5);
             _fbService.SaveValueList(inputs);
 
             var (fizzes, buzzes, fizzBuzzes) = CountFizzBuzzes();
-            FizzBuzzDisplay.DisplayResults(_fbService.TallyPoints(), fizzes, buzzes, fizzBuzzes);
+            _display.DisplayResults(_fbService.TallyPoints(), fizzes, buzzes, fizzBuzzes);
         }
 
         /// <summary>

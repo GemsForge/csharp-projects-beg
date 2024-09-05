@@ -3,12 +3,12 @@
     /// <summary>
     /// Handles the display and user interaction for the FizzBuzz game.
     /// </summary>
-    public static class FizzBuzzDisplay
+    public class FizzBuzzDisplay : IFizzBuzzDisplay
     {
         /// <summary>
         /// Displays the rules of the FizzBuzz game to the console.
         /// </summary>
-        public static void DisplayGameRules()
+        public void DisplayGameRules()
         {
             Console.WriteLine("Welcome to the FizzBuzz Game!");
             Console.WriteLine("Here are the rules:");
@@ -27,14 +27,14 @@
         /// </summary>
         /// <param name="numberOfInputs">The number of inputs to collect.</param>
         /// <returns>A list of validated integers.</returns>
-        public static List<int> GetValidatedInputs(int numberOfInputs)
+        public List<int> GetValidatedInputs(int numberOfInputs)
         {
-            List<int> inputs = new List<int>();
+            List<int> inputs = new();
             Console.WriteLine($"Enter {numberOfInputs} numbers between 1 and 100:");
 
             for (int i = 1; i <= numberOfInputs; i++)
             {
-                while (true)
+                while (true) 
                 {
                     Console.Write($"Input {i}: ");
                     if (!int.TryParse(Console.ReadLine(), out int input) || input < 1 || input > 100)
@@ -57,7 +57,7 @@
         /// <param name="fizzes">The number of "Fizz" occurrences.</param>
         /// <param name="buzzes">The number of "Buzz" occurrences.</param>
         /// <param name="fizzBuzzes">The number of "FizzBuzz" occurrences.</param>
-        public static void DisplayResults(int totalPoints, int fizzes, int buzzes, int fizzBuzzes)
+        public void DisplayResults(int totalPoints, int fizzes, int buzzes, int fizzBuzzes)
         {
             Console.WriteLine($"Total Points: {totalPoints} (Fizz {fizzes}x | Buzz {buzzes}x | FizzBuzz {fizzBuzzes}x)");
         }
