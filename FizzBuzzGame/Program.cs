@@ -12,9 +12,6 @@ namespace FizzBuzzGame
             Logo.DisplayLogo();
             IFizzBuzzDisplay fbDisplay = new FizzBuzzDisplay();
 
-            // Display the rules of the FizzBuzz game to the console
-            fbDisplay.DisplayGameRules();
-
             // Initialize the FizzBuzz service
             IFizzBuzzService fbService = new FizzBuzzService();
 
