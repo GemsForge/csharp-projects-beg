@@ -7,6 +7,12 @@
     {
         void DisplayGameRules();
         List<int> GetValidatedInputs(int numberOfInputs);
-        void DisplayResults(int totalPoints, int fizzes, int buzzes, int fizzBuzzes);
+        void DisplayResults( int fizzes, int buzzes, int fizzBuzzes);
+        bool AskToPlayAgain();
+        void DisplayScore(int score);
+        void DisplayFinalScore(int score);
+
+
+
     }
 }
