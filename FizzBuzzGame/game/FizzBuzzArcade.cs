@@ -31,6 +31,31 @@ namespace FizzBuzzGame.game
 
             var (fizzes, buzzes, fizzBuzzes) = CountFizzBuzzes();
             _display.DisplayResults(_fbService.TallyPoints(), fizzes, buzzes, fizzBuzzes);
+            EndGame();
+        }
+
+        public void EndGame()
+        {
+
+            bool exit = false;
+            while (!exit)
+            {
+                Console.WriteLine("Play Again: y or n");
+                var input = Console.ReadLine();
+
+                switch (input)
+                {
+                    case "y":
+                        StartGame();
+                        break;
+                    case "n":
+                        exit = true; break;
+                    default:
+                        Console.WriteLine("Invalid input, try again");
+                        break;
+                }
+            }
+
         }
 
         /// <summary>
