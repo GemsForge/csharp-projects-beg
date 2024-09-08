@@ -31,6 +31,42 @@ namespace FizzBuzzGame.service
                 _values.Add(fizzBuzz);
             }
         }
+        /// <summary>
+        /// Clears the previous results to reset the game state.
+        /// </summary>
+        public void ClearPreviousResults()
+        {
+            _values.Clear();  // Clear stored FizzBuzz values
+        }
+
+        /// <summary>
+        /// Counts the occurrences of Fizz, Buzz, and FizzBuzz based on the saved FizzBuzz values.
+        /// </summary>
+        /// <returns>A tuple containing the counts of Fizz, Buzz, and FizzBuzz.</returns>
+        public (int fizzes, int buzzes, int fizzBuzzes) CountFizzBuzzes()
+        {
+            int fizzes = 0;
+            int buzzes = 0;
+            int fizzBuzzes = 0;
+
+            foreach (var fizzBuzz in GetSavedValues())
+            {
+                switch (fizzBuzz.Guess)
+                {
+                    case FizzBuzzGuess.FIZZ:
+                        fizzes++;
+                        break;
+                    case FizzBuzzGuess.BUZZ:
+                        buzzes++;
+                        break;
+                    case FizzBuzzGuess.FIZZBUZZ:
+                        fizzBuzzes++;
+                        break;
+                }
+            }
+
+            return (fizzes, buzzes, fizzBuzzes);
+        }
 
         /// <summary>
         /// Calculates the total points based on the saved FizzBuzz guesses.
