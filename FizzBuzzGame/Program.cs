@@ -1,6 +1,6 @@
 ﻿using FizzBuzzGame.service;
 using FizzBuzzGame.game;
-using TaskTracker.BrandLogo;
+using CommonLibrary;
 
 namespace FizzBuzzGame
 {
@@ -9,7 +9,7 @@ namespace FizzBuzzGame
         public static void Main(string[] args)
         {
             // Display the brand logo at the start of the program
-            Logo.DisplayLogo();
+            LogoPrinter.DisplayLogo();
             IFizzBuzzDisplay fbDisplay = new FizzBuzzDisplay();
 
             // Initialize the FizzBuzz service

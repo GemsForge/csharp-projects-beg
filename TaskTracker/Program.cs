@@ -1,4 +1,4 @@
-﻿using TaskTracker.BrandLogo;
+﻿using CommonLibrary;
 using TaskTracker.data;
 using TaskTracker.services;
 using TaskTracker.ui;
@@ -18,9 +18,9 @@ namespace TaskTracker
         /// <param name="args">The command-line arguments.</param>
         public static void Main(string[] args)
         {
-            // Display GemsCode Logo in console
-            Logo.DisplayLogo();
-          
+            // Display GemsCode Logo in console at the start of the program
+            LogoPrinter.DisplayLogo();
+
             string filePath = @"C:\Users\Diamond R. Brown\OneDrive\Gem.Professional 🎖️\02 💻 GemsCode\Git Repositories\CSharpProjects\TaskTracker\data\Tasks.json";
 
             if (!File.Exists(filePath))
