@@ -21,7 +21,12 @@ namespace TaskTracker
             // Display GemsCode Logo in console
             Logo.DisplayLogo();
           
-            string filePath = @"Tasks.json";
+            string filePath = @"C:\Users\Diamond R. Brown\OneDrive\Gem.Professional 🎖️\02 💻 GemsCode\Git Repositories\CSharpProjects\TaskTracker\data\Tasks.json";
+
+            if (!File.Exists(filePath))
+            {
+                Console.WriteLine(filePath, "Path Exists!");
+            }
             // Instantiate TaskRepository which implements ITaskRepository
             ITaskRepository taskRepo = new TaskRepository(filePath);
             // Initialize the TaskManager (Data Layer)

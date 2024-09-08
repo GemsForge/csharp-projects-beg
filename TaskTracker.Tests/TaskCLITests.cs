@@ -138,6 +138,7 @@ namespace TaskTracker.Tests
             var input = "1\n";
             SetUpConsoleInput(input);
 
+            using (var consoleOutput = new StringWriter()) ;
             // Act
             taskCLI.DeleteTask();
 
@@ -216,11 +217,13 @@ namespace TaskTracker.Tests
 
         public void Dispose()
         {
-            // Clean up after each test
+            // Dispose of custom StringWriter and StringReader if they were set
             _consoleOutput?.Dispose();
             _consoleInput?.Dispose();
-            Console.SetOut(Console.Out);  // Reset console output to default
-            Console.SetIn(Console.In);    // Reset console input to default
+
+            // Reset Console output and input to default streams
+            Console.SetOut(new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true });
+            Console.SetIn(new StreamReader(Console.OpenStandardInput()));
         }
     }
 }

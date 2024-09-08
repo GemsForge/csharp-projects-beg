@@ -44,13 +44,20 @@ namespace TaskTracker.Tests
                 Status = Status.TODO
             };
 
+            using var consoleOutput = new StringWriter();
+            Console.SetOut(consoleOutput);
+
             // Act
             _taskManager.AddTask(newTask);
-            var tasks = _taskManager.GetTasks().ToList();
 
-            // Assert
+            // Assert: Check that the task was added
+            var tasks = _taskManager.GetTasks().ToList();
             Assert.Equal(4, tasks.Count);
             Assert.Contains(tasks, t => t.Description == "New Task");
+
+            // Assert: Check console output
+            string output = consoleOutput.ToString();
+            Assert.Contains("Task 'New Task' added successfully!", output);
         }
 
         [Fact]
@@ -62,6 +69,8 @@ namespace TaskTracker.Tests
                 Description = "New Task",
                 Status = Status.TODO
             };
+            using var consoleOutput = new StringWriter();
+            Console.SetOut(consoleOutput);
 
             //Act
             _taskManager.AddTask(newTask);
@@ -72,6 +81,10 @@ namespace TaskTracker.Tests
                 tasks[3].Id == 4 && // Ensure that the task has a new task Id.
                 tasks[3].Description == "New Task" &&  // Ensure first task is updated
                 tasks[3].Status == Status.TODO)), Times.Once);
+            // Assert: Check console output
+            string output = consoleOutput.ToString();
+            Assert.Contains("Task 'New Task' added successfully!", output);
+
         }
 
         [Fact]
@@ -119,14 +132,45 @@ namespace TaskTracker.Tests
         [Fact]
         public void DeleteTask_ValidTaskId_DeletesTaskSuccessfully()
         {
-            // Act
-            _taskManager.DeleteTask(2);
-            var tasks = _taskManager.GetTasks().ToList();
+            // Arrange
+            int taskIdToDelete = 2;
 
-            // Assert
+            using var consoleOutput = new StringWriter();
+            Console.SetOut(consoleOutput);
+
+            // Act
+            _taskManager.DeleteTask(taskIdToDelete);
+
+            // Assert: Check that the task was deleted
+            var tasks = _taskManager.GetTasks().ToList();
             Assert.Equal(2, tasks.Count); // One task should be deleted
-            Assert.DoesNotContain(tasks, t => t.Id == 2);
+            Assert.DoesNotContain(tasks, t => t.Id == taskIdToDelete);
+
+            // Assert: Check console output
+            string output = consoleOutput.ToString();
+            Assert.Contains($"Task with ID {taskIdToDelete} has been deleted successfully!", output);
         }
+        [Fact]
+        public void DeleteTask_InvalidTaskId_DeletesTaskUnsuccessfully()
+        {
+            // Arrange: Use an invalid task ID that does not exist in the mock data
+            int taskIdToDelete = 999; // ID not present in the _mockTasks list
+
+            using var consoleOutput = new StringWriter();
+            Console.SetOut(consoleOutput);
+
+            // Act
+            _taskManager.DeleteTask(taskIdToDelete);
+
+            // Assert: Check that the task count remains the same
+            var tasks = _taskManager.GetTasks().ToList();
+            Assert.Equal(3, tasks.Count); // No task should be deleted since the ID doesn't exist
+
+            // Assert: Check console output for the "not found" message
+            string output = consoleOutput.ToString();
+            Assert.Contains($"Task with ID {taskIdToDelete} not found.", output);
+        }
+
 
         [Fact]
         public void DeleteTask_ValidTask_DeletesTaskFromRepository()
