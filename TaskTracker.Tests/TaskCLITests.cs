@@ -1,7 +1,7 @@
 ﻿using Moq;
-using TaskTracker.dto;
-using TaskTracker.services;
 using TaskTracker.ui;
+using TaskTrackerConsole.dto;
+using TaskTrackerConsole.services;
 
 namespace TaskTracker.Tests
 {

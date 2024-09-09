@@ -1,7 +1,8 @@
-﻿using TaskTracker.dto;
-using Task = TaskTracker.model.Task;
+﻿using CommonLibrary.TaskTracker.model;
+using Task = CommonLibrary.TaskTracker.model.Task;
+using TaskTrackerConsole.dto;
 
-namespace TaskTracker.services
+namespace TaskTrackerConsole.services
 {
     /// <summary>
     /// Interface for managing tasks and business logic.

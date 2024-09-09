@@ -12,11 +12,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FizzBuzzGame", "FizzBuzzGam
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FizzBuzzGame.Tests", "FizzBuzzGame.Tests\FizzBuzzGame.Tests.csproj", "{97F7AA10-1B5B-45A7-B402-43BECE885CC0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskTracker", "TaskTracker\TaskTracker.csproj", "{53149F54-9FB0-4DEE-8A1F-92282FA60776}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskTrackerConsole", "TaskTracker\TaskTrackerConsole.csproj", "{53149F54-9FB0-4DEE-8A1F-92282FA60776}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskTracker.Tests", "TaskTracker.Tests\TaskTracker.Tests.csproj", "{5AAADDC7-D1DB-45B9-98C6-D00F69EB9393}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLibrary", "CommonLibrary\CommonLibrary.csproj", "{56128ADC-5DE6-486B-AA6B-76FBDD49C192}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonLibrary", "CommonLibrary\CommonLibrary.csproj", "{56128ADC-5DE6-486B-AA6B-76FBDD49C192}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

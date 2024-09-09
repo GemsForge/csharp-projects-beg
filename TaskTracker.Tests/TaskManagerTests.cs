@@ -1,6 +1,7 @@
-﻿using Moq;
-using TaskTracker.data;
-using Task = TaskTracker.model.Task;
+﻿using CommonLibrary.TaskTracker.data;
+using Moq;
+using TaskTrackerConsole.data;
+using Task = CommonLibrary.TaskTracker.model.Task;
 
 namespace TaskTracker.Tests
 {

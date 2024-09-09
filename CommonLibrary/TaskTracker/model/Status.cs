@@ -1,4 +1,4 @@
-﻿namespace TaskTracker
+﻿namespace CommonLibrary.TaskTracker.model
 {
     public enum Status
     {

@@ -1,8 +1,9 @@
-﻿using TaskTracker.data;
-using TaskTracker.dto;
-using Task = TaskTracker.model.Task;
+﻿using CommonLibrary.TaskTracker.data;
+using CommonLibrary.TaskTracker.model;
+using TaskTrackerConsole.dto;
+using Task = CommonLibrary.TaskTracker.model.Task;
 
-namespace TaskTracker.services
+namespace TaskTrackerConsole.services
 {
     /// <summary>
     /// Service class for managing tasks and business logic.
@@ -27,7 +28,7 @@ namespace TaskTracker.services
         /// <param name="status">The status of the task.</param>
         public void AddNewTask(string description, Status status)
         {
-            Task newTask = new Task
+            Task newTask = new()
             {
                 Description = description,
                 Status = status

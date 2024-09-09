@@ -1,7 +1,8 @@
-﻿using TaskTracker.dto;
-using TaskTracker.services;
+﻿using CommonLibrary.TaskTracker.model;
+using TaskTrackerConsole.dto;
+using TaskTrackerConsole.services;
 
-namespace TaskTracker.ui
+namespace TaskTrackerConsole.ui
 {
     /// <summary>
     /// Class for handling command-line interface interactions for tasks.

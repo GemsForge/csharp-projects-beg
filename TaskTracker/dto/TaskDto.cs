@@ -1,4 +1,4 @@
-﻿namespace TaskTracker.dto;
+﻿namespace TaskTrackerConsole.dto;
 /// <summary>
 /// The DTO will encapsulate the data you want to send to the UI, often transforming or formatting it as needed.
 /// </summary>
