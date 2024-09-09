@@ -2,7 +2,6 @@
 using CommonLibrary.TaskTracker.data;
 using TaskTrackerConsole.services;
 using TaskTrackerConsole.ui;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TaskTrackerConsole
 {
