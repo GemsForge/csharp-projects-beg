@@ -83,17 +83,16 @@ namespace FizzBuzzGame.Tests
             Console.SetOut(stringWriter);
             try
             {
-                int totalPoints = 22;
-                int fizzes = 2;
+               int fizzes = 2;
                 int buzzes = 2;
                 int fizzBuzzes = 1;
 
                 // Act
-                _display.DisplayResults(totalPoints, fizzes, buzzes, fizzBuzzes);
+                _display.DisplayResults(fizzes, buzzes, fizzBuzzes);
 
                 // Assert
                 var output = stringWriter.ToString();
-                Assert.Contains("Total Points: 22 (Fizz 2x | Buzz 2x | FizzBuzz 1x)", output.Trim());
+                Assert.Contains($"Results: Fizz: {fizzes}, Buzz: {buzzes}, FizzBuzz: {fizzBuzzes}", output.Trim());
             }
             finally
             {

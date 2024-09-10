@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TaskTracker\TaskTrackerConsole.csproj" />
+    <ProjectReference Include="..\TaskTrackerConsole\TaskTrackerConsole.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 ﻿using CommonLibrary.TaskTracker.data;
+using CommonLibrary.TaskTracker.model;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using TaskTrackerConsole.data;
 using Task = CommonLibrary.TaskTracker.model.Task;
 
 namespace TaskTracker.Tests

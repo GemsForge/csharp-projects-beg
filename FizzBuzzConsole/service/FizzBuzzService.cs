@@ -1,4 +1,4 @@
-﻿using FizzBuzzGame.model;
+﻿using FizzBuzzConsole.model;
 
 namespace FizzBuzzConsole.service
 {

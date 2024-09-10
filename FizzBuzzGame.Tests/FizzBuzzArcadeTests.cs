@@ -1,6 +1,6 @@
 ﻿using FizzBuzzConsole.game;
 using FizzBuzzConsole.service;
-using FizzBuzzGame.model;
+using FizzBuzzConsole.model;
 using Moq;
 
 namespace FizzBuzzGame.Tests
@@ -54,7 +54,7 @@ namespace FizzBuzzGame.Tests
             // Assert
             _mockFizzBuzzService.Verify(s => s.SaveValueList(It.IsAny<List<int>>()), Times.Once);
             _mockFizzBuzzService.Verify(s => s.TallyPoints(), Times.Once);
-            _mockFizzBuzzDisplay.Verify(d => d.DisplayResults(22, 1, 1, 1), Times.Once);
+            _mockFizzBuzzDisplay.Verify(d => d.DisplayResults( 1, 1, 1), Times.Once);
         }
     }
 }

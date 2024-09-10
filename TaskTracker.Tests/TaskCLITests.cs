@@ -1,8 +1,8 @@
 ﻿using CommonLibrary.TaskTracker.dto;
+using CommonLibrary.TaskTracker.model;
 using Moq;
-using TaskTracker.ui;
-using TaskTrackerConsole.dto;
 using TaskTrackerConsole.services;
+using TaskTrackerConsole.ui;
 
 namespace TaskTracker.Tests
 {
