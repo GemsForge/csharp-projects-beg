@@ -1,7 +1,6 @@
-﻿using FizzBuzzGame.service;
-using FizzBuzzGame.model;
+﻿using FizzBuzzConsole.service;
 
-namespace FizzBuzzGame.game
+namespace FizzBuzzConsole.game
 {
     /// <summary>
     /// Handles the core game logic for FizzBuzz.
@@ -32,7 +31,7 @@ namespace FizzBuzzGame.game
             _display.DisplayGameRules();
             while (playAgain)
             {
-                
+
                 List<int> inputs = _display.GetValidatedInputs(5);
                 _fbService.SaveValueList(inputs);
 
@@ -73,6 +72,6 @@ namespace FizzBuzzGame.game
             _score += fizzes * 1 + buzzes * 2 + fizzBuzzes * 3;
         }
 
-        
+
     }
 }

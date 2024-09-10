@@ -21,13 +21,6 @@ namespace CommonLibrary.TaskTracker.data
             _filePath = NormalizeAndGetFullPath(filePath);
         }
 
-        ///// <summary>
-        ///// Initializes a new instance of the <see cref="ITaskRepository"/> class with the default file path.
-        ///// </summary>
-        //public TaskRepository() : this(@"C:\Users\Diamond R. Brown\OneDrive\Gem.Professional 🎖️\02 💻 GemsCode\Git Repositories\CSharpProjects\TaskTracker\data\Tasks.json")
-        //{
-        //}
-
         ///<summary>
         /// Normalizes the file path to handle special characters and Unicode correctly,
         /// and gets the full absolute path.

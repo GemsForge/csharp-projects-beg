@@ -1,6 +1,6 @@
-﻿using FizzBuzzGame.service;
-using FizzBuzzGame.game;
-using CommonLibrary;
+﻿using CommonLibrary;
+using FizzBuzzConsole.game;
+using FizzBuzzConsole.service;
 
 namespace FizzBuzzGame
 {

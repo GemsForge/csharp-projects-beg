@@ -1,4 +1,4 @@
-﻿namespace FizzBuzzGame.game
+﻿namespace FizzBuzzConsole.game
 {
     /// <summary>
     /// Interface for displaying the FizzBuzz game and handling user input.
@@ -7,7 +7,7 @@
     {
         void DisplayGameRules();
         List<int> GetValidatedInputs(int numberOfInputs);
-        void DisplayResults( int fizzes, int buzzes, int fizzBuzzes);
+        void DisplayResults(int fizzes, int buzzes, int fizzBuzzes);
         bool AskToPlayAgain();
         void DisplayScore(int score);
         void DisplayFinalScore(int score);

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace FizzBuzzGame.game
+﻿namespace FizzBuzzConsole.game
 {
     /// <summary>
     /// Handles the display and user interaction for the FizzBuzz game.
@@ -58,8 +56,8 @@ namespace FizzBuzzGame.game
                         break;
                 }
             }
-     
-           
+
+
         }
 
         /// <summary>

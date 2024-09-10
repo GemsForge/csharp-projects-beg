@@ -1,7 +1,7 @@
 
 
+using FizzBuzzConsole.service;
 using FizzBuzzGame;
-using FizzBuzzGame.service;
 
 
 namespace FizzBuzzGame.Tests

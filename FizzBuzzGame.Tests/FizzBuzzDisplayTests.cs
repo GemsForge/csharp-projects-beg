@@ -1,4 +1,4 @@
-﻿using FizzBuzzGame.game;
+﻿using FizzBuzzConsole.game;
 
 namespace FizzBuzzGame.Tests
 {

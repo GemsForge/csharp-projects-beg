@@ -1,6 +1,6 @@
-﻿using FizzBuzzGame.game;
+﻿using FizzBuzzConsole.game;
+using FizzBuzzConsole.service;
 using FizzBuzzGame.model;
-using FizzBuzzGame.service;
 using Moq;
 
 namespace FizzBuzzGame.Tests
