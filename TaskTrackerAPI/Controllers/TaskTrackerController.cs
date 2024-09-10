@@ -15,12 +15,27 @@ namespace TaskTrackerAPI.Controllers
         private readonly ITaskManager _taskManager;
         private readonly ILogger<TaskTrackerController> _logger;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TaskTrackerController"/> class.
+        /// </summary>
+        /// <param name="taskManager">The task manager service.</param>
+        /// <param name="logger">The logger service.</param>
+
         public TaskTrackerController(ITaskManager taskManager, ILogger<TaskTrackerController> logger)
         {
             _taskManager = taskManager;
             _logger = logger;
         }
-        // GET: api/<TaskTrackerController>
+        /// <summary>
+        /// Gets all tasks.
+        /// </summary>
+        /// <returns>A list of tasks.</returns>
+        /// <remarks>
+        /// Example request:
+        ///
+        ///     GET /api/TaskTracker/tasks
+        ///
+        /// </remarks>
         [HttpGet("tasks")]
         public ActionResult<IEnumerable<TaskDto>> Get()
         {
@@ -32,7 +47,19 @@ namespace TaskTrackerAPI.Controllers
             return Ok(taskDtos);
         }
 
-        // GET api/<TaskTrackerController>/5
+        /// <summary>
+        /// Gets a specific task by ID.
+        /// </summary>
+        /// <param name="id">The ID of the task to retrieve.</param>
+        /// <returns>The task with the specified ID.</returns>
+        /// <response code="200">Returns the task with the specified ID.</response>
+        /// <response code="404">If the task is not found.</response>
+        /// <remarks>
+        /// Example request:
+        ///
+        ///     GET /api/TaskTracker/task/1
+        ///
+        /// </remarks>
         [HttpGet("task/{id}")]
         public IActionResult Get(int id)
         {
@@ -48,7 +75,23 @@ namespace TaskTrackerAPI.Controllers
             return Ok(taskDto);
         }
 
-        // POST api/<TaskTrackerController>
+        /// <summary>
+        /// Creates a new task.
+        /// </summary>
+        /// <param name="taskDto">The task data transfer object.</param>
+        /// <returns>The newly created task.</returns>
+        /// <response code="201">Returns the newly created task.</response>
+        /// <response code="400">If the task is invalid.</response>
+        /// <remarks>
+        /// Example request:
+        ///
+        ///     POST /api/TaskTracker
+        ///     {
+        ///        "description": "New Task",
+        ///        "status": "TODO"
+        ///     }
+        ///
+        /// </remarks>
         [HttpPost]
         public IActionResult Post([FromBody] TaskDto taskDto)
         {
@@ -82,7 +125,25 @@ namespace TaskTrackerAPI.Controllers
             return CreatedAtAction(nameof(Get), new { id = newTask.Id }, newTaskDto);
         }
 
-
+        /// <summary>
+        /// Updates an existing task.
+        /// </summary>
+        /// <param name="id">The ID of the task to update.</param>
+        /// <param name="taskDto">The updated task data.</param>
+        /// <returns>No content if successful.</returns>
+        /// <response code="200">Returns the updated task.</response>
+        /// <response code="404">If the task is not found.</response>
+        /// <response code="400">If the task data is invalid.</response>
+        /// <remarks>
+        /// Example request:
+        ///
+        ///     PUT /api/TaskTracker/1
+        ///     {
+        ///        "description": "Updated Task",
+        ///        "status": "COMPLETE"
+        ///     }
+        ///
+        /// </remarks>
         // PUT api/<TaskTrackerController>/5
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] TaskDto taskDto)
@@ -110,6 +171,19 @@ namespace TaskTrackerAPI.Controllers
             return Ok(updatedTaskDto);
         }
 
+        /// <summary>
+        /// Deletes a task by ID.
+        /// </summary>
+        /// <param name="id">The ID of the task to delete.</param>
+        /// <returns>No content if successful.</returns>
+        /// <response code="204">If the task is successfully deleted.</response>
+        /// <response code="404">If the task is not found.</response>
+        /// <remarks>
+        /// Example request:
+        ///
+        ///     DELETE /api/TaskTracker/1
+        ///
+        /// </remarks>
         // DELETE api/<TaskTrackerController>/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
