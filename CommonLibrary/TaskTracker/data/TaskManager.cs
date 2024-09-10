@@ -1,16 +1,16 @@
-using Task = TaskTracker.model.Task;
+using Task = CommonLibrary.TaskTracker.model.Task;
 
-namespace TaskTracker.data
+namespace CommonLibrary.TaskTracker.data
 {
     /// <summary>
     /// Manages tasks and provides operations to add, update, delete, and retrieve tasks.
     /// </summary>
     public class TaskManager : ITaskManager
     {
-        private List<Task> _tasks;
+        private readonly List<Task> _tasks;
         private readonly ITaskRepository _taskRepository;
-        
-            
+
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskManager"/> class.
         /// Pre-populates the task list with some sample tasks.
@@ -136,10 +136,10 @@ namespace TaskTracker.data
         {
             return _tasks;
         }
-       /// <summary>
-       /// Update task list in JSON file.
-       /// </summary>
-       private void UpdateTaskListJson()
+        /// <summary>
+        /// Update task list in JSON file.
+        /// </summary>
+        private void UpdateTaskListJson()
         {
             // Add the new task to the json file
             _taskRepository.SaveTasksToFile(_tasks);

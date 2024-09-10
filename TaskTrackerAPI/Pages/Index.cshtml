@@ -1,0 +1,29 @@
+﻿@page
+@model TaskTrackerAPI.Pages.IndexModel
+@{
+    <h1>Task List</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Task ID</th>
+                <th>Description</th>
+                <th>Satus</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var task in Model.Tasks)
+            {
+                <tr>
+                    <td>@task.Id</td>
+                    <td>@task.Description</td>
+                    <td>@task.Status</td>
+                    <td>@task.CreatedAt</td>
+                    <td>@task.UpdatedAt</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

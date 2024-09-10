@@ -1,9 +1,9 @@
-﻿using System.Text;
+﻿using CommonLibrary.TaskTracker.model;
+using System.Text;
 using System.Text.Json;
-using TaskTracker.model;
-using Task = TaskTracker.model.Task;
+using Task = CommonLibrary.TaskTracker.model.Task;
 
-namespace TaskTracker.data
+namespace CommonLibrary.TaskTracker.data
 {
     /// <summary>
     /// Handles loading and saving tasks to and from a JSON file.
@@ -20,13 +20,6 @@ namespace TaskTracker.data
         {
             _filePath = NormalizeAndGetFullPath(filePath);
         }
-
-        ///// <summary>
-        ///// Initializes a new instance of the <see cref="ITaskRepository"/> class with the default file path.
-        ///// </summary>
-        //public TaskRepository() : this(@"C:\Users\Diamond R. Brown\OneDrive\Gem.Professional 🎖️\02 💻 GemsCode\Git Repositories\CSharpProjects\TaskTracker\data\Tasks.json")
-        //{
-        //}
 
         ///<summary>
         /// Normalizes the file path to handle special characters and Unicode correctly,
