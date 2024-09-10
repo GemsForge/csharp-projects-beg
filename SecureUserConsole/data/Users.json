@@ -1,17 +1,26 @@
 ﻿[
   {
     "id": "1",
-    "username": "alice",
+    "first_name": "Alice",
+    "last_name": "Smith",
+    "username": "smithalice",
+    "email": "alice.smith@example.com",
     "password": "passwordAlice123"
   },
   {
     "id": "2",
-    "username": "bob",
+    "first_name": "Bob",
+    "last_name": "Johnson",
+    "username": "johnsonbob",
+    "email": "bob.johnson@example.com",
     "password": "passwordBob456"
   },
   {
     "id": "3",
-    "username": "charlie",
+    "first_name": "Charlie",
+    "last_name": "Brown",
+    "username": "browcharlie",
+    "email": "charlie.brown@example.com",
     "password": "passwordCharlie789"
   }
 ]

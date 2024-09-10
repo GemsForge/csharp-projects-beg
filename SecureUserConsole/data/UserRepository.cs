@@ -51,7 +51,7 @@ namespace SecureUserConsole.data
             if (!File.Exists(_filePath))
             {
                 Console.WriteLine("Users file not found. Initializing with a pre-populated list.");
-                var users = InitilizeDefaultUsers();
+                var users = InitializeDefaultUsers();
                 return users;
             }
             //Encapsulate in try_catch block
@@ -79,25 +79,41 @@ namespace SecureUserConsole.data
             }
         }
 
-        private static List<User> InitilizeDefaultUsers()
+        private static List<User> InitializeDefaultUsers()
         {
-            //DEBUG initilize list of test users
+            // DEBUG: Initialize list of test users
             return new List<User>
             {
                 new()
                 {
                     Id = 1,
-                    Username = "Test1",
-                    Password = "Test",
+                    FirstName = "Alice",
+                    LastName = "Smith",
+                    Username = "smithalice",
+                    Email = "alice.smith@example.com",
+                    Password = "passwordAlice123" // In a real application, this should be hashed
                 },
                 new()
                 {
                     Id = 2,
-                    Username = "Test2",
-                    Password = "Test",
+                    FirstName = "Bob",
+                    LastName = "Johnson",
+                    Username = "johnsonbob",
+                    Email = "bob.johnson@example.com",
+                    Password = "passwordBob456" // In a real application, this should be hashed
+                },
+                new()
+                {
+                    Id = 3,
+                    FirstName = "Charlie",
+                    LastName = "Brown",
+                    Username = "browcharlie",
+                    Email = "charlie.brown@example.com",
+                    Password = "passwordCharlie789" // In a real application, this should be hashed
                 }
             };
         }
+
 
         ///<summary>
         ///Saves users to JSON File
