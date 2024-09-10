@@ -1,9 +1,9 @@
 ﻿using CommonLibrary;
-using TaskTracker.data;
-using TaskTracker.services;
-using TaskTracker.ui;
+using CommonLibrary.TaskTracker.data;
+using TaskTrackerConsole.services;
+using TaskTrackerConsole.ui;
 
-namespace TaskTracker
+namespace TaskTrackerConsole
 {
     /// <summary>
     /// Entry point for the TaskTracker application.
@@ -21,16 +21,11 @@ namespace TaskTracker
             // Display GemsCode Logo in console at the start of the program
             LogoPrinter.DisplayLogo();
 
-            string filePath = @"C:\Users\Diamond R. Brown\OneDrive\Gem.Professional 🎖️\02 💻 GemsCode\Git Repositories\CSharpProjects\TaskTracker\data\Tasks.json";
+            string filePath = @"C:\Users\Diamond R. Brown\OneDrive\Gem.Professional 🎖️\02 💻 GemsCode\Git Repositories\CSharpProjects\CommonLibrary\TaskTracker\data\Tasks.json";
 
-            if (!File.Exists(filePath))
-            {
-                Console.WriteLine(filePath, "Path Exists!");
-            }
             // Instantiate TaskRepository which implements ITaskRepository
-            ITaskRepository taskRepo = new TaskRepository(filePath);
             // Initialize the TaskManager (Data Layer)
-            TaskManager taskManager = new(taskRepo);
+            TaskManager taskManager = new(new TaskRepository(filePath));
 
             // Initialize the TaskService (Service Layer) with TaskManager dependency
             TaskService taskService = new(taskManager);

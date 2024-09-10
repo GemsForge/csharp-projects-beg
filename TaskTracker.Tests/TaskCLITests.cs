@@ -1,7 +1,8 @@
-﻿using Moq;
-using TaskTracker.dto;
-using TaskTracker.services;
+﻿using CommonLibrary.TaskTracker.dto;
+using Moq;
 using TaskTracker.ui;
+using TaskTrackerConsole.dto;
+using TaskTrackerConsole.services;
 
 namespace TaskTracker.Tests
 {
