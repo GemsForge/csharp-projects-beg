@@ -18,7 +18,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskTracker.Tests", "TaskTr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonLibrary", "CommonLibrary\CommonLibrary.csproj", "{56128ADC-5DE6-486B-AA6B-76FBDD49C192}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskTrackerAPI", "TaskTrackerAPI\TaskTrackerAPI.csproj", "{D1C2AD95-DFAC-4A37-BEF8-30551D787347}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskTrackerAPI", "TaskTrackerAPI\TaskTrackerAPI.csproj", "{D1C2AD95-DFAC-4A37-BEF8-30551D787347}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FizzBuzzAPI", "FizzBuzzAPI\FizzBuzzAPI.csproj", "{325BE6C8-A103-41F7-8AC0-362C44C77492}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,6 +52,10 @@ Global
 		{D1C2AD95-DFAC-4A37-BEF8-30551D787347}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1C2AD95-DFAC-4A37-BEF8-30551D787347}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1C2AD95-DFAC-4A37-BEF8-30551D787347}.Release|Any CPU.Build.0 = Release|Any CPU
+		{325BE6C8-A103-41F7-8AC0-362C44C77492}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{325BE6C8-A103-41F7-8AC0-362C44C77492}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{325BE6C8-A103-41F7-8AC0-362C44C77492}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{325BE6C8-A103-41F7-8AC0-362C44C77492}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
