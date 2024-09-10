@@ -8,7 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FizzBuzzGame", "FizzBuzzGame\FizzBuzzGame.csproj", "{D02C4A1C-2690-46C8-9C2C-C32C1DCAFEBD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FizzBuzzConsole", "FizzBuzzGame\FizzBuzzConsole.csproj", "{D02C4A1C-2690-46C8-9C2C-C32C1DCAFEBD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FizzBuzzGame.Tests", "FizzBuzzGame.Tests\FizzBuzzGame.Tests.csproj", "{97F7AA10-1B5B-45A7-B402-43BECE885CC0}"
 EndProject

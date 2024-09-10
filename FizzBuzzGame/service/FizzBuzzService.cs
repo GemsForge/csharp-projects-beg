@@ -1,6 +1,6 @@
 ﻿using FizzBuzzGame.model;
 
-namespace FizzBuzzGame.service
+namespace FizzBuzzConsole.service
 {
     /// <summary>
     /// Provides game service logic for the FizzBuzz program.

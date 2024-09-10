@@ -1,4 +1,4 @@
-using FizzBuzzGame.service;
+using FizzBuzzConsole.service;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);

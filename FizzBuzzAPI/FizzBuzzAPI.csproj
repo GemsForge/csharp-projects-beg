@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FizzBuzzGame\FizzBuzzGame.csproj" />
+    <ProjectReference Include="..\FizzBuzzGame\FizzBuzzConsole.csproj" />
   </ItemGroup>
 
 </Project>
