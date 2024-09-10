@@ -1,6 +1,6 @@
 ﻿using CommonLibrary.TaskTracker.data;
 using CommonLibrary.TaskTracker.model;
-using TaskTrackerConsole.dto;
+using CommonLibrary.TaskTracker.dto;
 using Task = CommonLibrary.TaskTracker.model.Task;
 
 namespace TaskTrackerConsole.services
@@ -10,6 +10,7 @@ namespace TaskTrackerConsole.services
     /// </summary>
     public class TaskService : ITaskService
     {
+         
         private readonly ITaskManager _taskManager;
 
         /// <summary>

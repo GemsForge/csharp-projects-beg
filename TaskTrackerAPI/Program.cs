@@ -1,3 +1,5 @@
+using CommonLibrary.TaskTracker.data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,6 +9,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddRazorPages();
+string? taskFilePath = builder.Configuration.GetValue<string>("TaskFilePath");
+//Register Task Tracker repository and manager
+builder.Services.AddScoped<ITaskRepository>(provider => new TaskRepository(taskFilePath));
+builder.Services.AddScoped<ITaskManager, TaskManager>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

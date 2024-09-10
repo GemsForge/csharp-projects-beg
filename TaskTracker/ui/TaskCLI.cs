@@ -1,5 +1,5 @@
 ﻿using CommonLibrary.TaskTracker.model;
-using TaskTrackerConsole.dto;
+using CommonLibrary.TaskTracker.dto;
 using TaskTrackerConsole.services;
 
 namespace TaskTrackerConsole.ui
