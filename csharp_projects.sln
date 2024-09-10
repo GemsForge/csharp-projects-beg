@@ -22,6 +22,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FizzBuzzConsole", "FizzBuzz
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskTrackerConsole", "TaskTrackerConsole\TaskTrackerConsole.csproj", "{62B978EC-2330-4FEB-8409-B1B16767E4B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecureUserConsole", "SecureUserConsole\SecureUserConsole.csproj", "{09543EC6-6964-4635-9FE4-589E0782EBF9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{62B978EC-2330-4FEB-8409-B1B16767E4B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62B978EC-2330-4FEB-8409-B1B16767E4B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62B978EC-2330-4FEB-8409-B1B16767E4B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09543EC6-6964-4635-9FE4-589E0782EBF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09543EC6-6964-4635-9FE4-589E0782EBF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09543EC6-6964-4635-9FE4-589E0782EBF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09543EC6-6964-4635-9FE4-589E0782EBF9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
