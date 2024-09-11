@@ -56,32 +56,7 @@ The application should run from the command line, accept user actions and inputs
 - List all tasks that are complete
 - List all tasks that are not done
 - List all tasks that are in progress
-
-### Task Tracker API 📊
-### Description
-The **Task Tracker API** builds upon the CLI version, converting it into a RESTful API for managing tasks via HTTP requests. The API is designed around CRUD operations for managing task data.
 [Link to project rules and examples](https://roadmap.sh/projects/task-tracker)
-
-### Key Topics Discussed:
-- **API for Data Management**: This API focuses on CRUD operations (Create, Read, Update, Delete) for managing tasks, making it a typical data management API.
-- **Model Binding and Validation**: Using DTOs and model binding to validate input data and ensure proper formatting.
-- **Dependency Injection and Service Registration**: Leveraging DI to register services like `TaskManager` to handle task operations, maintaining separation of concerns.
-- **Mapping Data Objects**: Converting between domain models and DTOs for consistent API responses.
-- **Developing with SOLID Principles**: Emphasizing code maintainability and readability through SOLID principles like Open/Closed and Single Responsibility.
-
-### Preview of API Endpoints
-- `POST /api/TaskTracker/tasks` - Add a new task.
-- `GET /api/TaskTracker/tasks` - List all tasks.
-- `PUT /api/TaskTracker/tasks/{id}` - Update a task.
-- `DELETE /api/TaskTracker/tasks/{id}` - Delete a task.
-
-### Constraints
-- The JSON file should be created if it does not exist.
-- Use the native file system module of your programming language to interact with the JSON file.
-- Do not use any external libraries or frameworks to build this project.
-- Ensure to handle errors and edge cases gracefully.
-
-
 ### Task Tracker API 📊
 ### Description
 The **Task Tracker API** builds upon the CLI version, converting it into a RESTful API for managing tasks via HTTP requests. The API is designed around CRUD operations for managing task data.
@@ -104,5 +79,3 @@ The **Task Tracker API** builds upon the CLI version, converting it into a RESTf
 - Use the native file system module of your programming language to interact with the JSON file.
 - Do not use any external libraries or frameworks to build this project.
 - Ensure to handle errors and edge cases gracefully.
-
-[Link to project rules and examples](https://roadmap.sh/projects/task-tracker)
