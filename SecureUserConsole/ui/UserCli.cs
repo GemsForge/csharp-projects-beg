@@ -65,14 +65,10 @@ namespace SecureUserConsole.ui
 
         private void AddUser()
         {
-            Console.Write("Enter First Name: ");
-            var firstName = Console.ReadLine();
-            Console.Write("Enter Last Name: ");
-            var lastName = Console.ReadLine();
-            Console.Write("Enter Email: ");
-            var email = Console.ReadLine();
-            Console.Write("Enter Password: ");
-            var password = Console.ReadLine();
+            var firstName = UserInputValidator.GetValidatedFirstName("Enter First Name: ");
+            var lastName = UserInputValidator.GetValidatedLastName("Enter Last Name: ");
+            var email = UserInputValidator.GetValidatedEmail("Enter Email: ");
+            var password = UserInputValidator.GetValidatedPassword("Enter Password: ");
 
             var registerInfo = new RegisterInfo
             {
@@ -98,22 +94,17 @@ namespace SecureUserConsole.ui
                 return;
             }
 
-            Console.Write("Enter New First Name (leave blank to keep current): ");
-            var firstName = Console.ReadLine();
-            Console.Write("Enter New Last Name (leave blank to keep current): ");
-            var lastName = Console.ReadLine();
-            Console.Write("Enter New Email (leave blank to keep current): ");
-            var email = Console.ReadLine();
-            Console.Write("Enter New Username (leave blank to keep current): ");
-            username = Console.ReadLine();
-            Console.Write("Enter New Password (leave blank to keep current): ");
-            var password = Console.ReadLine();
+            var firstName = UserInputValidator.GetValidatedFirstName($"Enter New First Name (leave blank to keep current: {user.FirstName}): ");
+            var lastName = UserInputValidator.GetValidatedLastName($"Enter New Last Name (leave blank to keep current: {user.LastName}): ");
+            var email = UserInputValidator.GetValidatedEmail($"Enter New Email (leave blank to keep current: {user.Email}): ");
+            var newUsername = UserInputValidator.GetValidatedUsername($"Enter New Last Name (leave blank to keep current: {user.Username}): ");
+            var password = UserInputValidator.GetValidatedPassword($"Enter New Password (leave blank to keep current: {user.Password}): ");
 
             // Update fields only if new values are provided
             if (!string.IsNullOrEmpty(firstName)) user.FirstName = firstName;
             if (!string.IsNullOrEmpty(lastName)) user.LastName = lastName;
             if (!string.IsNullOrEmpty(email)) user.Email = email;
-            if (!string.IsNullOrEmpty(username)) user.Username = username;
+            if (!string.IsNullOrEmpty(newUsername)) user.Username = newUsername;
             if (!string.IsNullOrEmpty(password)) user.Password = password;
 
             _userManager.UpdateUser(user);
@@ -141,10 +132,8 @@ namespace SecureUserConsole.ui
 
         private void Login()
         {
-            Console.Write("Enter Username: ");
-            var username = Console.ReadLine();
-            Console.Write("Enter Password: ");
-            var password = Console.ReadLine();
+            var username = UserInputValidator.GetValidatedUsername("Enter Username: ");
+            var password = UserInputValidator.GetValidatedPassword("Enter Password: ");
 
             var loginInfo = new LoginInfo
             {
