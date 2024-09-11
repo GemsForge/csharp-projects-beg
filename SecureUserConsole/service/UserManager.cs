@@ -8,14 +8,16 @@ namespace SecureUserConsole.service
     public class UserManager : IUserManager
     {
         private readonly IUserService _userService;
+        private readonly IPasswordUtility _passwordUtility;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserManager"/> class.
         /// </summary>
         /// <param name="userService">The <see cref="UserService"/> instance used for CRUD operations.</param>
-        public UserManager(IUserService userService)
+        public UserManager(IUserService userService, IPasswordUtility passwordUtility)
         {
             _userService = userService;
+            _passwordUtility = passwordUtility;
         }
 
         /// <summary>
@@ -26,12 +28,13 @@ namespace SecureUserConsole.service
         {
             if (registerInfo != null && !UserExists(registerInfo.Email))
             {
+                var hashedPassword = _passwordUtility.HashPassword(registerInfo.Password);
                 User newUser = new()
                 {
                     FirstName = registerInfo.FirstName,
                     LastName = registerInfo.LastName,
                     Email = registerInfo.Email,
-                    Password = registerInfo.Password,
+                    Password = hashedPassword,
                     Username = CreateUniqueUsername(registerInfo.FirstName, registerInfo.LastName)
                 };
                 _userService.AddUser(newUser);
@@ -51,7 +54,7 @@ namespace SecureUserConsole.service
         public bool LoginUser(LoginInfo loginInfo)
         {
             var user = _userService.GetUserByUsername(loginInfo.Username);
-            if (user != null && user.Password == loginInfo.Password)
+            if (user != null && _passwordUtility.VerifyPassword(user.Password, loginInfo.Password))
             {
                 Console.WriteLine("Login successful.");
                 return true;
@@ -70,10 +73,11 @@ namespace SecureUserConsole.service
                 var existingUser = _userService.GetUserByUsername(updatedUser.Username);
                 if (existingUser != null)
                 {
+                    var hashedPassword = _passwordUtility.HashPassword(updatedUser.Password);
                     existingUser.FirstName = updatedUser.FirstName;
                     existingUser.LastName = updatedUser.LastName;
                     existingUser.Email = updatedUser.Email;
-                    existingUser.Password = updatedUser.Password;
+                    existingUser.Password = hashedPassword;
 
                     _userService.UpdateUser(existingUser);
                     Console.WriteLine("User updated successfully.");

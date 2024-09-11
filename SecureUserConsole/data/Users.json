@@ -30,5 +30,13 @@
     "username": "gemBro",
     "email": "gem@email.com",
     "password": "password"
+  },
+  {
+    "id": 0,
+    "first_name": "Joe",
+    "last_name": "Dirt",
+    "username": "dirtjoe",
+    "email": "dirtyjoe@email.com",
+    "password": "XBw6Q7HH/KXdAu52FgMkmNIVdfL62TRTc8K8QaYn9K6B4tvE"
   }
 ]
