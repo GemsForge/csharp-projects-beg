@@ -59,6 +59,36 @@ namespace SecureUserConsole.service
             Console.WriteLine("Invalid username or password.");
             return false;
         }
+        /// <summary>
+        /// Updates an existing user's details.
+        /// </summary>
+        /// <param name="updatedUser">The <see cref="User"/> object containing updated user details.</param>
+        public void UpdateUser(User updatedUser)
+        {
+            if (updatedUser != null && !string.IsNullOrEmpty(updatedUser.Username))
+            {
+                var existingUser = _userService.GetUserByUsername(updatedUser.Username);
+                if (existingUser != null)
+                {
+                    existingUser.FirstName = updatedUser.FirstName;
+                    existingUser.LastName = updatedUser.LastName;
+                    existingUser.Email = updatedUser.Email;
+                    existingUser.Password = updatedUser.Password;
+
+                    _userService.UpdateUser(existingUser);
+                    Console.WriteLine("User updated successfully.");
+                }
+                else
+                {
+                    Console.WriteLine("User not found.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid user details.");
+            }
+        }
+
 
         #region Helper Methods
 
