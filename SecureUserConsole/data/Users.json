@@ -1,6 +1,6 @@
-﻿[
+[
   {
-    "id": "1",
+    "id": 1,
     "first_name": "Alice",
     "last_name": "Smith",
     "username": "smithalice",
@@ -8,7 +8,7 @@
     "password": "passwordAlice123"
   },
   {
-    "id": "2",
+    "id": 2,
     "first_name": "Bob",
     "last_name": "Johnson",
     "username": "johnsonbob",
@@ -16,11 +16,19 @@
     "password": "passwordBob456"
   },
   {
-    "id": "3",
+    "id": 3,
     "first_name": "Charlie",
     "last_name": "Brown",
     "username": "browcharlie",
     "email": "charlie.brown@example.com",
     "password": "passwordCharlie789"
+  },
+  {
+    "id": 0,
+    "first_name": "Gem",
+    "last_name": "Brown",
+    "username": "test",
+    "email": "gbrown@example.com",
+    "password": "test"
   }
 ]

@@ -61,7 +61,7 @@ namespace SecureUserConsole.data
                 string json = File.ReadAllText(_filePath);
                 //Log the JSON content for debugging purposes
                 Console.WriteLine("JSON content read from file:");
-                Console.WriteLine(json);
+                //Console.WriteLine(json);
 
                 var options = new JsonSerializerOptions
                 {
@@ -69,7 +69,7 @@ namespace SecureUserConsole.data
                 };
                 //Return deserialize JSON into a list of User objects 
                 List<User> userList = JsonSerializer.Deserialize<List<User>>(json, options);
-                Console.WriteLine($"Users loaded successfully from the file. Total users: {userList}");
+                Console.WriteLine($"Users loaded successfully from the file. Total users: {userList.Count}");
                 return userList;
             }
             catch (Exception ex)
@@ -130,7 +130,7 @@ namespace SecureUserConsole.data
                 };
                 string json = JsonSerializer.Serialize(users, options);
                 File.WriteAllText(_filePath, json);
-                Console.WriteLine("Users saved successfully to this file.");
+                //Console.WriteLine("Users saved successfully to this file.");
             }
             catch (Exception ex)
             {

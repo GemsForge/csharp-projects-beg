@@ -35,7 +35,7 @@ namespace SecureUserConsole.service
                     Username = CreateUniqueUsername(registerInfo.FirstName, registerInfo.LastName)
                 };
                 _userService.AddUser(newUser);
-                Console.WriteLine("User registered successfully.");
+                Console.WriteLine($"User registered successfully. Your username is {newUser.Username}");
             }
             else
             {
@@ -82,10 +82,6 @@ namespace SecureUserConsole.service
                 {
                     Console.WriteLine("User not found.");
                 }
-            }
-            else
-            {
-                Console.WriteLine("Invalid user details.");
             }
         }
 

@@ -72,6 +72,7 @@ namespace SecureUserConsole.service
             {
                 _users.Remove(user);
                 _userRepo.SaveUsersToFile(_users);
+                Console.WriteLine($"User {user.Username} was permanately removed.");
             }
             else
             {
@@ -96,11 +97,6 @@ namespace SecureUserConsole.service
                     userToUpdate.LastName = user.LastName;
                     userToUpdate.Password = user.Password;
                     _userRepo.SaveUsersToFile(_users);
-                    Console.WriteLine("User updated successfully.");
-                }
-                else
-                {
-                    Console.WriteLine("User not found.");
                 }
             }
             else

@@ -6,5 +6,6 @@ namespace SecureUserConsole.service
     {
         void RegisterUser(RegisterInfo registerInfo);
         public bool LoginUser(LoginInfo loginInfo);
+        void UpdateUser(User updatedUser);
     }
 }
