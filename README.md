@@ -60,6 +60,7 @@ The application should run from the command line, accept user actions and inputs
 ### Task Tracker API 📊
 ### Description
 The **Task Tracker API** builds upon the CLI version, converting it into a RESTful API for managing tasks via HTTP requests. The API is designed around CRUD operations for managing task data.
+[Link to project rules and examples](https://roadmap.sh/projects/task-tracker)
 
 ### Key Topics Discussed:
 - **API for Data Management**: This API focuses on CRUD operations (Create, Read, Update, Delete) for managing tasks, making it a typical data management API.
@@ -80,19 +81,6 @@ The **Task Tracker API** builds upon the CLI version, converting it into a RESTf
 - Do not use any external libraries or frameworks to build this project.
 - Ensure to handle errors and edge cases gracefully.
 
-[Link to project rules and examples](https://roadmap.sh/projects/task-tracker)
-
-Task Tracker is a project used to track and manage your tasks. This project helps practice programming skills, including working with the filesystem, handling user inputs, and building a simple CLI application.
-
-### Requirements
-The application should run from the command line, accept user actions and inputs as arguments, and store the tasks in a JSON file. The user should be able to:
-
-- Add, Update, and Delete tasks
-- Mark a task as `TODO`, `PENDING`, or `COMPLETE`
-- List all tasks
-- List all tasks that are complete
-- List all tasks that are not done
-- List all tasks that are in progress
 
 ### Task Tracker API 📊
 ### Description
