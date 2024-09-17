@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace SecureUserConsole.ui
 {
@@ -11,11 +12,17 @@ namespace SecureUserConsole.ui
         /// <returns>Valid username if valid, otherwise prompts the user to enter a valid username.</returns>
         public static string GetValidatedUsername(string prompt)
         {
-            string username;
+            string? username;
             do
             {
                 Console.Write(prompt);
                 username = Console.ReadLine();
+                //If username is null or whitespace, allow it as a valid input
+                if (String.IsNullOrWhiteSpace(username) && prompt.Contains("New")) //Update user prompt asks for new data
+                {
+                    break; //Exit loop
+                }
+                continue;
             } while (!IsValidUsername(username));
             return username;
         }
@@ -27,11 +34,16 @@ namespace SecureUserConsole.ui
         /// <returns>Valid password if valid, otherwise prompts the user to enter a valid password.</returns>
         public static string GetValidatedPassword(string prompt)
         {
-            string password;
+            string? password;
             do
             {
                 Console.Write(prompt);
                 password = Console.ReadLine();
+                if (String.IsNullOrWhiteSpace(password) && prompt.Contains("New")) //Update user prompt asks for new data
+                {
+                    break; //Exit loop
+                }
+                continue;
             } while (!IsValidPassword(password));
             return password;
         }
@@ -43,11 +55,16 @@ namespace SecureUserConsole.ui
         /// <returns>Valid email if valid, otherwise prompts the user to enter a valid email.</returns>
         public static string GetValidatedEmail(string prompt)
         {
-            string email;
+            string? email;
             do
             {
                 Console.Write(prompt);
                 email = Console.ReadLine();
+                if (String.IsNullOrWhiteSpace(email) && prompt.Contains("New")) //Update user prompt asks for new data
+                {
+                    break; //Exit loop
+                }
+                continue;
             } while (!IsValidEmail(email));
             return email;
         }
@@ -59,14 +76,20 @@ namespace SecureUserConsole.ui
         /// <returns>Valid first name if valid, otherwise prompts the user to enter a valid first name.</returns>
         public static string GetValidatedFirstName(string prompt)
         {
-            string firstName;
+            string? firstName;
             do
             {
                 Console.Write(prompt);
                 firstName = Console.ReadLine();
+                if (String.IsNullOrWhiteSpace(firstName) && prompt.Contains("New")) //Update user prompt asks for new data
+                {
+                    break; //Exit loop
+
+                }
+                continue;
             } while (!IsValidName(firstName));
             return firstName;
-        }
+            }
 
         /// <summary>
         /// Validates the last name input.
@@ -75,11 +98,16 @@ namespace SecureUserConsole.ui
         /// <returns>Valid last name if valid, otherwise prompts the user to enter a valid last name.</returns>
         public static string GetValidatedLastName(string prompt)
         {
-            string lastName;
+            string? lastName;
             do
             {
                 Console.Write(prompt);
                 lastName = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(lastName) && prompt.Contains("New")) //Update user prompt asks for new data
+                {
+                    break; //Exit loop
+                }
+                continue;
             } while (!IsValidName(lastName));
             return lastName;
         }

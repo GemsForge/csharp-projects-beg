@@ -23,16 +23,17 @@ namespace SecureUserConsole.ui
         /// </summary>
         public void Start()
         {
+            Console.Title = "Secure User Management System"; // Set the console title
             while (true)
             {
                 Console.Clear();
                 LogoPrinter.DisplayLogo();
-                Console.WriteLine("User Management CLI");
-                Console.WriteLine("1. Add User");
-                Console.WriteLine("2. Update User");
-                Console.WriteLine("3. Remove User");
-                Console.WriteLine("4. List Users");
-                Console.WriteLine("5. Login");
+                Console.WriteLine("Secure User Management System");
+                Console.WriteLine("1. List Users");
+                Console.WriteLine("2. Login");
+                Console.WriteLine("3. Add User");
+                Console.WriteLine("4. Update User");
+                Console.WriteLine("5. Remove User");
                 Console.WriteLine("6. Exit");
                 Console.Write("Select an option: ");
 
@@ -40,19 +41,19 @@ namespace SecureUserConsole.ui
                 switch (choice)
                 {
                     case "1":
-                        AddUser();
-                        break;
-                    case "2":
-                        UpdateUser();
-                        break;
-                    case "3":
-                        RemoveUser();
-                        break;
-                    case "4":
                         ListUsers();
                         break;
-                    case "5":
+                    case "2":
                         Login();
+                        break;
+                    case "3":
+                        AddUser();
+                        break;
+                    case "4":
+                        UpdateUser();
+                        break;
+                    case "5":
+                        RemoveUser();
                         break;
                     case "6":
                         return; // Exit the loop and close the application
@@ -65,10 +66,10 @@ namespace SecureUserConsole.ui
 
         private void AddUser()
         {
-            var firstName = UserInputValidator.GetValidatedFirstName("Enter First Name: ");
-            var lastName = UserInputValidator.GetValidatedLastName("Enter Last Name: ");
-            var email = UserInputValidator.GetValidatedEmail("Enter Email: ");
-            var password = UserInputValidator.GetValidatedPassword("Enter Password: ");
+            string firstName = UserInputValidator.GetValidatedFirstName("Enter First Name: ");
+            string lastName = UserInputValidator.GetValidatedLastName("Enter Last Name: ");
+            string email = UserInputValidator.GetValidatedEmail("Enter Email: ");
+            string password = UserInputValidator.GetValidatedPassword("Enter Password: ");
 
             var registerInfo = new RegisterInfo
             {
@@ -84,27 +85,36 @@ namespace SecureUserConsole.ui
 
         private void UpdateUser()
         {
-            Console.Write("Enter Username to Update: ");
-            var username = Console.ReadLine();
-            var user = _userService.GetUserByUsername(username);
+            string username;
+            User? user;
 
-            if (user == null)
+            do
             {
-                Console.WriteLine("User not found.");
-                return;
-            }
+                // Prompt user for a valid username
+                username = UserInputValidator.GetValidatedUsername("Enter Username to Update: ");
 
-            var firstName = UserInputValidator.GetValidatedFirstName($"Enter New First Name (leave blank to keep current: {user.FirstName}): ");
-            var lastName = UserInputValidator.GetValidatedLastName($"Enter New Last Name (leave blank to keep current: {user.LastName}): ");
-            var email = UserInputValidator.GetValidatedEmail($"Enter New Email (leave blank to keep current: {user.Email}): ");
-            var newUsername = UserInputValidator.GetValidatedUsername($"Enter New Last Name (leave blank to keep current: {user.Username}): ");
-            var password = UserInputValidator.GetValidatedPassword($"Enter New Password (leave blank to keep current: {user.Password}): ");
+                // Check if the username exists
+                user = _userService.GetUserByUsername(username);
+
+                if (user == null)
+                {
+                    Console.WriteLine("User not found. Please try again.");
+                }
+
+            } while (user == null); // Continue looping until a valid user is found
+
+
+            string firstName = UserInputValidator.GetValidatedFirstName(prompt: $"Enter New First Name (leave blank to keep current: {user.FirstName}): ");
+            string lastName = UserInputValidator.GetValidatedLastName(prompt: $"Enter New Last Name (leave blank to keep current: {user.LastName}): ");
+            string email = UserInputValidator.GetValidatedEmail(prompt: $"Enter New Email (leave blank to keep current: {user.Email}): ");
+            string newUsername = UserInputValidator.GetValidatedUsername(prompt: $"Enter New Username (leave blank to keep current: {user.Username}): ");
+            string password = UserInputValidator.GetValidatedPassword(prompt: $"Enter New Password (leave blank to keep current: {user.Password}): ");
 
             // Update fields only if new values are provided
             if (!string.IsNullOrEmpty(firstName)) user.FirstName = firstName;
             if (!string.IsNullOrEmpty(lastName)) user.LastName = lastName;
             if (!string.IsNullOrEmpty(email)) user.Email = email;
-            if (!string.IsNullOrEmpty(newUsername)) user.Username = newUsername;
+            if (!string.IsNullOrEmpty(newUsername)) user.Username = newUsername.ToLower();
             if (!string.IsNullOrEmpty(password)) user.Password = password;
 
             _userManager.UpdateUser(user);
@@ -113,16 +123,15 @@ namespace SecureUserConsole.ui
 
         private void RemoveUser()
         {
-            Console.Write("Enter Username to Remove: ");
-            var username = Console.ReadLine();
-            _userService.RemoveUser(username);
+            string username = UserInputValidator.GetValidatedUsername(prompt: "Enter Username to Remove: ");
+            if (!string.IsNullOrEmpty(username)) _userService.RemoveUser(username);
             Console.ReadKey();
         }
 
         private void ListUsers()
         {
-            var users = _userService.GetUsers();
             Console.WriteLine("User List:");
+            var users = _userService.GetUsers();
             foreach (var user in users)
             {
                 Console.WriteLine($" Name: {user.FirstName} {user.LastName}, Username: {user.Username}, Email: {user.Email}, Password: {user.Password}");
@@ -132,8 +141,8 @@ namespace SecureUserConsole.ui
 
         private void Login()
         {
-            var username = UserInputValidator.GetValidatedUsername("Enter Username: ");
-            var password = UserInputValidator.GetValidatedPassword("Enter Password: ");
+            string username = UserInputValidator.GetValidatedUsername(prompt: "Enter Username: ");
+            string password = UserInputValidator.GetValidatedPassword(prompt: "Enter Password: "); //Password IS case sensitive
 
             var loginInfo = new LoginInfo
             {

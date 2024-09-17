@@ -35,7 +35,7 @@ namespace SecureUserConsole.service
                     LastName = registerInfo.LastName,
                     Email = registerInfo.Email,
                     Password = hashedPassword,
-                    Username = CreateUniqueUsername(registerInfo.FirstName, registerInfo.LastName)
+                    Username = CreateUniqueUsername(registerInfo.FirstName, registerInfo.LastName).ToLower(),
                 };
                 _userService.AddUser(newUser);
                 Console.WriteLine($"User registered successfully. Your username is {newUser.Username}");
@@ -54,7 +54,7 @@ namespace SecureUserConsole.service
         public bool LoginUser(LoginInfo loginInfo)
         {
             var user = _userService.GetUserByUsername(loginInfo.Username);
-            if (user != null && _passwordUtility.VerifyPassword(user.Password, loginInfo.Password))
+            if (user != null && _passwordUtility.VerifyPassword(loginInfo.Password, user.Password))
             {
                 Console.WriteLine("Login successful.");
                 return true;

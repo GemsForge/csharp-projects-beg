@@ -52,6 +52,12 @@ namespace SecureUserConsole.service
         {
             if (user != null && !UserExists(user.Email))
             {
+                // Find the highest existing user ID
+                int lastUserId = _users.Any() ? _users.Max(u => u.Id) : 0;
+
+                // Assign a new sequential ID to the new user
+                user.Id = lastUserId + 1;
+
                 _users.Add(user);
                 _userRepo.SaveUsersToFile(_users);
             }

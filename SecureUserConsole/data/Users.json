@@ -24,19 +24,19 @@
     "password": "passwordCharlie789"
   },
   {
-    "id": 0,
+    "id": 4,
     "first_name": "Gem",
     "last_name": "Brown",
-    "username": "gemBro",
-    "email": "gem@email.com",
-    "password": "password"
+    "username": "gembro",
+    "email": "gembrown@gmail.com",
+    "password": "\u002Bhr5/gWpHxXTdtw\u002B9ZrC7joSEktocLKzjewwJCTIpTzbCStW"
   },
   {
-    "id": 0,
-    "first_name": "Joe",
-    "last_name": "Dirt",
-    "username": "dirtjoe",
-    "email": "dirtyjoe@email.com",
-    "password": "XBw6Q7HH/KXdAu52FgMkmNIVdfL62TRTc8K8QaYn9K6B4tvE"
+    "id": 5,
+    "first_name": "Test",
+    "last_name": "User",
+    "username": "usertes",
+    "email": "testuser@email.com",
+    "password": "AxN/0lRKxz40Ch62Ptlv2MtW4F07fPuLSOGLqD6QtFPLr/XG"
   }
 ]
