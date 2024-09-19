@@ -1,7 +1,7 @@
- # C Sharp Projects for Beginners
-This repository contains basic projects, including the popular FizzBuzz coding challenge and a Task Tracker CLI.
+# C Sharp Projects for Beginners
+This repository contains basic projects including the popular FizzBuzz coding challenge, Task Tracker CLI, and a Secure User Management System CLI.
 
-## FizzBuzz Console Arcade - Divisibility Challenge 🕹️
+## FizzBuzz Game - Divisibility Challenge 🕹️
 ### Description
 The FizzBuzz Game is a classic coding challenge that tests basic programming skills. The rules are simple:
 
@@ -12,13 +12,14 @@ Enter 5 numbers between 1 and 100. For each number:
 - Otherwise, 1 point.
 
 ### Preview of CLI
-![Preview of FizzBuzz Game CLI](https://github.com/Dbrown127/csharp-projects-beg/blob/main/FizzBuzzConsole/images/fizzbuzz_game_preview-v1-03Sep2024.png?raw=true)
+![Preview of FizzBuzz Game CLI](https://github.com/Dbrown127/csharp-projects-beg/blob/fizzbuzz/FizzBuzzGame/images/fizzbuzz_game_preview-v1-03Sep2024.png)
+
 
 ### Technical Notes 💻
 - **Model Class (FizzBuzz):** Encapsulates game logic by determining "Fizz", "Buzz", "FizzBuzz", or "Number" with associated points.
 - **Service Class (FizzBuzzService):** Handles core game logic, storing user inputs, and tallying points.
 - **Interactive CLI:** Provides an engaging user experience, displaying rules and collecting validated inputs.
-- **XML Documentation:** Comprehensive code comments using XML aid in understanding and maintaining the codebase.
+- **XML Documentation:** Comprehensive code comments using XML, aiding in understanding and maintaining the codebase.
 
 - **OG Rules**:
 Fizz Buzz Problem states that given an integer n, for every integer i <= n, the task is to print “FizzBuzz” if i is divisible by 3 and 5, “Fizz” if i is divisible by 3, “Buzz” if i is divisible by 5 or i (as a string) if none of the conditions are true.
@@ -57,25 +58,63 @@ The application should run from the command line, accept user actions and inputs
 - List all tasks that are not done
 - List all tasks that are in progress
 [Link to project rules and examples](https://roadmap.sh/projects/task-tracker)
-### Task Tracker API 📊
+
+
+## Secure User Management CLI 🔐
 ### Description
-The **Task Tracker API** builds upon the CLI version, converting it into a RESTful API for managing tasks via HTTP requests. The API is designed around CRUD operations for managing task data.
+This project focuses on creating a **Secure User Management system** with login and registration functionality. It implements seamless user input, validation, error handling, password hashing, and service injection, ensuring a secure and smooth user experience.
 
-### Key Topics Discussed:
-- **API for Data Management**: This API focuses on CRUD operations (Create, Read, Update, Delete) for managing tasks, making it a typical data management API.
-- **Model Binding and Validation**: Using DTOs and model binding to validate input data and ensure proper formatting.
-- **Dependency Injection and Service Registration**: Leveraging DI to register services like `TaskManager` to handle task operations, maintaining separation of concerns.
-- **Mapping Data Objects**: Converting between domain models and DTOs for consistent API responses.
-- **Developing with SOLID Principles**: Emphasizing code maintainability and readability through SOLID principles like Open/Closed and Single Responsibility.
+### Key Features:
+- **User Login & Registration**: Handles user sign-in and sign-up processes with username and password.
+- **Password Hashing**: Utilizes cryptographic hashing to securely store user passwords.
+- **Input Validation**: Validates user inputs (e.g., username and password) with robust rules, ensuring correct data is provided.
+- **Error Handling**: Gracefully manages errors such as invalid credentials or missing user data.
+- **Service Injection**: Injects external services like `_userManager` to handle user data and authentication, ensuring a clean, modular architecture.
+- **Unit Testing**: Includes unit tests to verify the functionality of login, registration, and password validation logic.
 
-### Preview of API Endpoints
-- `POST /api/TaskTracker/tasks` - Add a new task.
-- `GET /api/TaskTracker/tasks` - List all tasks.
-- `PUT /api/TaskTracker/tasks/{id}` - Update a task.
-- `DELETE /api/TaskTracker/tasks/{id}` - Delete a task.
+### Preview of CLI
+Users can enter their credentials through the CLI, with error messages displayed upon invalid login attempts, prompting the user to re-enter information without overwhelming the console.
 
-### Constraints
-- The JSON file should be created if it does not exist.
-- Use the native file system module of your programming language to interact with the JSON file.
-- Do not use any external libraries or frameworks to build this project.
-- Ensure to handle errors and edge cases gracefully.
+```csharp
+private void Login()
+{
+    string username;
+    string password;
+    bool isValidUser;
+    bool firstAttempt = true;
+
+    do
+    {
+        if (!firstAttempt)
+        {
+            Console.WriteLine("Invalid login. Please try again.");
+        }
+
+        // Re-prompt for username and password
+        username = UserInputValidator.GetValidatedUsername(prompt: "Enter Username: ");
+        password = UserInputValidator.GetValidatedPassword(prompt: "Enter Password: "); // Password IS case sensitive
+
+        var loginInfo = new LoginInfo
+        {
+            Username = username,
+            Password = password
+        };
+
+        // Try logging in the user
+        isValidUser = _userManager.LoginUser(loginInfo);
+
+        firstAttempt = false;
+
+    } while (!isValidUser);
+
+    Console.WriteLine("Login successful!");
+    Console.ReadKey();
+}
+```
+
+### Technical Notes 💻
+- **Input Validation**: Ensures usernames meet specific criteria (e.g., minimum length) and passwords are case-sensitive.
+- **Dependency Injection**: The `_userManager` service manages users and authentication.
+- **Seamless User Experience**: Smooth error handling to avoid clearing the console and confusing users. Failed attempts are simply re-prompted with minimal disruption.
+
+This Secure User Management CLI provides a simple yet powerful way to handle user credentials securely in C#.
