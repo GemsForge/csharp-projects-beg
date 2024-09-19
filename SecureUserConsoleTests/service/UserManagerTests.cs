@@ -88,13 +88,13 @@ namespace SecureUserConsoleTests.service
             };
 
             _userServiceMock.Setup(s => s.GetUserByUsername(loginInfo.Username)).Returns(user);
-            _passwordUtilityMock.Setup(p => p.VerifyPassword(user.Password, loginInfo.Password)).Returns(true);
+            _passwordUtilityMock.Setup(p => p.VerifyPassword( loginInfo.Password, user.Password)).Returns(true);
 
             // Act
             var result = _userManager.LoginUser(loginInfo);
 
             // Assert
-            Assert.IsTrue(result);
+             Assert.IsTrue(result);
         }
 
         [TestMethod]
