@@ -141,15 +141,29 @@ namespace SecureUserConsole.ui
 
         private void Login()
         {
-            string username = UserInputValidator.GetValidatedUsername(prompt: "Enter Username: ");
-            string password = UserInputValidator.GetValidatedPassword(prompt: "Enter Password: "); //Password IS case sensitive
+            string username;
+            string password;
+            bool isValidUser;
 
-            var loginInfo = new LoginInfo
-            {
-                Username = username,
-                Password = password
-            };
-            _userManager.LoginUser(loginInfo);
+            do
+            { 
+
+                // Re-prompt for username and password
+                username = UserInputValidator.GetValidatedUsername(prompt: "Enter Username: ");
+                password = UserInputValidator.GetValidatedPassword(prompt: "Enter Password: "); // Password IS case sensitive
+
+                var loginInfo = new LoginInfo
+                {
+                    Username = username.ToLower(),
+                    Password = password
+                };
+
+                // Try logging in the user
+                isValidUser = _userManager.LoginUser(loginInfo);
+
+            } while (!isValidUser); // Loop until a valid login is provided
+
+
             Console.ReadKey();
         }
     }
