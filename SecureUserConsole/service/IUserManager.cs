@@ -4,8 +4,9 @@ namespace SecureUserConsole.service
 {
     public interface IUserManager
     {
-        void RegisterUser(RegisterInfo registerInfo);
+        string RegisterUser(RegisterInfo registerInfo);
         public bool LoginUser(LoginInfo loginInfo);
         void UpdateUser(User updatedUser);
+        bool UserExists(string email);
     }
 }

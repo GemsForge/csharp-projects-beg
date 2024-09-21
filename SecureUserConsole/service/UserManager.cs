@@ -24,7 +24,7 @@ namespace SecureUserConsole.service
         /// Registers a new user.
         /// </summary>
         /// <param name="registerInfo">The <see cref="RegisterInfo"/> object containing registration details.</param>
-        public void RegisterUser(RegisterInfo registerInfo)
+        public string RegisterUser(RegisterInfo registerInfo)
         {
             if (registerInfo != null && !UserExists(registerInfo.Email))
             {
@@ -38,11 +38,11 @@ namespace SecureUserConsole.service
                     Username = CreateUniqueUsername(registerInfo.FirstName, registerInfo.LastName).ToLower(),
                 };
                 _userService.AddUser(newUser);
-                Console.WriteLine($"User registered successfully. Your username is {newUser.Username}");
+                return newUser.Username;  // Return the generated username
             }
             else
             {
-                Console.WriteLine("User with this email already exists or invalid registration details.");
+                throw new InvalidOperationException("User with this email already exists or invalid registration details.");
             }
         }
 
@@ -116,7 +116,7 @@ namespace SecureUserConsole.service
         /// </summary>
         /// <param name="email">The email of the user to check.</param>
         /// <returns><c>true</c> if the user exists; otherwise, <c>false</c>.</returns>
-        private bool UserExists(string email)
+        public bool UserExists(string email)
         {
             return _userService.GetUsers().Any(existingUser => existingUser.Email == email);
         }

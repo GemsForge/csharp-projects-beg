@@ -26,6 +26,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecureUserConsole", "Secure
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecureUserConsole.Tests", "SecureUserConsoleTests\SecureUserConsole.Tests.csproj", "{B3895B01-2450-4BA1-93F0-D7EE8708E4B9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecureUserAPI", "SecureUserAPI\SecureUserAPI.csproj", "{8C947DC3-144A-49EB-8C18-A69419E18524}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,10 @@ Global
 		{B3895B01-2450-4BA1-93F0-D7EE8708E4B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3895B01-2450-4BA1-93F0-D7EE8708E4B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3895B01-2450-4BA1-93F0-D7EE8708E4B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C947DC3-144A-49EB-8C18-A69419E18524}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C947DC3-144A-49EB-8C18-A69419E18524}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C947DC3-144A-49EB-8C18-A69419E18524}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C947DC3-144A-49EB-8C18-A69419E18524}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -5,6 +5,22 @@
     "last_name": "Brown",
     "username": "gembro",
     "email": "gembrown@email.com",
-    "password": "NXpv3v4lnDHzNFQJN7hlfG7HAj6tU\u002BhoA\u002BvyhpeMQ5KedH4W"
+    "password": "\u002B0DYzRPI1UkOP8Qp90WXT3DlLMAQPA04cLVU5/sW8ROyiIeG"
+  },
+  {
+    "id": 2,
+    "first_name": "Joe",
+    "last_name": "Dirt",
+    "username": "dirtyjoe",
+    "email": "dirtyjoe@email.com",
+    "password": "H0a9TGvVYDMp/PpHmFp2NEG8P\u002BHKZUipauN1aOhua47m\u002B1OV"
+  },
+  {
+    "id": 3,
+    "first_name": "Test",
+    "last_name": "User",
+    "username": "usertes",
+    "email": "user@email.com",
+    "password": "KVKPK3H7wFmYgQ8LzBUzqBnZBzPMzOWs7UpHGOxQA25qb/2D"
   }
 ]
