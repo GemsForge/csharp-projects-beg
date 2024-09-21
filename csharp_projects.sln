@@ -28,6 +28,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecureUserConsole.Tests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecureUserAPI", "SecureUserAPI\SecureUserAPI.csproj", "{8C947DC3-144A-49EB-8C18-A69419E18524}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GemConnectAPI", "GemConnectAPI\GemConnectAPI.csproj", "{213F6813-2F49-463A-B58E-D88CA07D0D39}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,6 +76,10 @@ Global
 		{8C947DC3-144A-49EB-8C18-A69419E18524}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C947DC3-144A-49EB-8C18-A69419E18524}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C947DC3-144A-49EB-8C18-A69419E18524}.Release|Any CPU.Build.0 = Release|Any CPU
+		{213F6813-2F49-463A-B58E-D88CA07D0D39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{213F6813-2F49-463A-B58E-D88CA07D0D39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{213F6813-2F49-463A-B58E-D88CA07D0D39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{213F6813-2F49-463A-B58E-D88CA07D0D39}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
