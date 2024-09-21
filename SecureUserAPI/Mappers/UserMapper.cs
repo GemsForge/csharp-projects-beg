@@ -33,7 +33,7 @@ namespace SecureUserAPI.Mappers
         {
             return new LoginInfo
             {
-                Username = dto.Email, // Assuming email is used as the username
+                Username = dto.Username, // Assuming email is used as the username
                 Password = dto.Password
             };
         }
@@ -47,5 +47,16 @@ namespace SecureUserAPI.Mappers
         {
             return (dto.Username, dto.Email, dto.LastName, dto.NewPassword);
         }
+        public User MapToUpdatedUser(UpdateUserDto dto, User existingUser)
+        {
+            if (!string.IsNullOrEmpty(dto.FirstName)) existingUser.FirstName = dto.FirstName;
+            if (!string.IsNullOrEmpty(dto.LastName)) existingUser.LastName = dto.LastName;
+            if (!string.IsNullOrEmpty(dto.Email)) existingUser.Email = dto.Email;
+            if (!string.IsNullOrEmpty(dto.Username)) existingUser.Username = dto.Username.ToLower();
+            if (!string.IsNullOrEmpty(dto.Password)) existingUser.Password = dto.Password;
+
+            return existingUser;
+        }
+
     }
 }

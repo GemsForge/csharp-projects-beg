@@ -1,5 +1,4 @@
-﻿using CommonLibrary;
-using SecureUserConsole.data;
+﻿using SecureUserConsole.data;
 using SecureUserConsole.service;
 using SecureUserConsole.ui;
 

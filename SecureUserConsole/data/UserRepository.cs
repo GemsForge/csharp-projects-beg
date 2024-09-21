@@ -10,7 +10,7 @@ namespace SecureUserConsole.data
 
         public UserRepository(string filePath)
         {
-            _filePath = filePath;
+            _filePath = NormalizeAndGetFullPath(filePath);
         }
 
         ///<summary>
@@ -48,6 +48,7 @@ namespace SecureUserConsole.data
         ///
         public List<User> LoadUsersFromFile()
         {
+            Console.WriteLine($"Attempting to load users from file at path: {_filePath}");
             if (!File.Exists(_filePath))
             {
                 Console.WriteLine("Users file not found. Initializing with a pre-populated list.");

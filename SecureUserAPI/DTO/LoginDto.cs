@@ -8,16 +8,16 @@ namespace SecureUserAPI.DTO
     public class LoginDto
     {
         /// <summary>
-        /// Gets or sets the email address of the user.
+        /// Gets or sets the username of the user.
         /// </summary>
-        [Required]
-        [EmailAddress(ErrorMessage = "Please enter a valid email address.")]
-        public required string Email { get; set; }
+        [Required(ErrorMessage = "Please enter a username.")]
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "Username must be between 3 and 50 characters.")]
+        public required string Username { get; set; }
 
         /// <summary>
         /// Gets or sets the password of the user.
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = "Please enter a password.")]
         [StringLength(100, MinimumLength = 8, ErrorMessage = "Password must be at least 8 characters long.")]
         public required string Password { get; set; }
     }
