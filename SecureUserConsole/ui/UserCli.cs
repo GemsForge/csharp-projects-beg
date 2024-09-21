@@ -11,11 +11,13 @@ namespace SecureUserConsole.ui
     {
         private readonly IUserService _userService;
         private readonly IUserManager _userManager;
+        private readonly IPasswordResetService _resetService;
 
-        public UserCli(IUserService userService, IUserManager userManager)
+        public UserCli(IUserService userService, IUserManager userManager, IPasswordResetService resetService)
         {
             _userService = userService;
             _userManager = userManager;
+            _resetService = resetService;
         }
 
         /// <summary>
@@ -34,7 +36,8 @@ namespace SecureUserConsole.ui
                 Console.WriteLine("3. Add User");
                 Console.WriteLine("4. Update User");
                 Console.WriteLine("5. Remove User");
-                Console.WriteLine("6. Exit");
+                Console.WriteLine("6. Reset Password");
+                Console.WriteLine("7. Exit");
                 Console.Write("Select an option: ");
 
                 var choice = Console.ReadLine();
@@ -56,6 +59,9 @@ namespace SecureUserConsole.ui
                         RemoveUser();
                         break;
                     case "6":
+                        ResetPassword();
+                        break;
+                    case "7":
                         return; // Exit the loop and close the application
                     default:
                         Console.WriteLine("Invalid choice. Please select again.");
@@ -139,6 +145,9 @@ namespace SecureUserConsole.ui
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Handles the user login process, including checking login credentials and tracking failed attempts.
+        /// </summary>
         private void Login()
         {
             string username;
@@ -146,8 +155,7 @@ namespace SecureUserConsole.ui
             bool isValidUser;
 
             do
-            { 
-
+            {
                 // Re-prompt for username and password
                 username = UserInputValidator.GetValidatedUsername(prompt: "Enter Username: ");
                 password = UserInputValidator.GetValidatedPassword(prompt: "Enter Password: "); // Password IS case sensitive
@@ -160,9 +168,49 @@ namespace SecureUserConsole.ui
 
                 // Try logging in the user
                 isValidUser = _userManager.LoginUser(loginInfo);
+                if (!isValidUser)
+                {
+                    // Track failed attempts and trigger password reset if necessary
+                    if (_resetService.HandleFailedLogin(username))
+                    {
+                        Console.WriteLine("Too many failed attempts. Please verify your identity.");
+                        ResetPassword();
+                        return;
+                    }
+                }
 
             } while (!isValidUser); // Loop until a valid login is provided
 
+            // Reset the failed login count on success
+            _resetService.ResetFailedLoginAttempts(username);
+            Console.ReadKey();
+        }
+        private void ResetPassword()
+        {
+            string username = UserInputValidator.GetValidatedUsername("Enter Username: ");
+            string email = UserInputValidator.GetValidatedEmail("Enter Email: ");
+            string lastName = UserInputValidator.GetValidatedLastName("Enter Last Name: ");
+
+            // Verify user identity first
+            var isVerified = _resetService.VerifyUserIdentity(username, email, lastName);
+            if (isVerified)
+            {
+                string newPassword = UserInputValidator.GetValidatedPassword("Enter New Password: ");
+
+                bool success = _resetService.ResetPassword(username, email, lastName, newPassword);
+                if (success)
+                {
+                    Console.WriteLine("Password reset successful.");
+                }
+                else
+                {
+                    Console.WriteLine("Password reset failed. Please check the information and try again.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Password reset failed due to verification issues.");
+            }
 
             Console.ReadKey();
         }

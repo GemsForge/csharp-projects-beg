@@ -24,7 +24,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskTrackerConsole", "TaskT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecureUserConsole", "SecureUserConsole\SecureUserConsole.csproj", "{09543EC6-6964-4635-9FE4-589E0782EBF9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecureUserConsoleTests", "SecureUserConsoleTests\SecureUserConsoleTests.csproj", "{B3895B01-2450-4BA1-93F0-D7EE8708E4B9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecureUserConsole.Tests", "SecureUserConsoleTests\SecureUserConsole.Tests.csproj", "{B3895B01-2450-4BA1-93F0-D7EE8708E4B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
