@@ -1,8 +1,4 @@
-﻿using SecureUserConsole.model;
-using System;
-using System.Security.Cryptography;
-
-namespace SecureUserConsole.service
+﻿namespace SecureUserConsole.service
 {
     /// <summary>
     /// Provides password reset functionality, including failed login tracking,
