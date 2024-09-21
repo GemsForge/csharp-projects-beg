@@ -1,84 +1,111 @@
-﻿using System.Net.Mail;
+﻿using SecureUserConsole.model;
+using System;
 using System.Security.Cryptography;
 
 namespace SecureUserConsole.service
 {
-    public class PasswordResetService
+    /// <summary>
+    /// Provides password reset functionality, including failed login tracking,
+    /// user verification, and password updating.
+    /// </summary>
+    public class PasswordResetService : IPasswordResetService
     {
-        private const int TokenLength = 32;  // Length of the token in bytes
-        private const int TokenExpirationMinutes = 15;
+        private const int MaxFailedAttempts = 3;  // Maximum allowed failed login attempts
+        private readonly Dictionary<string, int> _failedLoginAttempts = new();
+        private readonly IPasswordUtility _passwordUtility;
+        private readonly IUserService _userService;
 
         /// <summary>
-        /// Generates a secure token for password reset and sends it via email.
+        /// Initializes a new instance of the <see cref="PasswordResetService"/> class.
         /// </summary>
-        /// <param name="userEmail">The email address of the user requesting the reset.</param>
-        public void SendPasswordResetEmail(string userEmail)
+        /// <param name="userService">The user service for accessing user data.</param>
+        public PasswordResetService(IPasswordUtility passwordUtility, IUserService userService)
         {
-            // Generate a secure token
-            string token = GenerateResetToken();
-
-            // Store the token and expiration time securely
-            StoreTokenInDatabase(userEmail, token, DateTime.UtcNow.AddMinutes(TokenExpirationMinutes));
-
-            // Create the reset link
-            string resetLink = $"https://yourapp.com/reset-password?token={token}";
-
-            // Send the reset email
-            var mailMessage = new MailMessage("no-reply@yourapp.com", userEmail)
-            {
-                Subject = "Password Reset Request",
-                Body = $"Hi there!\n\nWe heard you need a password reset. Click the link below to reset your password:\n{resetLink}\n\nThis link will expire in {TokenExpirationMinutes} minutes.\n\nBest,\nYour Friendly App",
-                IsBodyHtml = false
-            };
-
-            var smtpClient = new SmtpClient("smtp.yourmailprovider.com");
-            smtpClient.Send(mailMessage);
+            _passwordUtility = passwordUtility;
+            _userService = userService;
         }
 
         /// <summary>
-        /// Generates a secure token for the reset.
+        /// Tracks a failed login attempt and determines if the password reset process needs to be triggered.
         /// </summary>
-        /// <returns>A secure reset token as a base64 string.</returns>
-        private string GenerateResetToken()
+        /// <param name="username">The username of the user attempting to log in.</param>
+        /// <returns>True if the maximum number of failed attempts has been reached, false otherwise.</returns>
+        public bool HandleFailedLogin(string username)
         {
-            using (var rng = RandomNumberGenerator.Create())
+            if (_failedLoginAttempts.ContainsKey(username))
             {
-                byte[] tokenData = new byte[TokenLength];
-                rng.GetBytes(tokenData);
+                _failedLoginAttempts[username]++;
+            }
+            else
+            {
+                _failedLoginAttempts[username] = 1;
+            }
 
-                return Convert.ToBase64String(tokenData);  // Base64 encoding for URL compatibility
+            return _failedLoginAttempts[username] >= MaxFailedAttempts;
+        }
+
+        /// <summary>
+        /// Resets the count of failed login attempts for a given user.
+        /// </summary>
+        /// <param name="username">The username of the user to reset the login attempts for.</param>
+        public void ResetFailedLoginAttempts(string username)
+        {
+            if (_failedLoginAttempts.ContainsKey(username))
+            {
+                _failedLoginAttempts[username] = 0;
             }
         }
 
         /// <summary>
-        /// Stores the token and its expiration in the database (hashed).
+        /// Verifies if the provided username, email, and last name match a registered user.
         /// </summary>
-        /// <param name="userEmail">The user's email address.</param>
-        /// <param name="token">The generated reset token.</param>
-        /// <param name="expiration">The expiration date/time of the token.</param>
-        private void StoreTokenInDatabase(string userEmail, string token, DateTime expiration)
+        /// <param name="username">The username to verify.</param>
+        /// <param name="email">The email to verify.</param>
+        /// <param name="lastName">The last name to verify.</param>
+        /// <returns><c>true</c> if the user information matches; otherwise, <c>false</c>.</returns>
+        public bool VerifyUserIdentity(string username, string email, string lastName)
         {
-            // Hash the token before storing it
-            string hashedToken = HashToken(token);
+            var user = _userService.GetUserByUsername(username);
+            if (user == null)
+            {
+                Console.WriteLine("User not found.");
+                return false;
+            }
 
-            // Store hashedToken and expiration with the user's email in your database
-            // Example: UserManager.SavePasswordResetToken(userEmail, hashedToken, expiration);
+            if (!(string.Equals(email, user.Email, StringComparison.OrdinalIgnoreCase) &&
+string.Equals(lastName, user.LastName, StringComparison.OrdinalIgnoreCase)))
+            {
+                Console.WriteLine("Verification failed. Email or last name does not match.");
+                return false;  // Verification failed
+            }
+            else
+            {
+                return true;  // User verified
+            }
         }
 
         /// <summary>
-        /// Hashes the token using a secure hashing algorithm.
+        /// Handles password reset by verifying user details and updating the password.
         /// </summary>
-        /// <param name="token">The token to hash.</param>
-        /// <returns>The hashed token.</returns>
-        private string HashToken(string token)
+        /// <param name="username">The username of the user attempting to reset their password.</param>
+        /// <param name="email">The email of the user.</param>
+        /// <param name="lastName">The last name of the user.</param>
+        /// <param name="newPassword">The new password to set for the user.</param>
+        /// <returns><c>true</c> if the password reset was successful; otherwise, <c>false</c>.</returns>
+        public bool ResetPassword(string username, string email, string lastName, string newPassword)
         {
-            using (var sha256 = SHA256.Create())
+            var user = _userService.GetUserByUsername(username);
+            if (user == null)
             {
-                byte[] tokenBytes = System.Text.Encoding.UTF8.GetBytes(token);
-                byte[] hashedBytes = sha256.ComputeHash(tokenBytes);
-
-                return Convert.ToBase64String(hashedBytes);
+                Console.WriteLine("User not found.");
+                return false;
             }
+
+            var hashedPassword = _passwordUtility.HashPassword(newPassword);
+            user.Password = hashedPassword;
+            _userService.UpdateUser(user);
+            Console.WriteLine("Password reset successfully.");
+            return true;
         }
     }
 }
