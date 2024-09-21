@@ -80,6 +80,25 @@ builder.Services.AddScoped<IUserManager>(provider =>
         provider.GetRequiredService<IUserService>(),
         provider.GetRequiredService<IPasswordUtility>()));
 builder.Services.AddScoped<IUserMapper, UserMapper>();
+builder.Services.AddAuthorization(options => {
+    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("User", policy => policy.RequireRole("User"));
+});
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = "GemConnectAPI",
+            ValidAudience = "GemConnectAPI",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("YourSecretKey"))
+        };
+    });
+
 
 
 var app = builder.Build();
