@@ -26,6 +26,7 @@ builder.Services.AddSwaggerGen(opt =>
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     opt.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
+builder.Services.AddScoped<IUserMapper, IUserMapper>();
 
 var app = builder.Build();
 
