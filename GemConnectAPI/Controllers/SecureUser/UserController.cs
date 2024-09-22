@@ -27,7 +27,7 @@ public class UserController : ControllerBase
     /// Gets a list of all users (Admin access only).
     /// </summary>
     /// <returns>Returns a list of users or a 404 status if no users are found.</returns>
-    //[Authorize(Policy = "Admin")]
+    [Authorize(Policy = "Admin")]
     [HttpGet]
     public IActionResult GetUsers()
     {
@@ -72,7 +72,7 @@ public class UserController : ControllerBase
     /// <param name="username">The username of the user to be updated.</param>
     /// <param name="updateUserDto">An object containing the updated user details.</param>
     /// <returns>Returns a 200 OK status if the update is successful, or 400/404 statuses for errors.</returns>
-    //[Authorize(Policy = "User")]  // Accessible to both Admin and User
+    [Authorize(Policy = "User")]  // Accessible to both Admin and User
     [HttpPut("{username}")]
     public IActionResult UpdateUser(string username, [FromBody] UpdateUserDto updateUserDto)
     {
@@ -84,7 +84,7 @@ public class UserController : ControllerBase
         // Ensure users can only update their own info, unless they're an Admin
         if (User.Identity.Name != username && !User.IsInRole("ADMIN"))
         {
-            return Forbid("You cannot update another user's profile.");
+            return StatusCode(403, value: "You cannot update another user's profile.");
         }
 
         if (!ModelState.IsValid)
@@ -121,7 +121,7 @@ public class UserController : ControllerBase
     /// <param name="username">The username of the user whose role is being updated.</param>
     /// <param name="newRole">The new role to be assigned to the user.</param>
     /// <returns>Returns a 200 OK status if the role update is successful, or 404/400 if errors occur.</returns>
-    //[Authorize(Policy = "Admin")]  // Only Admins can change roles
+    [Authorize(Policy = "Admin")]  // Only Admins can change roles
     [HttpPut("{username}/role")]
     public IActionResult UpdateUserRole(string username, [FromBody] string newRole)
     {
