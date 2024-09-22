@@ -1,10 +1,13 @@
 ﻿using CommonLibrary.TaskTracker.data;
 using FizzBuzzConsole.service;
+using GemConnectAPI.Mappers.SecureUser;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 //using Microsoft.OpenApi.Models;
-using SecureUserAPI.Mappers;
 using SecureUserConsole.data;
 using SecureUserConsole.service;
 using System.Reflection;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -93,9 +96,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = "GemConnectAPI",
-            ValidAudience = "GemConnectAPI",
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("YourSecretKey"))
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
 
