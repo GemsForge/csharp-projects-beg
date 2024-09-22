@@ -1,6 +1,7 @@
 ﻿using CommonLibrary.TaskTracker.data;
 using FizzBuzzConsole.service;
 using GemConnectAPI.Mappers.SecureUser;
+using GemConnectAPI.Services.SecureUser;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 //using Microsoft.OpenApi.Models;
@@ -77,11 +78,15 @@ builder.Services.AddScoped<IPasswordResetService>(provider =>
     new PasswordResetService(
         provider.GetRequiredService<IPasswordUtility>(),
         provider.GetRequiredService<IUserService>()));
-
 builder.Services.AddScoped<IUserManager>(provider =>
     new UserManager(
         provider.GetRequiredService<IUserService>(),
         provider.GetRequiredService<IPasswordUtility>()));
+builder.Services.AddScoped<IApiUserManager>(provider =>
+new ApiUserManager(
+    provider.GetRequiredService<IUserManager>(),
+    provider.GetRequiredService<IUserService>(),
+    provider.GetRequiredService<IConfiguration>()));
 builder.Services.AddScoped<IUserMapper, UserMapper>();
 builder.Services.AddAuthorization(options => {
     options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
