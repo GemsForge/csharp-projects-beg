@@ -36,6 +36,7 @@ namespace SecureUserConsole.service
                     Email = registerInfo.Email,
                     Password = hashedPassword,
                     Username = CreateUniqueUsername(registerInfo.FirstName, registerInfo.LastName).ToLower(),
+                    Role = UserRole.USER
                 };
                 _userService.AddUser(newUser);
                 return newUser.Username;  // Return the generated username
