@@ -102,6 +102,7 @@ namespace SecureUserConsole.service
                     userToUpdate.FirstName = user.FirstName;
                     userToUpdate.LastName = user.LastName;
                     userToUpdate.Password = user.Password;
+                    userToUpdate.Role = user.Role;
                     _userRepo.SaveUsersToFile(_users);
                 }
             }
