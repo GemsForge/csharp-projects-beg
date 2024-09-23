@@ -93,8 +93,8 @@ new ApiUserManager(
     provider.GetRequiredService<IConfiguration>()));
 builder.Services.AddScoped<IUserMapper, UserMapper>();
 builder.Services.AddAuthorization(options => {
-    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
-    options.AddPolicy("User", policy => policy.RequireRole("User"));
+    options.AddPolicy("ADMIN", policy => policy.RequireRole("ADMIN"));
+    options.AddPolicy("USER", policy => policy.RequireRole("USER", "ADMIN"));
 });
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

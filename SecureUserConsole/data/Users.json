@@ -5,16 +5,25 @@
     "last_name": "User",
     "username": "usernew",
     "email": "newuser@example.com",
-    "password": "6Kbj69n6S4Voi2S/lNbC6CZd2TFqHXOaplA/BFa3axDPC920",
+    "password": "xaEgCxxEWIK2WZe8FU\u002BOKQI3fHYI7EooVQYY6Y/dSEck6znd",
     "role": "USER"
   },
   {
-    "id": 2,
+    "id": 3,
+    "first_name": "Charlie",
+    "last_name": "Brown",
+    "username": "browncha",
+    "email": "charliebrown@email.com",
+    "password": "WKm35\u002BJa9r4DRkl72mYB8vr9LizTvSX6Cf4T4JwnY/fghE2f",
+    "role": "USER"
+  },
+  {
+    "id": 4,
     "first_name": "Gem",
     "last_name": "Brown",
     "username": "browngem",
-    "email": "gembrown@example.com",
-    "password": "/zvJ5Ve7Pb4XgKO2OzLLtDUF3uHKYS2k\u002BxH1KLEIG30ZaF/p",
+    "email": "gembrown@email.com",
+    "password": "LH52uiZdSD/lyM5x58Ykp\u002B/wYYfCgBwTiA1gLo8sHbcmg87g",
     "role": "ADMIN"
   }
 ]

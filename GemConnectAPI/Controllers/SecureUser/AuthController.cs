@@ -42,7 +42,7 @@ public class AuthController : ControllerBase
         if (loginResponse != null)
         {
             _passwordResetService.ResetFailedLoginAttempts(loginInfo.Username);
-            return Ok($"Login successful. {loginResponse}");  // 200 OK
+            return Ok($"Login successful.\nUsername: {loginResponse.Username}\n Role: {loginResponse.Role}\n Token: {loginResponse.Token}\n ");  // 200 OK
         }
         else
         {
