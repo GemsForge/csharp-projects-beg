@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SecureUserAPI.DTO;
-using SecureUserAPI.Mappers;
+﻿using GemConnectAPI.DTO.SecureUser;
+using GemConnectAPI.Mappers.SecureUser;
+using GemConnectAPI.Services.SecureUser;
+using Microsoft.AspNetCore.Mvc;
 using SecureUserConsole.service;
 
 /// <summary>
@@ -11,12 +12,14 @@ using SecureUserConsole.service;
 public class AuthController : ControllerBase
 {
     private readonly IUserManager _userManager;
+    private readonly IApiUserManager _apiUserManager;
     private readonly IPasswordResetService _passwordResetService;
     private readonly IUserMapper _userMapper;
 
-    public AuthController(IUserManager userManager, IPasswordResetService passwordResetService, IUserMapper userMapper)
+    public AuthController(IUserManager userManager, IApiUserManager apiUserManager, IPasswordResetService passwordResetService, IUserMapper userMapper)
     {
         _userManager = userManager;
+        _apiUserManager = apiUserManager;
         _passwordResetService = passwordResetService;
         _userMapper = userMapper;
     }
@@ -27,7 +30,7 @@ public class AuthController : ControllerBase
     /// <param name="loginDto">An object containing the user's login credentials.</param>
     /// <returns>Returns a 200 OK status if login is successful, or a 401 Unauthorized status if the credentials are invalid.</returns>
     [HttpPost("login")]
-    public IActionResult Login(LoginDto loginDto)
+    public IActionResult Login([FromBody] LoginDto loginDto)
     {
         if (!ModelState.IsValid)
         {
@@ -35,10 +38,11 @@ public class AuthController : ControllerBase
         }
 
         var loginInfo = _userMapper.MapToLoginInfo(loginDto);
-        if (_userManager.LoginUser(loginInfo))
+        var loginResponse = _apiUserManager.LoginUser(loginInfo);
+        if (loginResponse != null)
         {
             _passwordResetService.ResetFailedLoginAttempts(loginInfo.Username);
-            return Ok("Login successful.");  // 200 OK
+            return Ok($"Login successful.\nUsername: {loginResponse.Username}\n Role: {loginResponse.Role}\n Token: {loginResponse.Token}\n ");  // 200 OK
         }
         else
         {
@@ -56,7 +60,7 @@ public class AuthController : ControllerBase
     /// <param name="passwordResetDto">An object containing the necessary details for resetting the user's password.</param>
     /// <returns>Returns a 200 OK status if the password is successfully reset, or a 400 Bad Request status if verification fails.</returns>
     [HttpPost("password-reset")]
-    public IActionResult ResetPassword(PasswordResetDto passwordResetDto)
+    public IActionResult ResetPassword([FromBody] PasswordResetDto passwordResetDto)
     {
         if (!ModelState.IsValid)
         {

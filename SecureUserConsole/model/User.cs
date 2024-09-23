@@ -38,10 +38,20 @@ namespace SecureUserConsole.model
         public required string Email { get; set; }
 
         /// <summary>
-        /// Gets or sets the user's password. (In a real scenario, this should be hashed.)
+        /// Gets or sets the user's password.
         /// </summary>
         [JsonPropertyName("password")]
         public required string Password { get; set; }
+
+
+        /// <summary>
+        /// Gets or sets the user's role.
+        /// </summary>
+        [JsonPropertyName("role")]
+        [JsonConverter(typeof(JsonStringEnumConverter))]  // For System.Text.Json
+        public required UserRole Role { get;  set; }
+
+
     }
 
     /// <summary>

@@ -25,7 +25,8 @@ namespace SecureUserConsole.Tests.service
                 Email = "test@example.com",
                 FirstName = "John",   // First name is required
                 LastName = "Doe",     // Last name
-                Password = "hashedpassword"  // Password is required
+                Password = "hashedpassword",  // Password is required
+                Role = UserRole.USER
             };
 
             // Set up the mock to return the test user when the username is queried

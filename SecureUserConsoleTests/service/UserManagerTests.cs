@@ -28,8 +28,9 @@ namespace SecureUserConsoleTests.service
                 FirstName = "John",
                 LastName = "Doe",
                 Email = "john.doe@example.com",
-                Password = "Password123"
+                Password = "Password123",
             };
+            
 
             _userServiceMock.Setup(s => s.GetUsers()).Returns(new List<User>());
             _passwordUtilityMock.Setup(p => p.HashPassword(registerInfo.Password)).Returns("hashedPassword");
@@ -58,7 +59,7 @@ namespace SecureUserConsoleTests.service
                 Password = "Password123"
             };
 
-            var existingUser = new User { FirstName = "John", LastName = "Doe", Email = registerInfo.Email, Password = "existingPassword", Username = "doejoh" };
+            var existingUser = new User { FirstName = "John", LastName = "Doe", Email = registerInfo.Email, Password = "existingPassword", Username = "doejoh", Role = UserRole.USER };
             _userServiceMock.Setup(s => s.GetUsers()).Returns(new List<User> { existingUser });
 
             // Act
@@ -84,7 +85,8 @@ namespace SecureUserConsoleTests.service
                 LastName = "Doe",
                 Email = "john.doe@example.com",
                 Username = loginInfo.Username,
-                Password = "hashedPassword"
+                Password = "hashedPassword",
+                Role = UserRole.USER
             };
 
             _userServiceMock.Setup(s => s.GetUserByUsername(loginInfo.Username)).Returns(user);
@@ -113,7 +115,8 @@ namespace SecureUserConsoleTests.service
                 LastName = "Doe",
                 Email = "johndoe@email.com",
                 Username = loginInfo.Username,
-                Password = "hashedPassword"
+                Password = "hashedPassword",
+                Role = UserRole.USER
             };
 
             _userServiceMock.Setup(s => s.GetUserByUsername(loginInfo.Username)).Returns(user);
@@ -136,7 +139,8 @@ namespace SecureUserConsoleTests.service
                 LastName = "Doe",
                 Email = "john.doe@newexample.com",
                 Password = "NewPassword123",
-                Username = "doejoh"
+                Username = "doejoh",
+                Role = UserRole.USER
             };
 
             var existingUser = new User
@@ -145,7 +149,8 @@ namespace SecureUserConsoleTests.service
                 LastName = "Doe",
                 Email = "john.doe@example.com",
                 Password = "oldPassword",
-                Username = updatedUser.Username
+                Username = updatedUser.Username,
+                Role = UserRole.USER
             };
 
             _userServiceMock.Setup(s => s.GetUserByUsername(updatedUser.Username)).Returns(existingUser);
@@ -173,7 +178,8 @@ namespace SecureUserConsoleTests.service
                 FirstName = "John",
                 LastName = "Doe",
                 Email = "john.doe@newexample.com",
-                Password = "NewPassword123"
+                Password = "NewPassword123",
+                Role = UserRole.USER
             };
 
             _userServiceMock.Setup(s => s.GetUserByUsername(updatedUser.Username)).Returns((User)null);

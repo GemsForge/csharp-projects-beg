@@ -1,16 +1,24 @@
 ﻿using CommonLibrary.TaskTracker.data;
 using FizzBuzzConsole.service;
+using GemConnectAPI.Mappers.SecureUser;
+using GemConnectAPI.Services.SecureUser;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 //using Microsoft.OpenApi.Models;
-using SecureUserAPI.Mappers;
 using SecureUserConsole.data;
 using SecureUserConsole.service;
 using System.Reflection;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+    });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(opt =>
@@ -74,12 +82,35 @@ builder.Services.AddScoped<IPasswordResetService>(provider =>
     new PasswordResetService(
         provider.GetRequiredService<IPasswordUtility>(),
         provider.GetRequiredService<IUserService>()));
-
 builder.Services.AddScoped<IUserManager>(provider =>
     new UserManager(
         provider.GetRequiredService<IUserService>(),
         provider.GetRequiredService<IPasswordUtility>()));
+builder.Services.AddScoped<IApiUserManager>(provider =>
+new ApiUserManager(
+    provider.GetRequiredService<IUserManager>(),
+    provider.GetRequiredService<IUserService>(),
+    provider.GetRequiredService<IConfiguration>()));
 builder.Services.AddScoped<IUserMapper, UserMapper>();
+builder.Services.AddAuthorization(options => {
+    options.AddPolicy("ADMIN", policy => policy.RequireRole("ADMIN"));
+    options.AddPolicy("USER", policy => policy.RequireRole("USER", "ADMIN"));
+});
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        };
+    });
+
 
 
 var app = builder.Build();

@@ -1,7 +1,7 @@
-﻿using SecureUserAPI.DTO;
+﻿using GemConnectAPI.DTO.SecureUser;
 using SecureUserConsole.model;
 
-namespace SecureUserAPI.Mappers
+namespace GemConnectAPI.Mappers.SecureUser
 {
     public interface IUserMapper
     {

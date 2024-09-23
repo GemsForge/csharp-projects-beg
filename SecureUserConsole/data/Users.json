@@ -1,26 +1,29 @@
 [
   {
     "id": 1,
-    "first_name": "Gem",
-    "last_name": "Brown",
-    "username": "gembro",
-    "email": "gembrown@email.com",
-    "password": "\u002B0DYzRPI1UkOP8Qp90WXT3DlLMAQPA04cLVU5/sW8ROyiIeG"
-  },
-  {
-    "id": 2,
-    "first_name": "Joe",
-    "last_name": "Dirt",
-    "username": "dirtyjoe",
-    "email": "dirtyjoe@email.com",
-    "password": "H0a9TGvVYDMp/PpHmFp2NEG8P\u002BHKZUipauN1aOhua47m\u002B1OV"
+    "first_name": "New",
+    "last_name": "User",
+    "username": "usernew",
+    "email": "newuser@example.com",
+    "password": "xaEgCxxEWIK2WZe8FU\u002BOKQI3fHYI7EooVQYY6Y/dSEck6znd",
+    "role": "USER"
   },
   {
     "id": 3,
-    "first_name": "Test",
-    "last_name": "User",
-    "username": "usertes",
-    "email": "user@email.com",
-    "password": "KVKPK3H7wFmYgQ8LzBUzqBnZBzPMzOWs7UpHGOxQA25qb/2D"
+    "first_name": "Charlie",
+    "last_name": "Brown",
+    "username": "browncha",
+    "email": "charliebrown@email.com",
+    "password": "WKm35\u002BJa9r4DRkl72mYB8vr9LizTvSX6Cf4T4JwnY/fghE2f",
+    "role": "USER"
+  },
+  {
+    "id": 4,
+    "first_name": "Gem",
+    "last_name": "Brown",
+    "username": "browngem",
+    "email": "gembrown@email.com",
+    "password": "LH52uiZdSD/lyM5x58Ykp\u002B/wYYfCgBwTiA1gLo8sHbcmg87g",
+    "role": "ADMIN"
   }
 ]

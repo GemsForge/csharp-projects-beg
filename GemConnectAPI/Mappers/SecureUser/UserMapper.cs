@@ -1,7 +1,7 @@
-﻿using SecureUserAPI.DTO;
+﻿using GemConnectAPI.DTO.SecureUser;
 using SecureUserConsole.model;
 
-namespace SecureUserAPI.Mappers
+namespace GemConnectAPI.Mappers.SecureUser
 {
     /// <summary>
     /// Provides  methods for mapping between DTOs and domain models.
@@ -54,7 +54,7 @@ namespace SecureUserAPI.Mappers
             if (!string.IsNullOrEmpty(dto.Email)) existingUser.Email = dto.Email;
             if (!string.IsNullOrEmpty(dto.Username)) existingUser.Username = dto.Username.ToLower();
             if (!string.IsNullOrEmpty(dto.Password)) existingUser.Password = dto.Password;
-            if (!string.IsNullOrEmpty(dto.Role)) existingUser.Password = dto.Role;
+            //if (!string.IsNullOrEmpty(dto.Role)) existingUser.Role = (UserRole)Enum.Parse(typeof(UserRole), value: dto.Role);
 
             return existingUser;
         }

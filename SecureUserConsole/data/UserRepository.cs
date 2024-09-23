@@ -92,7 +92,8 @@ namespace SecureUserConsole.data
                     LastName = "Smith",
                     Username = "smithalice",
                     Email = "alice.smith@example.com",
-                    Password = "passwordAlice123" // In a real application, this should be hashed
+                    Password = "passwordAlice123", // In a real application, this should be hashed
+                    Role = UserRole.USER
                 },
                 new()
                 {
@@ -101,7 +102,8 @@ namespace SecureUserConsole.data
                     LastName = "Johnson",
                     Username = "johnsonbob",
                     Email = "bob.johnson@example.com",
-                    Password = "passwordBob456" // In a real application, this should be hashed
+                    Password = "passwordBob456", // In a real application, this should be hashed
+                    Role = UserRole.USER
                 },
                 new()
                 {
@@ -110,7 +112,8 @@ namespace SecureUserConsole.data
                     LastName = "Brown",
                     Username = "browcharlie",
                     Email = "charlie.brown@example.com",
-                    Password = "passwordCharlie789" // In a real application, this should be hashed
+                    Password = "passwordCharlie789" ,
+                    Role = UserRole.USER
                 }
             };
         }

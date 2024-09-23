@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SecureUserAPI.DTO;
-using SecureUserAPI.Mappers;
+﻿using GemConnectAPI.DTO.SecureUser;
+using GemConnectAPI.Mappers.SecureUser;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SecureUserConsole.model;
 using SecureUserConsole.service;
 
 /// <summary>
@@ -22,11 +24,12 @@ public class UserController : ControllerBase
     }
 
     /// <summary>
-    /// Retrieves a list of all registered users.
+    /// Gets a list of all users (Admin access only).
     /// </summary>
     /// <returns>Returns a list of users or a 404 status if no users are found.</returns>
+    [Authorize(Policy = "ADMIN")]
     [HttpGet]
-    public IActionResult ListUsers()
+    public IActionResult GetUsers()
     {
         var users = _userService.GetUsers();
         if (users.Any())
@@ -69,13 +72,19 @@ public class UserController : ControllerBase
     /// <param name="username">The username of the user to be updated.</param>
     /// <param name="updateUserDto">An object containing the updated user details.</param>
     /// <returns>Returns a 200 OK status if the update is successful, or 400/404 statuses for errors.</returns>
+    [Authorize(Policy = "USER")]  // Accessible to both Admin and User
     [HttpPut("{username}")]
-    public IActionResult UpdateUser(string username, UpdateUserDto updateUserDto)
+    public IActionResult UpdateUser(string username, [FromBody] UpdateUserDto updateUserDto)
     {
         var user = _userService.GetUserByUsername(username);
         if (user == null)
         {
             return NotFound("User not found.");  // 404 Not Found
+        }
+        // Ensure users can only update their own info, unless they're an Admin
+        if (User.Identity.Name != username && !User.IsInRole("ADMIN"))
+        {
+            return StatusCode(403, value: "You cannot update another user's profile.");
         }
 
         if (!ModelState.IsValid)
@@ -105,5 +114,35 @@ public class UserController : ControllerBase
 
         _userService.RemoveUser(username);
         return Ok("User removed successfully.");  // 200 OK
+    }
+    
+    /// <summary>
+    /// Updates the role of a user (Admin access only).
+    /// </summary>
+    /// <param name="username">The username of the user whose role is being updated.</param>
+    /// <param name="newRole">The new role to be assigned to the user.</param>
+    /// <returns>Returns a 200 OK status if the role update is successful, or 404/400 if errors occur.</returns>
+    [Authorize(Policy = "ADMIN")]  // Only Admins can change roles
+    [HttpPut("{username}/role")]
+    public IActionResult UpdateUserRole(string username, [FromBody] string newRole)
+    {
+        // Ensure the role being assigned is valid
+        if (!Enum.TryParse(typeof(UserRole), newRole, true, out var role))
+        {
+            return BadRequest("Invalid role.");
+        }
+
+        // Fetch the user
+        var user = _userService.GetUserByUsername(username);
+        if (user == null)
+        {
+            return NotFound("User not found.");
+        }
+
+        // Update the user's role
+        user.Role = (UserRole)role;
+        _userManager.UpdateUser(user);
+
+        return Ok($"User {username}'s role updated to {newRole}.");
     }
 }
