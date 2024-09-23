@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace CommonLibrary.TaskTracker.model
+namespace TaskTrackerConsole.model
 {
     /// <summary>
     /// Represents a task in the task tracker system.

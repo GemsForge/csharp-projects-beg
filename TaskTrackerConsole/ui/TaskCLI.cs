@@ -1,6 +1,6 @@
-﻿using CommonLibrary.TaskTracker.model;
-using CommonLibrary.TaskTracker.dto;
-using TaskTrackerConsole.services;
+﻿using TaskTrackerConsole.services;
+using TaskTrackerConsole.model;
+using TaskTrackerConsole.dto;
 
 namespace TaskTrackerConsole.ui
 {

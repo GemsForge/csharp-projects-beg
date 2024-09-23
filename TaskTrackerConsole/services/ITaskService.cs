@@ -1,6 +1,6 @@
-﻿using CommonLibrary.TaskTracker.model;
-using Task = CommonLibrary.TaskTracker.model.Task;
-using CommonLibrary.TaskTracker.dto;
+﻿using Task = TaskTrackerConsole.model.Task;
+using TaskTrackerConsole.model;
+using TaskTrackerConsole.dto;
 
 namespace TaskTrackerConsole.services
 {

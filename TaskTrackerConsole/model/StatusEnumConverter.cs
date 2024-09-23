@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace CommonLibrary.TaskTracker.model
+namespace TaskTrackerConsole.model
 {
     public class StatusEnumConverter : JsonConverter<Status>
     {

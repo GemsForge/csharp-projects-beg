@@ -1,4 +1,4 @@
-﻿namespace CommonLibrary.TaskTracker.model
+﻿namespace TaskTrackerConsole.model
 {
     /// <summary>
     /// Represents the status of a task.

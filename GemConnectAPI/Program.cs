@@ -1,5 +1,4 @@
-﻿using CommonLibrary.TaskTracker.data;
-using FizzBuzzConsole.service;
+﻿using FizzBuzzConsole.service;
 using GemConnectAPI.Mappers.SecureUser;
 using GemConnectAPI.Services.SecureUser;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -9,6 +8,7 @@ using SecureUserConsole.data;
 using SecureUserConsole.service;
 using System.Reflection;
 using System.Text;
+using TaskTrackerConsole.data;
 
 var builder = WebApplication.CreateBuilder(args);
 

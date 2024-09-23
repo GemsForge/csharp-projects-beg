@@ -1,6 +1,6 @@
-using Task = CommonLibrary.TaskTracker.model.Task;
+using Task = TaskTrackerConsole.model.Task;
 
-namespace CommonLibrary.TaskTracker.data
+namespace TaskTrackerConsole.data
 {
     /// <summary>
     /// Manages tasks and provides operations to add, update, delete, and retrieve tasks.

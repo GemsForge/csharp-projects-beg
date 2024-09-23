@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CommonLibrary.TaskTracker.dto;
+namespace TaskTrackerConsole.dto;
 
 /// <summary>
 /// Represents a Data Transfer Object (DTO) for tasks.

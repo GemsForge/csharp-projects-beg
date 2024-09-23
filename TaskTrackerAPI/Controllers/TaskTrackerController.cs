@@ -1,8 +1,8 @@
-﻿using CommonLibrary.TaskTracker.data;
-using Task = CommonLibrary.TaskTracker.model.Task;
+﻿using Task = TaskTrackerConsole.model.Task;
 using Microsoft.AspNetCore.Mvc;
-using CommonLibrary.TaskTracker.dto;
-using CommonLibrary.TaskTracker.model;
+using TaskTrackerConsole.data;
+using TaskTrackerConsole.model;
+using TaskTrackerConsole.dto;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
