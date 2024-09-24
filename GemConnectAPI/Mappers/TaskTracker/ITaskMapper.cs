@@ -6,8 +6,8 @@ namespace GemConnectAPI.Mappers.TaskTracker
 {
     public interface ITaskMapper
     {
-        Task MaptoTask(TaskDto taskDto, string userId, Status statusEnum);
-        TaskDto MapTaskToDto(Task task);
+        Task MaptoTask(TaskDto taskDto, int userId, Status statusEnum);
+        TaskDto MapTaskToDto(Task task, String username);
         bool TryParseStatus(string statusString, out Status status);
     }
 }

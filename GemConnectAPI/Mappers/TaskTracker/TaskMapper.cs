@@ -6,7 +6,7 @@ namespace GemConnectAPI.Mappers.TaskTracker
 {
     public class TaskMapper : ITaskMapper
     {
-        public Task MaptoTask(TaskDto taskDto, string userId, Status statusEnum)
+        public Task MaptoTask(TaskDto taskDto, int userId, Status statusEnum)
         {
             return new Task
             {
@@ -14,10 +14,10 @@ namespace GemConnectAPI.Mappers.TaskTracker
                 Status = statusEnum,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
-                CreatedBy = userId.ToString()
+                CreatedBy = userId
             };
         }
-        public TaskDto MapTaskToDto(Task task)
+        public TaskDto MapTaskToDto(Task task, string username)
         {
             return new TaskDto
             {

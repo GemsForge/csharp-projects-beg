@@ -41,7 +41,7 @@ namespace TaskTrackerConsole.model
         /// Gets or sets the created by property with the user Id
         /// </summary>
         [JsonPropertyName("created_by")]
-        public string CreatedBy { get; set; }
+        public int CreatedBy { get; set; }
     }
     // Define a wrapper class to match the new JSON structure
     public class TaskWrapper

@@ -40,5 +40,5 @@ public class TaskDto
     /// </summary>
     /// <example>2024-09-12 09:15:30</example>
     public string? UpdatedAt { get; set; }  // Formatted date
-    public string CreatedBy { get; internal set; }
+    public string? CreatedBy { get; internal set; }
 }

@@ -47,8 +47,9 @@ namespace GemConnectAPI.Controllers.TaskTracker
         public ActionResult<IEnumerable<TaskDto>> GetTasks()
         {
             var tasks = _taskManager.GetTasks();
+            var username = User.FindFirst(ClaimTypes.Name)?.Value;  // Fetch the username
             //Return the tasks as TaskDto objects instead of Task models
-            IEnumerable<TaskDto> enumerable = tasks.Select(_taskMapper.MapTaskToDto);  //pass the method MapTaskToDto to the Select method
+            IEnumerable<TaskDto> enumerable = tasks.Select(task => _taskMapper.MapTaskToDto(task, username));  //pass the method MapTaskToDto to the Select method
             var taskDtos = enumerable;
 
             return Ok(taskDtos);
@@ -76,8 +77,8 @@ namespace GemConnectAPI.Controllers.TaskTracker
             {
                 return HandleTaskNotFound(id);
             }
-
-            TaskDto taskDto = _taskMapper.MapTaskToDto(task);
+            var username = User.FindFirst(ClaimTypes.Name)?.Value;
+            TaskDto taskDto = _taskMapper.MapTaskToDto(task, username);
 
             return Ok(taskDto);
         }
@@ -119,7 +120,7 @@ namespace GemConnectAPI.Controllers.TaskTracker
             if (errorResponse != null) { return errorResponse; }
 
             // Map to Task using the mapper, now passing the already validated statusEnum
-            Task newTask = _taskMapper.MaptoTask(taskDto, userId, statusEnum.Value);
+            Task newTask = _taskMapper.MaptoTask(taskDto, int.Parse(userId), statusEnum.Value);
 
             // Add the new task
             _taskManager.AddTask(newTask);
@@ -167,8 +168,10 @@ namespace GemConnectAPI.Controllers.TaskTracker
 
             //Update task
             _taskManager.UpdateTask(id, task);
+            var username = User.FindFirst(ClaimTypes.Name)?.Value;
+
             // Use the helper method to map to TaskDto
-            var updatedTaskDto = _taskMapper.MapTaskToDto(task);
+            TaskDto updatedTaskDto = _taskMapper.MapTaskToDto(task, username: username);
             return Ok(updatedTaskDto);
         }
 
@@ -198,7 +201,7 @@ namespace GemConnectAPI.Controllers.TaskTracker
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;  // Get the User Id from the token
 
             // Ensure users can only delete their own tasks or if they are Admins
-            if (task.CreatedBy != userId && !User.IsInRole("ADMIN"))
+            if (task.CreatedBy != int.Parse(userId) && !User.IsInRole("ADMIN"))
             {
                 return Forbid("You are not allowed to delete this task.");
             }
