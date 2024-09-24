@@ -46,7 +46,11 @@ namespace GemConnectAPI.Controllers.TaskTracker
         [HttpGet("tasks")]
         public ActionResult<IEnumerable<TaskDto>> GetTasks()
         {
-            var tasks = _taskManager.GetTasks();
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;  // Get the User Id from the 
+
+            // Fetch tasks that belong to the authenticated user
+            var tasks = _taskManager.GetTasks().Where(t => t.CreatedBy == int.Parse(userId));
+
             var username = User.FindFirst(ClaimTypes.Name)?.Value;  // Fetch the username
             //Return the tasks as TaskDto objects instead of Task models
             IEnumerable<TaskDto> enumerable = tasks.Select(task => _taskMapper.MapTaskToDto(task, username));  //pass the method MapTaskToDto to the Select method
@@ -77,6 +81,13 @@ namespace GemConnectAPI.Controllers.TaskTracker
             {
                 return HandleTaskNotFound(id);
             }
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            // Ensure the user is the creator of the task or is an Admin
+            if (task.CreatedBy != int.Parse(userId) && !User.IsInRole("ADMIN"))
+            {
+                return Forbid("You are not allowed to view this task.");
+            }
             var username = User.FindFirst(ClaimTypes.Name)?.Value;
             TaskDto taskDto = _taskMapper.MapTaskToDto(task, username);
 
@@ -105,7 +116,7 @@ namespace GemConnectAPI.Controllers.TaskTracker
         /// </summary>
         [Authorize(Policy = "USER")]  // Allow users to create tasks
         [HttpPost]
-        public IActionResult AddTask([FromBody] TaskDto taskDto)
+        public IActionResult AddTask([FromBody] CreateTaskDto taskDto)
         {
             if (!ModelState.IsValid)
             {
@@ -125,7 +136,8 @@ namespace GemConnectAPI.Controllers.TaskTracker
             // Add the new task
             _taskManager.AddTask(newTask);
             // Return 201 Created response with the new task's URI
-            return CreatedAtAction(nameof(GetTaskById), new { id = newTask.Id });
+            // return CreatedAtAction(nameof(GetTaskById), new { id = newTask.Id });
+            return Ok("New task created.");
         }
 
         /// <summary>
@@ -150,13 +162,20 @@ namespace GemConnectAPI.Controllers.TaskTracker
         // PUT api/<TaskTrackerController>/5
         [Authorize(Policy = "USER")]
         [HttpPut("{id}")]
-        public IActionResult UpdateTask(int id, [FromBody] TaskDto taskDto)
+        public IActionResult UpdateTask(int id, [FromBody] CreateTaskDto taskDto)
         {
             var task = _taskManager.GetTask(id);
 
             if (task == null)
             {
                 return HandleTaskNotFound(id);
+            }
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            // Ensure the user is the creator of the task or is an Admin
+            if (task.CreatedBy != int.Parse(userId) && !User.IsInRole("ADMIN"))
+            {
+                return Forbid("You are not allowed to view this task.");
             }
             // Try to parse the string status to the Status 
             var (statusEnum, errorResponse) = ValidateAndParseStatus(taskDto.Status);
@@ -198,8 +217,13 @@ namespace GemConnectAPI.Controllers.TaskTracker
             {
                 return HandleTaskNotFound(id);
             }
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;  // Get the User Id from the token
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
+            // Ensure the user is the creator of the task or is an Admin
+            if (task.CreatedBy != int.Parse(userId) && !User.IsInRole("ADMIN"))
+            {
+                return Forbid("You are not allowed to view this task.");
+            }
             // Ensure users can only delete their own tasks or if they are Admins
             if (task.CreatedBy != int.Parse(userId) && !User.IsInRole("ADMIN"))
             {

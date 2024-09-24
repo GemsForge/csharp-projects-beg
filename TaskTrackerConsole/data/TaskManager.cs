@@ -39,7 +39,8 @@ namespace TaskTrackerConsole.data
                 Description = newTask.Description,
                 Status = newTask.Status,
                 CreatedAt = now,
-                UpdatedAt = now
+                UpdatedAt = now,
+                CreatedBy = newTask.CreatedBy
             };
 
             // Add the new task to the list

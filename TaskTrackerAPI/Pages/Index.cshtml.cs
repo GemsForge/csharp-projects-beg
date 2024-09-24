@@ -1,5 +1,4 @@
-﻿using CommonLibrary.TaskTracker.data;
-using Task = TaskTrackerConsole.model.Task;
+﻿using Task = TaskTrackerConsole.model.Task;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TaskTrackerConsole.data;
 

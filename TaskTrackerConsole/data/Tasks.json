@@ -70,5 +70,53 @@
     "created_at": "2024-09-10T00:21:47.6185477-04:00",
     "updated_at": "2024-09-10T00:21:47.6185477-04:00",
     "created_by": 4
+  },
+  {
+    "id": 10,
+    "description": "New Task with aUtHoRiZaTiOn!",
+    "status": "TODO",
+    "created_at": "2024-09-24T03:17:12.3206805-04:00",
+    "updated_at": "2024-09-24T03:17:12.3206805-04:00",
+    "created_by": 0
+  },
+  {
+    "id": 11,
+    "description": "New Task with aUtHoRiZaTiOn!",
+    "status": "TODO",
+    "created_at": "2024-09-24T03:23:28.4607946-04:00",
+    "updated_at": "2024-09-24T03:23:28.4607946-04:00",
+    "created_by": 1
+  },
+  {
+    "id": 12,
+    "description": "New Task with aUtHoRiZaTiOn!",
+    "status": "TODO",
+    "created_at": "2024-09-24T03:24:27.6258862-04:00",
+    "updated_at": "2024-09-24T03:24:27.6258862-04:00",
+    "created_by": 1
+  },
+  {
+    "id": 14,
+    "description": "Implement the new user authentication module",
+    "status": "COMPLETE",
+    "created_at": "2024-09-24T03:37:57.8722074-04:00",
+    "updated_at": "2024-09-24T04:02:59.6010977-04:00",
+    "created_by": 1
+  },
+  {
+    "id": 16,
+    "description": "New Task with aUtHoRiZaTiOn!",
+    "status": "TODO",
+    "created_at": "2024-09-24T03:43:07.8799978-04:00",
+    "updated_at": "2024-09-24T03:43:07.8799978-04:00",
+    "created_by": 1
+  },
+  {
+    "id": 17,
+    "description": "ANOTHER New Task with aUtHoRiZaTiOn!",
+    "status": "PENDING",
+    "created_at": "2024-09-24T03:52:27.0153468-04:00",
+    "updated_at": "2024-09-24T03:52:27.0153468-04:00",
+    "created_by": 1
   }
 ]

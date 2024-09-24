@@ -35,6 +35,7 @@ namespace TaskTrackerConsole.services
                 Status = status
             };
             _taskManager.AddTask(newTask);
+
         }
 
         /// <summary>

@@ -60,10 +60,13 @@ namespace GemConnectAPI.Services.SecureUser
         {
             var claims = new[]
             {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Username),
-            new Claim(ClaimTypes.Role, user.Role.ToString()),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),  // Use userId for the Sub claim
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),    // Use userId for the NameIdentifier claim
+                new Claim(ClaimTypes.Name, user.Username),                   // Use username for the Name claim
+                new Claim(ClaimTypes.Role, user.Role.ToString()),            // Role claim (e.g., ADMIN or USER)
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) // Unique token ID
+            };
+
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

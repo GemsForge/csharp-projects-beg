@@ -1,6 +1,4 @@
-﻿using CommonLibrary.TaskTracker.dto;
-using CommonLibrary.TaskTracker.model;
-using Moq;
+﻿using Moq;
 using TaskTrackerConsole.dto;
 using TaskTrackerConsole.model;
 using TaskTrackerConsole.services;
