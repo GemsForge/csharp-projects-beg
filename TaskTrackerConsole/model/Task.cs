@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace CommonLibrary.TaskTracker.model
+namespace TaskTrackerConsole.model
 {
     /// <summary>
     /// Represents a task in the task tracker system.
@@ -36,6 +36,12 @@ namespace CommonLibrary.TaskTracker.model
         /// </summary>
         [JsonPropertyName("updated_at")]
         public DateTime UpdatedAt { get; set; }
+
+        /// <summary>
+        /// Gets or sets the created by property with the user Id
+        /// </summary>
+        [JsonPropertyName("created_by")]
+        public int CreatedBy { get; set; }
     }
     // Define a wrapper class to match the new JSON structure
     public class TaskWrapper

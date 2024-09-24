@@ -1,6 +1,6 @@
-using Task = CommonLibrary.TaskTracker.model.Task;
+using Task = TaskTrackerConsole.model.Task;
 
-namespace CommonLibrary.TaskTracker.data
+namespace TaskTrackerConsole.data
 {
     /// <summary>
     /// Manages tasks and provides operations to add, update, delete, and retrieve tasks.
@@ -39,7 +39,8 @@ namespace CommonLibrary.TaskTracker.data
                 Description = newTask.Description,
                 Status = newTask.Status,
                 CreatedAt = now,
-                UpdatedAt = now
+                UpdatedAt = now,
+                CreatedBy = newTask.CreatedBy
             };
 
             // Add the new task to the list

@@ -1,9 +1,9 @@
-﻿using CommonLibrary.TaskTracker.model;
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
-using Task = CommonLibrary.TaskTracker.model.Task;
+using TaskTrackerConsole.model;
+using Task = TaskTrackerConsole.model.Task;
 
-namespace CommonLibrary.TaskTracker.data
+namespace TaskTrackerConsole.data
 {
     /// <summary>
     /// Handles loading and saving tasks to and from a JSON file.

@@ -6,14 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="TaskTracker\data\Tasks.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="TaskTracker\data\Tasks.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
-
 </Project>

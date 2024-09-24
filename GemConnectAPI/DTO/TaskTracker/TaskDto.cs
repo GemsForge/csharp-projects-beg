@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CommonLibrary.TaskTracker.dto;
+namespace GemConnectAPI.DTO.TaskTracker;
 
 /// <summary>
 /// Represents a Data Transfer Object (DTO) for tasks.
@@ -40,4 +40,22 @@ public class TaskDto
     /// </summary>
     /// <example>2024-09-12 09:15:30</example>
     public string? UpdatedAt { get; set; }  // Formatted date
+    public string? CreatedBy { get; internal set; }
+}
+
+public class CreateTaskDto
+{/// <summary>
+ /// Gets or sets the description of the task.
+ /// </summary>
+ /// <example>Implement the new user authentication module</example>
+    [Required]
+    public required string Description { get; set; }
+
+    /// <summary>
+    /// Gets or sets the status of the task.
+    /// Allowed values are: TODO, PENDING, COMPLETE.
+    /// </summary>
+    /// <example>TODO</example>
+    [Required]
+    public required string Status { get; set; }  // String representation of the status for easier display
 }

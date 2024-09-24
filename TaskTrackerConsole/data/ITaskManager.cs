@@ -1,5 +1,5 @@
-﻿using Task = CommonLibrary.TaskTracker.model.Task;
-namespace CommonLibrary.TaskTracker.data
+﻿using Task = TaskTrackerConsole.model.Task;
+namespace TaskTrackerConsole.data
 {
     public interface ITaskManager
     {

@@ -1,6 +1,6 @@
-using CommonLibrary.TaskTracker.data;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using TaskTrackerConsole.data;
 
 var builder = WebApplication.CreateBuilder(args);
 
