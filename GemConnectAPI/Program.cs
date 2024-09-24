@@ -1,5 +1,6 @@
 ﻿using FizzBuzzConsole.service;
 using GemConnectAPI.Mappers.SecureUser;
+using GemConnectAPI.Mappers.TaskTracker;
 using GemConnectAPI.Services.SecureUser;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -92,6 +93,7 @@ new ApiUserManager(
     provider.GetRequiredService<IUserService>(),
     provider.GetRequiredService<IConfiguration>()));
 builder.Services.AddScoped<IUserMapper, UserMapper>();
+builder.Services.AddScoped<ITaskMapper, TaskMapper>();
 builder.Services.AddAuthorization(options => {
     options.AddPolicy("ADMIN", policy => policy.RequireRole("ADMIN"));
     options.AddPolicy("USER", policy => policy.RequireRole("USER", "ADMIN"));

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TaskTrackerConsole.dto;
+namespace GemConnectAPI.DTO.TaskTracker;
 
 /// <summary>
 /// Represents a Data Transfer Object (DTO) for tasks.

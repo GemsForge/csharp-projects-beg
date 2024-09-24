@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using TaskTrackerConsole.data;
 using TaskTrackerConsole.model;
-using TaskTrackerConsole.dto;
+using System.Security.Claims;
+using GemConnectAPI.Mappers.TaskTracker;
+using GemConnectAPI.DTO.TaskTracker;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,6 +17,7 @@ namespace GemConnectAPI.Controllers.TaskTracker
     public class TaskTrackerController : ControllerBase
     {
         private readonly ITaskManager _taskManager;
+        private readonly ITaskMapper _taskMapper;
         private readonly ILogger<TaskTrackerController> _logger;
 
         /// <summary>
@@ -23,9 +26,11 @@ namespace GemConnectAPI.Controllers.TaskTracker
         /// <param name="taskManager">The task manager service.</param>
         /// <param name="logger">The logger service.</param>
 
-        public TaskTrackerController(ITaskManager taskManager, ILogger<TaskTrackerController> logger)
+        public TaskTrackerController(ITaskManager taskManager, ITaskMapper taskMapper,
+            ILogger<TaskTrackerController> logger)
         {
             _taskManager = taskManager;
+            _taskMapper = taskMapper;
             _logger = logger;
         }
         /// <summary>
@@ -43,7 +48,7 @@ namespace GemConnectAPI.Controllers.TaskTracker
         {
             var tasks = _taskManager.GetTasks();
             //Return the tasks as TaskDto objects instead of Task models
-            IEnumerable<TaskDto> enumerable = tasks.Select(MapTaskToDto);  //pass the method MapTaskToDto to the Select method
+            IEnumerable<TaskDto> enumerable = tasks.Select(_taskMapper.MapTaskToDto);  //pass the method MapTaskToDto to the Select method
             var taskDtos = enumerable;
 
             return Ok(taskDtos);
@@ -72,7 +77,7 @@ namespace GemConnectAPI.Controllers.TaskTracker
                 return HandleTaskNotFound(id);
             }
 
-            var taskDto = MapTaskToDto(task);
+            TaskDto taskDto = _taskMapper.MapTaskToDto(task);
 
             return Ok(taskDto);
         }
@@ -105,30 +110,21 @@ namespace GemConnectAPI.Controllers.TaskTracker
             {
                 return BadRequest(ModelState);
             }
+            // Parse and validate the status here
 
-            // Try to parse the string status to the Status enum
-            if (!TryParseStatus(taskDto.Status, out Status statusEnum))  // Corrected to use "!"
-            {
-                _logger.LogError($"ERROR: Invalid status value '{taskDto.Status}' provided.");
-                return BadRequest("Invalid status value. Please provide a valid status like 'TODO', 'PENDING', or 'COMPLETE'.");
-            }
 
-            Task newTask = new()
-            {
-                Description = taskDto.Description,
-                Status = statusEnum,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            };
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;  // Get the User Id from the token
+            //Validate and parse the status
+            var (statusEnum, errorResponse) = ValidateAndParseStatus(taskDto.Status);
+            if (errorResponse != null) { return errorResponse; }
+
+            // Map to Task using the mapper, now passing the already validated statusEnum
+            Task newTask = _taskMapper.MaptoTask(taskDto, userId, statusEnum.Value);
 
             // Add the new task
             _taskManager.AddTask(newTask);
-
-            // Use the helper method to map to TaskDto
-            var newTaskDto = MapTaskToDto(newTask);
-
             // Return 201 Created response with the new task's URI
-            return CreatedAtAction(nameof(GetTaskById), new { id = newTask.Id }, newTaskDto);
+            return CreatedAtAction(nameof(GetTaskById), new { id = newTask.Id });
         }
 
         /// <summary>
@@ -162,19 +158,17 @@ namespace GemConnectAPI.Controllers.TaskTracker
                 return HandleTaskNotFound(id);
             }
             // Try to parse the string status to the Status 
-            if (!TryParseStatus(taskDto.Status, out Status statusEnum))
-            {
-                _logger.LogError(message: $"ERROR: Invalid status value '{taskDto.Status}' provided.");
-                return BadRequest("Invalid status value. Please provide a valid status like 'TODO', 'PENDING', or 'COMPLETE'.");
-            }
+            var (statusEnum, errorResponse) = ValidateAndParseStatus(taskDto.Status);
+            if (errorResponse != null) { return errorResponse; }
+
             task.Description = taskDto.Description;
-            task.Status = statusEnum;
+            task.Status = (Status)statusEnum;
             task.UpdatedAt = DateTime.UtcNow; //Update the timestamp
 
             //Update task
             _taskManager.UpdateTask(id, task);
             // Use the helper method to map to TaskDto
-            var updatedTaskDto = MapTaskToDto(task);
+            var updatedTaskDto = _taskMapper.MapTaskToDto(task);
             return Ok(updatedTaskDto);
         }
 
@@ -194,40 +188,46 @@ namespace GemConnectAPI.Controllers.TaskTracker
         // DELETE api/<TaskTrackerController>/5
         [Authorize(Policy = "USER")]
         [HttpDelete("{id}")]
-        public IActionResult DeleteTask(int id)
+        public IActionResult Delete(int id)
         {
             var task = _taskManager.GetTask(id);
             if (task == null)
             {
                 return HandleTaskNotFound(id);
             }
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;  // Get the User Id from the token
 
-            //Delete task
+            // Ensure users can only delete their own tasks or if they are Admins
+            if (task.CreatedBy != userId && !User.IsInRole("ADMIN"))
+            {
+                return Forbid("You are not allowed to delete this task.");
+            }
+
             _taskManager.DeleteTask(id);
             return NoContent();
-
         }
 
         #region Helpers
-        private IActionResult HandleTaskNotFound(int id)
+        private (Status?, IActionResult) ValidateAndParseStatus(string statusString)
+        {
+            // Attempt to parse the status string to the enum
+            if (Enum.TryParse(statusString, true, out Status statusEnum))
+            {
+                // Parsing successful, return the statusEnum and no error response
+                return (statusEnum, null);
+            }
+
+            // Log the error and return a BadRequest response with the error message
+            _logger.LogError($"Invalid status value '{statusString}' provided.");
+            return (null, BadRequest("Invalid status value. Please provide a valid status like 'TODO', 'PENDING', or 'COMPLETE'."));
+        }
+        private NotFoundObjectResult HandleTaskNotFound(int id)
         {
             // Use a logger for better logging management (assumes ILogger<TaskTrackerController> is injected)
             _logger.LogWarning(message: $"Task with ID {id} could not be found.");
 
             // Return a 404 Not Found response
             return NotFound($"Task with ID {id} could not be found.");
-        }
-        private bool TryParseStatus(string statusString, out Status status) => Enum.TryParse(statusString, true, out status);
-        private TaskDto MapTaskToDto(Task task)
-        {
-            return new TaskDto
-            {
-                Id = task.Id,
-                Description = task.Description,
-                Status = task.Status.ToString(),
-                CreatedAt = task.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
-                UpdatedAt = task.UpdatedAt.ToString("yyyy-MM-dd HH:mm:ss")
-            };
         }
         #endregion
     }
