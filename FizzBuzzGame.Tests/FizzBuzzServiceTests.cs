@@ -12,7 +12,7 @@ namespace FizzBuzzGame.Tests
     public class FizzBuzzServiceTests
     {
         private readonly IFizzBuzzService _fbService;
-        private Mock
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="FizzBuzzServiceTests"/> class.
         /// </summary>

@@ -1,17 +1,18 @@
 ﻿using FizzBuzzConsole.data;
 using FizzBuzzConsole.model;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace FizzBuzzConsole.service
 {
     /// <summary>
     /// Provides game service logic for the FizzBuzz program.
     /// Points are awarded based on whether a number is "Fizz", "Buzz", or "FizzBuzz".
-    /// Normal numbers are worth 1 point, "Fizz" or "Buzz" are worth 5 points, and "FizzBuzz" is worth 10 points.
     /// </summary>
     public class FizzBuzzService : IFizzBuzzService
     {
-        private IFizzBuzzRepository _repo;
-        private readonly List<FizzBuzz> _values;  // Use the FizzBuzz model to store values and their guesses
+        private readonly IFizzBuzzRepository _repo;
+        private readonly List<FizzBuzzGamePlay> _gamePlays;  // Use the FizzBuzzGamePlay model to store sessions
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FizzBuzzService"/> class.
@@ -19,62 +20,101 @@ namespace FizzBuzzConsole.service
         public FizzBuzzService(IFizzBuzzRepository repo)
         {
             _repo = repo;
-            _values = _repo.LoadResults(); //Load existing results when initializing the service
+            _gamePlays = _repo.LoadResults();  // Load existing results when initializing the service
         }
 
         /// <summary>
-        /// Saves the provided list of integer values as FizzBuzz guesses for later use in calculating points.
+        /// Creates a new gameplay session and saves the provided list of integer values as FizzBuzz guesses.
         /// </summary>
-        /// <param name="values">The list of integer values to save.</param>
-        public void SaveValueList(List<int> values)
+        /// <param name="player">The player (User ID or Username) for the session.</param>
+        /// <param name="values">The list of integer values to evaluate.</param>
+        public void SaveGamePlay(string player, List<int> values)
         {
+            // Generate the next sequential GamePlayId
+            var gamePlayId = _gamePlays.Count != 0 ? _gamePlays.Max(gp => gp.GamePlayId) + 1 : 1;
+
+            var newGamePlay = new FizzBuzzGamePlay(gamePlayId, player);
+
             foreach (var value in values)
             {
-                var fizzBuzz = FizzBuzz.Create(value);
-                _values.Add(fizzBuzz);
+                var guess = DetermineGuess(value);  // Determine the FizzBuzz guess
+                newGamePlay.AddGuess(value, guess);  // Add guess and update total points
             }
-            _repo.SaveResults(_values);
-        }
-        /// <summary>
-        /// Clears the previous results to reset the game state.
-        /// </summary>
-        public void ClearPreviousResults()
-        {
-            _values.Clear();  // Clear stored FizzBuzz values
-            _repo.SaveResults(_values);
+
+            _gamePlays.Add(newGamePlay);  // Add the new gameplay session to the list
+            _repo.SaveResults(_gamePlays);  // Persist the updated list to the JSON file
         }
 
         /// <summary>
-        /// Counts the occurrences of Fizz, Buzz, and FizzBuzz based on the saved FizzBuzz values.
+        /// Clears the gameplay results for a specific session.
         /// </summary>
-        /// <returns>A tuple containing the counts of Fizz, Buzz, and FizzBuzz.</returns>
-        public (int fizzes, int buzzes, int fizzBuzzes) CountFizzBuzzes()
+        /// <param name="gamePlayId">The ID of the gameplay session to clear.</param>
+        public void ClearGamePlay(int gamePlayId)
         {
-            // Similar to before, counting FizzBuzzes
+            var gamePlay = _gamePlays.FirstOrDefault(gp => gp.GamePlayId == gamePlayId);
+            if (gamePlay != null)
+            {
+                _gamePlays.Remove(gamePlay);  // Remove the specific gameplay session
+                _repo.SaveResults(_gamePlays);  // Persist the updated list
+            }
+        }
+
+        /// <summary>
+        /// Counts the occurrences of Fizz, Buzz, and FizzBuzz based on the guesses for a specific gameplay session.
+        /// </summary>
+        /// <param name="gamePlayId">The ID of the gameplay session.</param>
+        /// <returns>A tuple containing the counts of Fizz, Buzz, and FizzBuzz.</returns>
+        public (int fizzes, int buzzes, int fizzBuzzes) CountFizzBuzzes(int gamePlayId)
+        {
+            var gamePlay = _gamePlays.FirstOrDefault(gp => gp.GamePlayId == gamePlayId);
+            if (gamePlay == null)
+            {
+                return (0, 0, 0);
+            }
+
             return (
-                _values.Count(x => x.Guess == FizzBuzzGuess.FIZZ),
-                _values.Count(x => x.Guess == FizzBuzzGuess.BUZZ),
-                _values.Count(x => x.Guess == FizzBuzzGuess.FIZZBUZZ)
+                gamePlay.Guesses.Values.Count(x => x == FizzBuzzGuess.FIZZ),
+                gamePlay.Guesses.Values.Count(x => x == FizzBuzzGuess.BUZZ),
+                gamePlay.Guesses.Values.Count(x => x == FizzBuzzGuess.FIZZBUZZ)
             );
         }
 
         /// <summary>
-        /// Calculates the total points based on the saved FizzBuzz guesses.
+        /// Retrieves all saved gameplay sessions for a specific player.
         /// </summary>
-        /// <returns>The total calculated points.</returns>
-        public int TallyPoints()
+        /// <param name="player">The player's ID or username.</param>
+        /// <returns>A list of FizzBuzzGamePlay objects for the player.</returns>
+        public IEnumerable<FizzBuzzGamePlay> GetGamePlaysForPlayer(string player)
         {
-            int total = 0;
-            foreach (var item in _values)
-            {
-                total += item.Point;
-            }
-            return total;
+            return _gamePlays.Where(gp => gp.Player == player);
         }
 
-        public IEnumerable<FizzBuzz> GetSavedValues()
+        /// <summary>
+        /// Calculates the total points for a specific gameplay session.
+        /// </summary>
+        /// <param name="gamePlayId">The ID of the gameplay session.</param>
+        /// <returns>The total calculated points.</returns>
+        public int TallyPoints(int gamePlayId)
         {
-            return _values;
+            var gamePlay = _gamePlays.FirstOrDefault(gp => gp.GamePlayId == gamePlayId);
+            return gamePlay?.TotalPoints ?? 0;
+        }
+
+        /// <summary>
+        /// Determines the FizzBuzz guess type for a given value.
+        /// </summary>
+        /// <param name="value">The integer value to evaluate.</param>
+        /// <returns>The determined FizzBuzzGuess.</returns>
+        private FizzBuzzGuess DetermineGuess(int value)
+        {
+            if (value % 3 == 0 && value % 5 == 0)
+                return FizzBuzzGuess.FIZZBUZZ;
+            else if (value % 3 == 0)
+                return FizzBuzzGuess.FIZZ;
+            else if (value % 5 == 0)
+                return FizzBuzzGuess.BUZZ;
+            else
+                return FizzBuzzGuess.NONE;
         }
     }
 }

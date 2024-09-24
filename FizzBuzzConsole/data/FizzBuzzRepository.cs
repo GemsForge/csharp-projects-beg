@@ -16,21 +16,21 @@ namespace FizzBuzzConsole.data
             _filePath = filePath;
         }
         // Load FizzBuzz results from the JSON file
-        public List<FizzBuzz> LoadResults()
+        public List<FizzBuzzGamePlay> LoadResults()
         {
             if (!File.Exists(_filePath))
             {
-                return new List<FizzBuzz>();
+                return [];
             }
 
             var jsonData = File.ReadAllText(_filePath);
-            return JsonSerializer.Deserialize<List<FizzBuzz>>(jsonData) ?? new List<FizzBuzz>();
+            return JsonSerializer.Deserialize<List<FizzBuzzGamePlay>>(jsonData) ?? [];
         }
 
-        // Save FizzBuzz results to the JSON file
-        public void SaveResults(List<FizzBuzz> results)
+        // Save FizzBuzz gameplay results to the JSON file
+        public void SaveResults(List<FizzBuzzGamePlay> gamePlays)
         {
-            var jsonData = JsonSerializer.Serialize(results, new JsonSerializerOptions { WriteIndented = true });
+            string jsonData = JsonSerializer.Serialize(gamePlays, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(_filePath, jsonData);
         }
     }
