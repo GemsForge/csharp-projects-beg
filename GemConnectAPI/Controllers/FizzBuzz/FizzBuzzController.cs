@@ -2,6 +2,7 @@
 using FizzBuzzConsole.service;
 using GemConnectAPI.DTO;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 
 namespace GemConnectAPI.Controllers.FizzBuzz
@@ -22,9 +23,8 @@ namespace GemConnectAPI.Controllers.FizzBuzz
             _fbService = fbService;
         }
 
-
         /// <summary>
-        /// Saves a list of values to calculate FizzBuzz results.
+        /// Saves a list of values to calculate FizzBuzz results for the logged-in user.
         /// </summary>
         /// <param name="fbDto">The list of integer values to process.</param>
         /// <remarks>
@@ -43,63 +43,76 @@ namespace GemConnectAPI.Controllers.FizzBuzz
                 return BadRequest(ModelState);
             }
 
-            _fbService.SaveValueList(fbDto.Values);
+            // Get the logged-in user's ID
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User not logged in.");
+            }
 
-            // Return a 201 Created response with the saved values in the body
-            return CreatedAtAction(nameof(GetSavedValues),new { }, _fbService.GetSavedValues());
+            // Save the gameplay for the logged-in user with sequential GamePlayId
+            _fbService.SaveGamePlay(userId, fbDto.Values);
+
+            return CreatedAtAction(nameof(GetSavedValues), new { }, _fbService.GetGamePlaysForPlayer(userId));
         }
 
         /// <summary>
-        /// Clears the previous results to reset the game state.
+        /// Clears the previous gameplay results for the logged-in user.
         /// </summary>
         /// <remarks>
         /// Example request:
         ///
-        ///     DELETE /api/FizzBuzz/clear
+        ///     DELETE /api/FizzBuzz/clear/{gamePlayId}
         ///
         /// </remarks>
-        [HttpDelete("clear")]
-        public IActionResult ClearResults()
+        [HttpDelete("clear/{gamePlayId}")]
+        public IActionResult ClearResults(int gamePlayId)
         {
-            _fbService.ClearPreviousResults();
+            // Get the logged-in user's ID
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User not logged in.");
+            }
+
+            _fbService.ClearGamePlay(gamePlayId);
             return NoContent();
         }
 
         /// <summary>
-        /// Gets the count of Fizz, Buzz, and FizzBuzz occurrences.
+        /// Gets the count of Fizz, Buzz, and FizzBuzz occurrences for the logged-in user.
         /// </summary>
         /// <returns>A tuple containing the counts of Fizz, Buzz, and FizzBuzz.</returns>
         /// <remarks>
         /// Example request:
         ///
-        ///     GET /api/FizzBuzz/count
+        ///     GET /api/FizzBuzz/count/{gamePlayId}
         ///
         /// </remarks>
-        [HttpGet("count")]
-        public IActionResult GetFizzBuzzCount()
+        [HttpGet("count/{gamePlayId}")]
+        public IActionResult GetFizzBuzzCount(int gamePlayId)
         {
-            var result = _fbService.CountFizzBuzzes();
+            var result = _fbService.CountFizzBuzzes(gamePlayId);
             return Ok(new { Fizz = result.fizzes, Buzz = result.buzzes, FizzBuzz = result.fizzBuzzes });
         }
-
         /// <summary>
-        /// Gets the total points based on the saved FizzBuzz guesses.
+        /// Gets the total points based on the saved FizzBuzz guesses for a specific gameplay session.
         /// </summary>
+        /// <param name="gamePlayId">The ID of the gameplay session.</param>
         /// <returns>The total calculated points.</returns>
         /// <remarks>
         /// Example request:
         ///
-        ///     GET /api/FizzBuzz/points
+        ///     GET /api/FizzBuzz/points/{gamePlayId}
         ///
         /// </remarks>
-        [HttpGet("points")]
-        public IActionResult GetTotalPoints()
+        [HttpGet("points/{gamePlayId}")]
+        public IActionResult GetTotalPoints(int gamePlayId)
         {
-            int totalPoints = _fbService.TallyPoints();
+            int totalPoints = _fbService.TallyPoints(gamePlayId);
             return Ok(new { TotalPoints = totalPoints });
         }
-
-        /// <summary>
+                /// <summary>
         /// Retrieves all saved FizzBuzz values and their results.
         /// </summary>
         /// <returns>A list of saved FizzBuzz values and their results.</returns>
@@ -112,7 +125,14 @@ namespace GemConnectAPI.Controllers.FizzBuzz
         [HttpGet("values")]
         public IActionResult GetSavedValues()
         {
-            var savedValues = _fbService.GetSavedValues();
+            //Get the logged-in user's ID
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User not logged in.");
+            }
+
+            var savedValues = _fbService.GetGamePlaysForPlayer(userId);
             return Ok(savedValues);
         }
     }
