@@ -26,7 +26,60 @@
         /// </summary>
         public void DisplayResults(int fizzes, int buzzes, int fizzBuzzes)
         {
-            Console.WriteLine($"Results: Fizz: {fizzes}, Buzz: {buzzes}, FizzBuzz: {fizzBuzzes}");
+            Console.WriteLine($"\nRound Results: Fizz: {fizzes}, Buzz: {buzzes}, FizzBuzz: {fizzBuzzes}");
+            Console.WriteLine("Scoring: Fizz = 5 points, Buzz = 5 points, FizzBuzz = 10 points.");
+        }
+
+        /// <summary>
+        /// Displays the current cumulative score to the user.
+        /// </summary>
+        /// <param name="score">The user's current cumulative score.</param>
+        public void DisplayScore(int score)
+        {
+            Console.WriteLine($"\nYour current score is: {score} points.\n");
+        }
+
+        /// <summary>
+        /// Displays the current GamePlayId to track session progress.
+        /// </summary>
+        /// <param name="gamePlayId">The current game's unique ID.</param>
+        public void DisplayGamePlayId(int gamePlayId)
+        {
+            Console.WriteLine($"This is Game Session: {gamePlayId}\n");
+        }
+
+        /// <summary>
+        /// Displays the final score after the user finishes playing.
+        /// </summary>
+        /// <param name="score">The user's final score.</param>
+        public void DisplayFinalScore(int score)
+        {
+            Console.WriteLine($"\nThank you for playing! Your final score is: {score} points.");
+            Console.WriteLine("Goodbye!");
+        }
+
+        /// <summary>
+        /// Prompts the user to enter a list of validated inputs.
+        /// </summary>
+        /// <param name="count">The number of inputs to request from the user.</param>
+        /// <returns>A list of validated integers entered by the user.</returns>
+        public List<int> GetValidatedInputs(int count)
+        {
+            List<int> inputs = new();
+            Console.WriteLine("Input a number between 1 and 100.");
+            while (inputs.Count < count)
+            {
+                Console.Write($"Enter number {inputs.Count + 1}: ");
+                if (int.TryParse(Console.ReadLine(), out int input) && input >= 1 && input <= 100)
+                {
+                    inputs.Add(input);
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter a number between 1 and 100.");
+                }
+            }
+            return inputs;
         }
 
         /// <summary>
@@ -42,13 +95,13 @@
                 if (answer is null)
                 {
                     Console.WriteLine("Invalid input, try again.");
-                    return false; // or handle accordingly
+                    return false;
                 }
 
                 switch (answer.ToLower()) // Convert to lowercase to handle 'Y' and 'N' variations
                 {
                     case "y":
-                        return true; // Corrected to return `true`
+                        return true;
                     case "n":
                         return false;
                     default:
@@ -56,50 +109,6 @@
                         break;
                 }
             }
-
-
-        }
-
-        /// <summary>
-        /// Displays the current cumulative score to the user.
-        /// </summary>
-        /// <param name="score">The user's current cumulative score.</param>
-        public void DisplayScore(int score)
-        {
-            Console.WriteLine($"\nYour current score is: {score} points.\n");
-        }
-
-        /// <summary>
-        /// Displays the final score after the user finishes playing.
-        /// </summary>
-        /// <param name="score">The user's final score.</param>
-        public void DisplayFinalScore(int score)
-        {
-            Console.WriteLine($"\nThank you for playing! Your final score is: {score} points.");
-        }
-
-        /// <summary>
-        /// Prompts the user to enter a list of validated inputs.
-        /// </summary>
-        /// <param name="count">The number of inputs to request from the user.</param>
-        /// <returns>A list of validated integers entered by the user.</returns>
-        public List<int> GetValidatedInputs(int count)
-        {
-            List<int> inputs = new();
-            Console.WriteLine("Input a number between 1 and 100");
-            while (inputs.Count < count)
-            {
-                Console.Write($"Enter number {inputs.Count + 1}: ");
-                if (int.TryParse(Console.ReadLine(), out int input) && input >= 1 && input <= 100)
-                {
-                    inputs.Add(input);
-                }
-                else
-                {
-                    Console.WriteLine("Invalid input. Please enter a number between 1 and 100.");
-                }
-            }
-            return inputs;
         }
     }
 }

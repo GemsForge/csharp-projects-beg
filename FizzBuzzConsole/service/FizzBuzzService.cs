@@ -33,7 +33,13 @@ namespace FizzBuzzConsole.service
             // Generate the next sequential GamePlayId
             var gamePlayId = _gamePlays.Count != 0 ? _gamePlays.Max(gp => gp.GamePlayId) + 1 : 1;
 
-            var newGamePlay = new FizzBuzzGamePlay(gamePlayId, player);
+            FizzBuzzGamePlay newGamePlay = new FizzBuzzGamePlay
+            {
+                GamePlayId = gamePlayId,
+                Player = player,
+                Guesses = [],
+                TotalPoints = 0
+            };
 
             foreach (var value in values)
             {

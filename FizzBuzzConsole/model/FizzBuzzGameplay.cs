@@ -1,79 +1,88 @@
-﻿namespace FizzBuzzConsole.model
+﻿using System.Text.Json.Serialization;
+using System.Text.Json;
+
+namespace FizzBuzzConsole.model
 {
     /// <summary>
-    /// Represents a gameplay session for the FizzBuzz game, storing guesses and points for a specific player.
+    /// Represents a FizzBuzz gameplay session, including guesses and total points.
     /// </summary>
     public class FizzBuzzGamePlay
     {
         /// <summary>
-        /// Gets or sets the unique ID for each gameplay session.
+        /// Gets or sets the ID of the gameplay session.
         /// </summary>
-        /// <example>1</example>
+        [JsonPropertyName("GamePlayId")]
         public int GamePlayId { get; set; }
 
         /// <summary>
-        /// Gets or sets the player identifier (could be User ID or Username).
+        /// Gets or sets the player associated with the gameplay session.
         /// </summary>
-        /// <example>user123</example>
+        [JsonPropertyName("Player")]
         public string Player { get; set; }
 
         /// <summary>
-        /// Gets or sets the key-value pairs of guesses made during the gameplay.
-        /// The key represents the number, and the value represents the FizzBuzz guess (e.g., "FIZZ", "BUZZ", "FIZZBUZZ", or "NONE").
+        /// Gets or sets the dictionary of guesses made during the gameplay session, where
+        /// the key is the number guessed, and the value is the corresponding FizzBuzz result.
         /// </summary>
-        /// <example>{ "3": "FIZZ", "5": "BUZZ", "15": "FIZZBUZZ", "7": "NONE" }</example>
-        public Dictionary<int, FizzBuzzGuess> Guesses { get; set; } = new();
+        [JsonPropertyName("Guesses")]
+        [JsonConverter(typeof(FizzBuzzGuessConverter))]
+        public Dictionary<int, FizzBuzzGuess> Guesses { get; set; } = new Dictionary<int, FizzBuzzGuess>();
 
         /// <summary>
-        /// Gets or sets the total points scored in the gameplay.
+        /// Gets or sets the total points earned during the gameplay session.
         /// </summary>
-        /// <example>21</example>
+        [JsonPropertyName("TotalPoints")]
         public int TotalPoints { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FizzBuzzGamePlay"/> class with the given gameplay ID and player.
+        /// Adds a guess and updates the total points for the gameplay session.
         /// </summary>
-        /// <param name="gamePlayId">The unique ID for the gameplay session.</param>
-        /// <param name="player">The identifier of the player (User ID or Username).</param>
-        /// <example>new FizzBuzzGamePlay(1, "user123")</example>
-        public FizzBuzzGamePlay(int gamePlayId, string player)
-        {
-            GamePlayId = gamePlayId;
-            Player = player;
-        }
-
-        /// <summary>
-        /// Adds a guess for a specific number and calculates the points based on the guess.
-        /// </summary>
-        /// <param name="number">The number being evaluated in the FizzBuzz game.</param>
-        /// <param name="guess">The FizzBuzz guess for the number (e.g., FIZZ, BUZZ, FIZZBUZZ, or NONE).</param>
-        /// <example>AddGuess(3, FizzBuzzGuess.FIZZ)</example>
+        /// <param name="number">The number guessed.</param>
+        /// <param name="guess">The FizzBuzz result (e.g., Fizz, Buzz, FizzBuzz, or None).</param>
         public void AddGuess(int number, FizzBuzzGuess guess)
         {
             Guesses[number] = guess;
-            TotalPoints += CalculatePoints(guess);
-        }
-
-        /// <summary>
-        /// Calculates the points based on the FizzBuzz guess type.
-        /// </summary>
-        /// <param name="guess">The FizzBuzz guess (FIZZ, BUZZ, FIZZBUZZ, or NONE).</param>
-        /// <returns>The points awarded based on the guess.</returns>
-        /// <example>
-        /// FIZZBUZZ: 10, 
-        /// FIZZ: 5, 
-        /// BUZZ: 5, 
-        /// NONE: 1
-        /// </example>
-        private static int CalculatePoints(FizzBuzzGuess guess)
-        {
-            return guess switch
-            {
-                FizzBuzzGuess.FIZZBUZZ => 10,
-                FizzBuzzGuess.FIZZ => 5,
-                FizzBuzzGuess.BUZZ => 5,
-                _ => 1,
-            };
+            TotalPoints += FizzBuzz.CalculatePoints(guess);
         }
     }
+
+    /// <summary>
+    /// Converts FizzBuzzGuess values to and from JSON.
+    /// </summary>
+    public class FizzBuzzGuessConverter : JsonConverter<Dictionary<int, FizzBuzzGuess>>
+    {
+        public override Dictionary<int, FizzBuzzGuess> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var dictionary = new Dictionary<int, FizzBuzzGuess>();
+
+            while (reader.Read())
+            {
+                if (reader.TokenType == JsonTokenType.EndObject)
+                {
+                    break;
+                }
+
+                var key = int.Parse(reader.GetString()!);
+
+                reader.Read();
+                var value = Enum.Parse<FizzBuzzGuess>(reader.GetString()!, true);
+
+                dictionary[key] = value;
+            }
+
+            return dictionary;
+        }
+
+        public override void Write(Utf8JsonWriter writer, Dictionary<int, FizzBuzzGuess> value, JsonSerializerOptions options)
+        {
+            writer.WriteStartObject();
+            foreach (var kvp in value)
+            {
+                writer.WritePropertyName(kvp.Key.ToString());
+                writer.WriteStringValue(kvp.Value.ToString());
+            }
+            writer.WriteEndObject();
+        }
+    }
+
 }

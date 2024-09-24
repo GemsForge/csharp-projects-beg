@@ -17,9 +17,9 @@ namespace FizzBuzzGame
             IFizzBuzzRepository fbRepo = new FizzBuzzRepository(filePath);
             // Initialize the FizzBuzz service
             IFizzBuzzService fbService = new FizzBuzzService(fbRepo);
-
+            string playerId = "4";
             // Create an instance of the FizzBuzz game with the service
-            FizzBuzzArcade game = new(fbService, fbDisplay);
+            FizzBuzzArcade game = new(fbService, fbDisplay, playerId);
 
             // Start the FizzBuzz game
             game.StartGame();

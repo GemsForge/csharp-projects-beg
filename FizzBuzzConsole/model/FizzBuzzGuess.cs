@@ -1,8 +1,11 @@
-﻿namespace FizzBuzzConsole.model
+﻿using System.Text.Json.Serialization;
+
+namespace FizzBuzzConsole.model
 {
     /// <summary>
     /// Represents the different types of FizzBuzz guesses.
     /// </summary>
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum FizzBuzzGuess
     {
         /// <summary>
