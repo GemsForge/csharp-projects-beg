@@ -7,9 +7,9 @@ namespace FizzBuzzConsole.service;
 /// </summary>
 public interface IFizzBuzzService
 {
-    void SaveValueList(List<int> values);
-    int TallyPoints();
-    IEnumerable<FizzBuzz> GetSavedValues();
-    void ClearPreviousResults();
-    (int fizzes, int buzzes, int fizzBuzzes) CountFizzBuzzes();
+    void ClearGamePlay(int gamePlayId);
+    (int fizzes, int buzzes, int fizzBuzzes) CountFizzBuzzes(int gamePlayId);
+    IEnumerable<FizzBuzzGamePlay> GetGamePlaysForPlayer(string player);
+    int TallyPoints(int gamePlayId);
+    void SaveGamePlay(string player, List<int> values);
 }

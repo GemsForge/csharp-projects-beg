@@ -18,7 +18,7 @@
         /// <summary>
         /// Gets the result of the FizzBuzz calculation as a string.
         /// </summary>
-        public string Result => Guess.ToString(); // Converts the Guess enum to its string representation
+        public string Result => Guess.ToString();
 
         /// <summary>
         /// Factory method to create a <see cref="FizzBuzz"/> instance based on a value.
@@ -47,7 +47,7 @@
             else if (value % 5 == 0)
                 return FizzBuzzGuess.BUZZ;
             else
-                return FizzBuzzGuess.NUMBER;
+                return FizzBuzzGuess.NONE;
         }
 
         /// <summary>
@@ -55,7 +55,7 @@
         /// </summary>
         /// <param name="guess">The <see cref="FizzBuzzGuess"/> type.</param>
         /// <returns>The points associated with the guess type.</returns>
-        private static int CalculatePoints(FizzBuzzGuess guess)
+        public static int CalculatePoints(FizzBuzzGuess guess)
         {
             return guess switch
             {
@@ -65,16 +65,5 @@
                 _ => 1,
             };
         }
-    }
-
-    /// <summary>
-    /// Represents the different types of FizzBuzz guesses.
-    /// </summary>
-    public enum FizzBuzzGuess
-    {
-        NUMBER,
-        FIZZ,
-        BUZZ,
-        FIZZBUZZ
     }
 }

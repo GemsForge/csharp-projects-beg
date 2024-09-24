@@ -10,15 +10,18 @@ namespace FizzBuzzConsole.game
         private readonly IFizzBuzzService _fbService;
         private readonly IFizzBuzzDisplay _display;
         private int _score;  // Variable to track the user's cumulative score
+        private string _playerId;  // Variable to store the current player's ID
+        private int _currentGamePlayId;  // Variable to track the current GamePlayId
 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FizzBuzzArcade"/> class.
         /// </summary>
-        public FizzBuzzArcade(IFizzBuzzService fizzBuzzService, IFizzBuzzDisplay display)
+        public FizzBuzzArcade(IFizzBuzzService fizzBuzzService, IFizzBuzzDisplay display, string playerId)
         {
             _fbService = fizzBuzzService;
             _display = display;
+            _playerId = playerId;  // Initialize with the player's ID
             _score = 0;  // Initialize score to 0
         }
 
@@ -29,13 +32,16 @@ namespace FizzBuzzConsole.game
         {
             bool playAgain = true;
             _display.DisplayGameRules();
+
             while (playAgain)
             {
+                // Create a new GamePlayId for each session
+                _currentGamePlayId = GenerateGamePlayId();
 
                 List<int> inputs = _display.GetValidatedInputs(5);
-                _fbService.SaveValueList(inputs);
+                _fbService.SaveGamePlay(_playerId, inputs);  // Save with player ID and inputs
 
-                var (fizzes, buzzes, fizzBuzzes) = _fbService.CountFizzBuzzes();
+                var (fizzes, buzzes, fizzBuzzes) = _fbService.CountFizzBuzzes(_currentGamePlayId);
                 _display.DisplayResults(fizzes, buzzes, fizzBuzzes);
 
                 UpdateScore(fizzes, buzzes, fizzBuzzes);  // Update score based on game results
@@ -57,9 +63,9 @@ namespace FizzBuzzConsole.game
         /// </summary>
         private void ResetGame()
         {
-            _fbService.ClearPreviousResults();  // Clear previous game results
-
+            _fbService.ClearGamePlay(_currentGamePlayId);  // Clear previous game results for this session
         }
+
         /// <summary>
         /// Updates the user's score based on the results of the game.
         /// </summary>
@@ -72,6 +78,15 @@ namespace FizzBuzzConsole.game
             _score += fizzes * 1 + buzzes * 2 + fizzBuzzes * 3;
         }
 
-
+        /// <summary>
+        /// Generates a unique GamePlayId by getting the next available ID from the service.
+        /// </summary>
+        /// <returns>The generated GamePlayId.</returns>
+        private int GenerateGamePlayId()
+        {
+            // This method assumes that the service can generate a new sequential GamePlayId
+            var gamePlays = _fbService.GetGamePlaysForPlayer(_playerId);
+            return gamePlays.Any() ? gamePlays.Max(gp => gp.GamePlayId) + 1 : 1;
+        }
     }
 }
