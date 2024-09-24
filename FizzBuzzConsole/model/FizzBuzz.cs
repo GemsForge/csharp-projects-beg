@@ -47,7 +47,7 @@
             else if (value % 5 == 0)
                 return FizzBuzzGuess.BUZZ;
             else
-                return FizzBuzzGuess.NUMBER;
+                return FizzBuzzGuess.NONE;
         }
 
         /// <summary>
@@ -72,7 +72,7 @@
     /// </summary>
     public enum FizzBuzzGuess
     {
-        NUMBER,
+        NONE,
         FIZZ,
         BUZZ,
         FIZZBUZZ

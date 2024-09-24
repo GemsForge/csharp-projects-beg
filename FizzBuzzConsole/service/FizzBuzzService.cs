@@ -1,4 +1,5 @@
-﻿using FizzBuzzConsole.model;
+﻿using FizzBuzzConsole.data;
+using FizzBuzzConsole.model;
 
 namespace FizzBuzzConsole.service
 {
@@ -9,14 +10,16 @@ namespace FizzBuzzConsole.service
     /// </summary>
     public class FizzBuzzService : IFizzBuzzService
     {
+        private IFizzBuzzRepository _repo;
         private readonly List<FizzBuzz> _values;  // Use the FizzBuzz model to store values and their guesses
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FizzBuzzService"/> class.
         /// </summary>
-        public FizzBuzzService()
+        public FizzBuzzService(IFizzBuzzRepository repo)
         {
-            _values = new List<FizzBuzz>();
+            _repo = repo;
+            _values = _repo.LoadResults(); //Load existing results when initializing the service
         }
 
         /// <summary>
@@ -30,6 +33,7 @@ namespace FizzBuzzConsole.service
                 var fizzBuzz = FizzBuzz.Create(value);
                 _values.Add(fizzBuzz);
             }
+            _repo.SaveResults(_values);
         }
         /// <summary>
         /// Clears the previous results to reset the game state.
@@ -37,6 +41,7 @@ namespace FizzBuzzConsole.service
         public void ClearPreviousResults()
         {
             _values.Clear();  // Clear stored FizzBuzz values
+            _repo.SaveResults(_values);
         }
 
         /// <summary>
@@ -45,27 +50,12 @@ namespace FizzBuzzConsole.service
         /// <returns>A tuple containing the counts of Fizz, Buzz, and FizzBuzz.</returns>
         public (int fizzes, int buzzes, int fizzBuzzes) CountFizzBuzzes()
         {
-            int fizzes = 0;
-            int buzzes = 0;
-            int fizzBuzzes = 0;
-
-            foreach (var fizzBuzz in GetSavedValues())
-            {
-                switch (fizzBuzz.Guess)
-                {
-                    case FizzBuzzGuess.FIZZ:
-                        fizzes++;
-                        break;
-                    case FizzBuzzGuess.BUZZ:
-                        buzzes++;
-                        break;
-                    case FizzBuzzGuess.FIZZBUZZ:
-                        fizzBuzzes++;
-                        break;
-                }
-            }
-
-            return (fizzes, buzzes, fizzBuzzes);
+            // Similar to before, counting FizzBuzzes
+            return (
+                _values.Count(x => x.Guess == FizzBuzzGuess.FIZZ),
+                _values.Count(x => x.Guess == FizzBuzzGuess.BUZZ),
+                _values.Count(x => x.Guess == FizzBuzzGuess.FIZZBUZZ)
+            );
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using FizzBuzzConsole.service;
+﻿using FizzBuzzConsole.data;
+using FizzBuzzConsole.service;
 using GemConnectAPI.Mappers.SecureUser;
 using GemConnectAPI.Mappers.TaskTracker;
 using GemConnectAPI.Services.SecureUser;
@@ -23,7 +24,9 @@ namespace GemConnectAPI.Extensions
         //Register FizzBuzzService
         public static IServiceCollection AddFizzBuzzServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<IFizzBuzzService, FizzBuzzService>();
+            services.AddScoped<IFizzBuzzService, FizzBuzzService>();
+            string? fizzBuzzFilePath = configuration.GetValue<string>("FizzBuzzFilePath");
+            services.AddScoped<IFizzBuzzRepository>(provider => new FizzBuzzRepository(fizzBuzzFilePath));
             return services;
         }
         public static IServiceCollection AddUserManagementServices(this IServiceCollection services, IConfiguration configuration)

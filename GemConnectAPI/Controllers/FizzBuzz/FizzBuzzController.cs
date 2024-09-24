@@ -1,7 +1,6 @@
 ﻿
 using FizzBuzzConsole.service;
 using GemConnectAPI.DTO;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -47,7 +46,7 @@ namespace GemConnectAPI.Controllers.FizzBuzz
             _fbService.SaveValueList(fbDto.Values);
 
             // Return a 201 Created response with the saved values in the body
-            return CreatedAtAction(nameof(GetSavedValues), _fbService.GetSavedValues());
+            return CreatedAtAction(nameof(GetSavedValues),new { }, _fbService.GetSavedValues());
         }
 
         /// <summary>
