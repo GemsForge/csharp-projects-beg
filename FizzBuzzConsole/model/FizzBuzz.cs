@@ -66,15 +66,4 @@
             };
         }
     }
-
-    /// <summary>
-    /// Represents the different types of FizzBuzz guesses.
-    /// </summary>
-    public enum FizzBuzzGuess
-    {
-        NONE,
-        FIZZ,
-        BUZZ,
-        FIZZBUZZ
-    }
 }

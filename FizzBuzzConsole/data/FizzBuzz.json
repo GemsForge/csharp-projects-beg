@@ -1,1 +1,24 @@
-﻿
+﻿[
+  {
+    "GamePlayId": 1,
+    "Player": "user123",
+    "Guesses": {
+      "3": "FIZZ",
+      "5": "BUZZ",
+      "15": "FIZZBUZZ",
+      "7": "NUMBER"
+    },
+    "TotalPoints": 21
+  },
+  {
+    "GamePlayId": 2,
+    "Player": "user456",
+    "Guesses": {
+      "2": "NUMBER",
+      "9": "FIZZ",
+      "10": "BUZZ",
+      "30": "FIZZBUZZ"
+    },
+    "TotalPoints": 21
+  }
+]
