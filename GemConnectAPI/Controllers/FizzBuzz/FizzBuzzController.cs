@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GemConnectAPI.Controllers.FizzBuzz
 {
-    [Authorize(Policy = "USER")]
+    //[Authorize(Policy = "USER")]
     [Route("api/[controller]")]
     [ApiController]
     public class FizzBuzzController : ControllerBase
