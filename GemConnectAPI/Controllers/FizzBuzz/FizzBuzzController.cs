@@ -35,7 +35,7 @@ namespace GemConnectAPI.Controllers.FizzBuzz
         ///
         /// </remarks>
         [HttpPost("values")]
-        public IActionResult SaveValues([FromBody] FizzBuzzDto fbDto)
+        public IActionResult PlayFizzBuzz([FromBody] FizzBuzzDto fbDto)
         {
             // Validate the model
             if (!ModelState.IsValid)
