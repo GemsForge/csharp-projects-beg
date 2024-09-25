@@ -15,27 +15,27 @@ namespace FizzBuzzConsole.model
         /// <summary>
         /// Gets or sets the ID of the gameplay session.
         /// </summary>
-        [JsonPropertyName("GamePlayId")]
+        [JsonPropertyName("game_play_id")]
         public int GamePlayId { get; set; }
 
         /// <summary>
         /// Gets or sets the player associated with the gameplay session.
         /// </summary>
-        [JsonPropertyName("Player")]
-        public string Player { get; set; }
+        [JsonPropertyName("player")]
+        public int Player { get; set; }
 
         /// <summary>
         /// Gets or sets the dictionary of guesses made during the gameplay session, where
         /// the key is the number guessed, and the value is the corresponding FizzBuzz result.
         /// </summary>
-        [JsonPropertyName("Guesses")]
+        [JsonPropertyName("guesses")]
         [JsonConverter(typeof(FizzBuzzGuessConverter))]
-        public Dictionary<int, FizzBuzzGuess> Guesses { get; set; } = new Dictionary<int, FizzBuzzGuess>();
+        public Dictionary<int, FizzBuzzGuess> Guesses { get; set; } = [];
 
         /// <summary>
         /// Gets or sets the total points earned during the gameplay session.
         /// </summary>
-        [JsonPropertyName("TotalPoints")]
+        [JsonPropertyName("total_points")]
         public int TotalPoints { get; set; }
 
         /// <summary>

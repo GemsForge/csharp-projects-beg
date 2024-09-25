@@ -36,7 +36,7 @@ namespace FizzBuzzConsole.service
             FizzBuzzGamePlay newGamePlay = new FizzBuzzGamePlay
             {
                 GamePlayId = gamePlayId,
-                Player = player,
+                Player = int.Parse(player),
                 Guesses = [],
                 TotalPoints = 0
             };
@@ -90,7 +90,7 @@ namespace FizzBuzzConsole.service
         /// </summary>
         /// <param name="player">The player's ID or username.</param>
         /// <returns>A list of FizzBuzzGamePlay objects for the player.</returns>
-        public IEnumerable<FizzBuzzGamePlay> GetGamePlaysForPlayer(string player)
+        public IEnumerable<FizzBuzzGamePlay> GetGamePlaysForPlayer(int player)
         {
             return _gamePlays.Where(gp => gp.Player == player);
         }

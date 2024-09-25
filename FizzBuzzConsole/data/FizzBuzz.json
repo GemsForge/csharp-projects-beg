@@ -1,73 +1,73 @@
 [
   {
-    "GamePlayId": 2,
-    "Player": "user456",
-    "Guesses": {
+    "game_play_id": 2,
+    "player": "user456",
+    "guesses": {
       "2": "NONE",
       "9": "FIZZ",
       "10": "BUZZ",
       "30": "FIZZBUZZ"
     },
-    "TotalPoints": 21
+    "total_points": 21
   },
   {
-    "GamePlayId": 3,
-    "Player": "4",
-    "Guesses": {
+    "game_play_id": 3,
+    "player": "4",
+    "guesses": {
       "3": "FIZZ",
       "90": "FIZZBUZZ",
       "87": "FIZZ",
       "62": "NONE",
       "51": "FIZZ"
     },
-    "TotalPoints": 26
+    "total_points": 26
   },
   {
-    "GamePlayId": 4,
-    "Player": "4",
-    "Guesses": {
+    "game_play_id": 4,
+    "player": "4",
+    "guesses": {
       "43": "NONE",
       "82": "NONE",
       "12": "FIZZ",
       "90": "FIZZBUZZ",
       "47": "NONE"
     },
-    "TotalPoints": 18
+    "total_points": 18
   },
   {
-    "GamePlayId": 5,
-    "Player": "1",
-    "Guesses": {
+    "game_play_id": 5,
+    "player": "1",
+    "guesses": {
       "1": "NONE",
       "3": "FIZZ",
       "5": "BUZZ",
       "15": "FIZZBUZZ",
       "7": "NONE"
     },
-    "TotalPoints": 22
+    "total_points": 22
   },
   {
-    "GamePlayId": 6,
-    "Player": "1",
-    "Guesses": {
+    "game_play_id": 6,
+    "player": "1",
+    "guesses": {
       "22": "NONE",
       "94": "NONE",
       "17": "NONE",
       "30": "FIZZBUZZ",
       "75": "FIZZBUZZ"
     },
-    "TotalPoints": 23
+    "total_points": 23
   },
   {
-    "GamePlayId": 7,
-    "Player": "1",
-    "Guesses": {
+    "game_play_id": 7,
+    "player": "1",
+    "guesses": {
       "3": "FIZZ",
       "15": "FIZZBUZZ",
       "64": "NONE",
       "30": "FIZZBUZZ",
       "75": "FIZZBUZZ"
     },
-    "TotalPoints": 36
+    "total_points": 36
   }
 ]
