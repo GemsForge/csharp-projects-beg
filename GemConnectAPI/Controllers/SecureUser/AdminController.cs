@@ -10,13 +10,13 @@ using SecureUserConsole.service;
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
-public class UserController : ControllerBase
+public class AdminController : ControllerBase
 {
     private readonly IUserManager _userManager;
     private readonly IUserService _userService;
     private readonly IUserMapper _userMapper;
 
-    public UserController(IUserManager userManager, IUserService userService, IUserMapper userMapper)
+    public AdminController(IUserManager userManager, IUserService userService, IUserMapper userMapper)
     {
         _userManager = userManager;
         _userService = userService;
@@ -44,6 +44,7 @@ public class UserController : ControllerBase
     /// </summary>
     /// <param name="registerDto">An object containing the user's registration details.</param>
     /// <returns>Returns a 201 Created status if the user is successfully registered, or a 400 or 409 status if validation fails.</returns>
+    [Authorize(Policy = "USER")]
     [HttpPost]
     public IActionResult AddUser(RegisterDto registerDto)
     {
@@ -103,6 +104,7 @@ public class UserController : ControllerBase
     /// </summary>
     /// <param name="username">The username of the user to be removed.</param>
     /// <returns>Returns a 200 OK status if the user is successfully removed, or a 404 Not Found status if the user does not exist.</returns>
+    [Authorize(Policy = "USER")]
     [HttpDelete("{username}")]
     public IActionResult RemoveUser(string username)
     {
@@ -110,6 +112,11 @@ public class UserController : ControllerBase
         if (user == null)
         {
             return NotFound("User not found.");  // 404 Not Found
+        }
+        // Ensure users can only remove their own info, unless they're an Admin
+        if (User.Identity.Name != username && !User.IsInRole("ADMIN"))
+        {
+            return StatusCode(403, value: "You cannot delete another user's profile.");
         }
 
         _userService.RemoveUser(username);
