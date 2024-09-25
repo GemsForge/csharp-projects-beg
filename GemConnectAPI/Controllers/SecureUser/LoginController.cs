@@ -1,6 +1,7 @@
 ﻿using GemConnectAPI.DTO.SecureUser;
 using GemConnectAPI.Mappers.SecureUser;
 using GemConnectAPI.Services.SecureUser;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SecureUserConsole.service;
 
@@ -9,14 +10,14 @@ using SecureUserConsole.service;
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController : ControllerBase
+public class LoginController : ControllerBase
 {
     private readonly IUserManager _userManager;
     private readonly IApiUserManager _apiUserManager;
     private readonly IPasswordResetService _passwordResetService;
     private readonly IUserMapper _userMapper;
 
-    public AuthController(IUserManager userManager, IApiUserManager apiUserManager, IPasswordResetService passwordResetService, IUserMapper userMapper)
+    public LoginController(IUserManager userManager, IApiUserManager apiUserManager, IPasswordResetService passwordResetService, IUserMapper userMapper)
     {
         _userManager = userManager;
         _apiUserManager = apiUserManager;
@@ -78,5 +79,15 @@ public class AuthController : ControllerBase
         }
 
         return BadRequest("Password reset failed due to incorrect verification details.");  // 400 Bad Request
+    }
+    /// <summary>
+    /// Dashboard for users and admins.
+    /// </summary>
+    [Authorize(Policy = "USER")]
+    [HttpGet("dashboard")]
+    public IActionResult UserDashboard()
+    {
+        var role = User.IsInRole("ADMIN") ? "Admin" : "User";
+        return Ok($"Welcome to your {role} dashboard.");
     }
 }
