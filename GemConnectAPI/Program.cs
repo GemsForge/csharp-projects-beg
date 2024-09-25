@@ -1,4 +1,5 @@
-﻿using GemConnectAPI.Extensions;
+﻿using GemConnectAPI.Data;
+using GemConnectAPI.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 //using Microsoft.OpenApi.Models;
@@ -21,6 +22,7 @@ builder.Services.AddCustomSwagger(builder.Configuration);
 builder.Services.AddTaskTrackerServices(builder.Configuration);
 builder.Services.AddUserManagementServices(builder.Configuration);
 builder.Services.AddFizzBuzzServices(builder.Configuration);
+builder.Services.AddSingleton(typeof(ISharedRepository<>), typeof(JsonSharedRepository<>));
 
 builder.Services.AddAuthorization(options => {
     options.AddPolicy("ADMIN", policy => policy.RequireRole("ADMIN"));
@@ -40,8 +42,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
-
-
 
 var app = builder.Build();
 
