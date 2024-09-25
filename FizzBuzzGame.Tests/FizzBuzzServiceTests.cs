@@ -1,8 +1,7 @@
-
-
+using FizzBuzzConsole.data;
+using FizzBuzzConsole.model;
 using FizzBuzzConsole.service;
-using FizzBuzzGame;
-
+using Moq;
 
 namespace FizzBuzzGame.Tests
 {
@@ -11,36 +10,37 @@ namespace FizzBuzzGame.Tests
     /// </summary>
     public class FizzBuzzServiceTests
     {
+        private readonly Mock<IFizzBuzzRepository> _mockRepository;
         private readonly IFizzBuzzService _fbService;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FizzBuzzServiceTests"/> class.
         /// </summary>
         public FizzBuzzServiceTests()
         {
-            //Inject fbService interface
-            _fbService = new FizzBuzzService();
+            // Set up mock repository
+            _mockRepository = new Mock<IFizzBuzzRepository>();
+            _mockRepository.Setup(r => r.LoadResults()).Returns(new List<FizzBuzzGamePlay>());
 
+            // Inject the mocked repository into the service
+            _fbService = new FizzBuzzService(_mockRepository.Object);
         }
+
         /// <summary>
-        /// Tests that SaveValueList correctly saves FizzBuzz guesses.
+        /// Tests that SaveGamePlay correctly saves FizzBuzz guesses.
         /// </summary>
-        [Fact()]
-        public void SaveValueList_Should_Save_FizzBuzzValue()
+        [Fact]
+        public void SaveGamePlay_Should_Save_FizzBuzzGameplay()
         {
-            //Arrange
-            var values = new List<int> { 1, 3, 5, 15 };
+            // Arrange
+            var values = new List<int> { 1, 3, 5, 15 }; // Test values for FizzBuzz
+            var player = "testPlayer";
 
-            //Act
-            _fbService.SaveValueList(values);
-            var savedValues = _fbService.GetSavedValues().ToList();
+            // Act
+            _fbService.SaveGamePlay(player, values);
 
-            //Assert
-            Assert.Equal(4, savedValues.Count); //Ensure 4 values are saved
-            Assert.Equal("NUMBER", savedValues[0].Result); //1 should be "Number"
-            Assert.Equal("FIZZ", savedValues[1].Result); //3 should be "Fizz"
-            Assert.Equal("BUZZ", savedValues[2].Result); //5 should be "Buzz"
-            Assert.Equal("FIZZBUZZ", savedValues[3].Result); //15 should be "FizzBuzz"
+            // Assert
+            _mockRepository.Verify(r => r.SaveResults(It.IsAny<List<FizzBuzzGamePlay>>()), Times.Once); // Verify the repository save method is called
         }
 
         /// <summary>
@@ -51,31 +51,79 @@ namespace FizzBuzzGame.Tests
         {
             // Arrange
             var values = new List<int> { 1, 3, 5, 15 }; // 1 -> 1pt, 3 -> 5pts, 5 -> 5pts, 15 -> 10pts
-            _fbService.SaveValueList(values);
+            var player = "testPlayer";
+
+            // Save the game play
+            _fbService.SaveGamePlay(player, values);
+
+            // Mock the repository to return the saved game play for TallyPoints test
+            _mockRepository.Setup(r => r.LoadResults()).Returns(new List<FizzBuzzGamePlay>
+            {
+                new() {
+                    Player = player,
+                    GamePlayId = 1,
+                    Guesses = new Dictionary<int, FizzBuzzGuess>
+                    {
+                        { 1, FizzBuzzGuess.NONE },
+                        { 3, FizzBuzzGuess.FIZZ },
+                        { 5, FizzBuzzGuess.BUZZ },
+                        { 15, FizzBuzzGuess.FIZZBUZZ }
+                    },
+                    TotalPoints = 21
+                }
+            });
 
             // Act
-            var totalPoints = _fbService.TallyPoints();
+            var totalPoints = _fbService.TallyPoints(1); // Passing the GamePlayId (1)
 
             // Assert
             Assert.Equal(21, totalPoints); // 1 + 5 + 5 + 10 = 21
         }
 
         /// <summary>
-        /// Tests that GetSavedValues returns all saved FizzBuzz guesses.
+        /// Tests that GetGamePlaysForPlayer returns all saved FizzBuzz gameplays for a specific player.
         /// </summary>
         [Fact]
-        public void GetSavedValues_Should_Return_All_Saved_Values()
+        public void GetGamePlaysForPlayer_Should_Return_All_GamePlays_For_Player()
         {
             // Arrange
-            var values = new List<int> { 1, 2, 3 };
-            _fbService.SaveValueList(values);
+            var player = "testPlayer";
+
+            // Mock the repository to return a gameplay session for the testPlayer
+            _mockRepository.Setup(r => r.LoadResults()).Returns(new List<FizzBuzzGamePlay>
+            {
+                 new() {
+                    Player = player,
+                    GamePlayId = 1,
+                    Guesses = new Dictionary<int, FizzBuzzGuess>
+                    {
+                        { 1, FizzBuzzGuess.NONE },
+                        { 3, FizzBuzzGuess.FIZZ },
+                        { 5, FizzBuzzGuess.BUZZ },
+                        { 15, FizzBuzzGuess.FIZZBUZZ }
+                    },
+                    TotalPoints = 21
+                },
+                new() {
+                    Player = player,
+                    GamePlayId = 2,
+                    Guesses = new Dictionary<int, FizzBuzzGuess>
+                    {
+                        { 1, FizzBuzzGuess.NONE },
+                        { 3, FizzBuzzGuess.FIZZ },
+                        { 5, FizzBuzzGuess.BUZZ },
+                        { 15, FizzBuzzGuess.FIZZBUZZ }
+                    },
+                    TotalPoints = 21
+                }
+            });
 
             // Act
-            var savedValues = _fbService.GetSavedValues();
+            var gamePlays = _fbService.GetGamePlaysForPlayer(player);
 
             // Assert
-            Assert.NotNull(savedValues);
-            Assert.Equal(3, savedValues.Count());
+            Assert.NotNull(gamePlays);
+            Assert.Equal(2, gamePlays.Count()); // Ensure two game plays are returned for the player
         }
     }
 }

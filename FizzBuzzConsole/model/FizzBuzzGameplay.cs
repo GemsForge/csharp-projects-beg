@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using System.Text.Json;
+using FizzBuzzConsole.manager;
 
 namespace FizzBuzzConsole.model
 {
@@ -8,6 +9,9 @@ namespace FizzBuzzConsole.model
     /// </summary>
     public class FizzBuzzGamePlay
     {
+        IFizzBuzzManager manager = new FizzBuzzManager();
+
+       
         /// <summary>
         /// Gets or sets the ID of the gameplay session.
         /// </summary>
@@ -42,7 +46,7 @@ namespace FizzBuzzConsole.model
         public void AddGuess(int number, FizzBuzzGuess guess)
         {
             Guesses[number] = guess;
-            TotalPoints += FizzBuzz.CalculatePoints(guess);
+            TotalPoints += manager.CalculatePoints(guess);
         }
     }
 
