@@ -5,4 +5,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Data\SharedData.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Data\SharedData.json" />
+  </ItemGroup>
 </Project>

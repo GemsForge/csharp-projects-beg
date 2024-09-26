@@ -1,3 +1,6 @@
+
+using CommonLibrary.Data;
+using TaskTrackerConsole.model;
 using Task = TaskTrackerConsole.model.Task;
 
 namespace TaskTrackerConsole.data
@@ -8,18 +11,20 @@ namespace TaskTrackerConsole.data
     public class TaskManager : ITaskManager
     {
         private readonly List<Task> _tasks;
-        private readonly ITaskRepository _taskRepository;
-
+        //private readonly ITaskRepository _taskRepository;
+        private readonly ISharedRepository<TaskWrapper, Task> _taskRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskManager"/> class.
         /// Pre-populates the task list with some sample tasks.
         /// </summary>
         /// <param name="filePath">The path to the JSON file for storing tasks.</param>
-        public TaskManager(ITaskRepository taskRepository)
+        public TaskManager(ISharedRepository<TaskWrapper, Task> taskRepository)
         {
             _taskRepository = taskRepository;
-            _tasks = _taskRepository.LoadTasksFromFile();  // Load tasks using TaskRepository
+            // Load tasks using TaskRepository and extract the list of tasks from the wrapper
+            var taskWrapper = _taskRepository.LoadFromFile().FirstOrDefault();
+            _tasks = taskWrapper?.Tasks ?? [];  // Ensure _tasks is initialized
         }
 
         /// <summary>
@@ -143,7 +148,8 @@ namespace TaskTrackerConsole.data
         private void UpdateTaskListJson()
         {
             // Add the new task to the json file
-            _taskRepository.SaveTasksToFile(_tasks);
+            // _taskRepository.save(_tasks);
+            _taskRepository.SaveToFile();
         }
 
         /// <summary>

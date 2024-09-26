@@ -1,9 +1,7 @@
-﻿using GemConnectAPI.Data;
-using GemConnectAPI.Extensions;
+﻿using GemConnectAPI.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 //using Microsoft.OpenApi.Models;
-using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,7 +20,6 @@ builder.Services.AddCustomSwagger(builder.Configuration);
 builder.Services.AddTaskTrackerServices(builder.Configuration);
 builder.Services.AddUserManagementServices(builder.Configuration);
 builder.Services.AddFizzBuzzServices(builder.Configuration);
-builder.Services.AddSingleton(typeof(ISharedRepository<>), typeof(JsonSharedRepository<>));
 
 builder.Services.AddAuthorization(options => {
     options.AddPolicy("ADMIN", policy => policy.RequireRole("ADMIN"));

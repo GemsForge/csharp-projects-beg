@@ -50,8 +50,11 @@ namespace SecureUserConsole.model
         [JsonPropertyName("role")]
         [JsonConverter(typeof(JsonStringEnumConverter))]  // For System.Text.Json
         public required UserRole Role { get;  set; }
-
-
+    }
+    public class UserWrapper
+    {
+        [JsonPropertyName("users")]
+        public List<User>? Users { get; set; } = [];
     }
 
     /// <summary>

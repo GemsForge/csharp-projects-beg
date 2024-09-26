@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using CommonLibrary.Data;
 using SecureUserConsole.data;
 using SecureUserConsole.model;
 
@@ -11,16 +12,17 @@ namespace SecureUserConsole.service
     public class UserService : IUserService
     {
         private readonly List<User> _users;
-        private readonly IUserRepository _userRepo;
-
+        private readonly ISharedRepository<UserWrapper, User> _userRepo;
         /// <summary>
         /// Initializes a new instance of the <see cref="UserService"/> class.
         /// </summary>
         /// <param name="userRepo">The repository used for loading and saving users.</param>
-        public UserService(IUserRepository userRepo)
+        public UserService(ISharedRepository<UserWrapper, User> userRepo)
         {
             _userRepo = userRepo;
-            _users = _userRepo.LoadUsersFromFile();
+            // Load tasks using SharedRepository and extract the list of tasks from the wrapper
+            var userWrapper = _userRepo.LoadFromFile().FirstOrDefault();
+            _users = userWrapper?.Users ?? [];  // Ensure _users is initialized
         }
 
         #region Methods
@@ -59,7 +61,7 @@ namespace SecureUserConsole.service
                 user.Id = lastUserId + 1;
 
                 _users.Add(user);
-                _userRepo.SaveUsersToFile(_users);
+                _userRepo.SaveToFile();
             }
             else
             {
@@ -77,7 +79,7 @@ namespace SecureUserConsole.service
             if (user != null)
             {
                 _users.Remove(user);
-                _userRepo.SaveUsersToFile(_users);
+                _userRepo.SaveToFile();
                 Console.WriteLine($"User {user.Username} was permanately removed.");
             }
             else
@@ -103,7 +105,7 @@ namespace SecureUserConsole.service
                     userToUpdate.LastName = user.LastName;
                     userToUpdate.Password = user.Password;
                     userToUpdate.Role = user.Role;
-                    _userRepo.SaveUsersToFile(_users);
+                    _userRepo.SaveToFile();
                 }
             }
             else
@@ -111,7 +113,6 @@ namespace SecureUserConsole.service
                 Console.WriteLine("User does not exist.");
             }
         }
-
 
         #endregion
 

@@ -9,7 +9,7 @@ namespace FizzBuzzConsole.model
     /// </summary>
     public class FizzBuzzGamePlay
     {
-        IFizzBuzzManager manager = new FizzBuzzManager();
+        private readonly IFizzBuzzManager manager = new FizzBuzzManager();
 
        
         /// <summary>
@@ -48,6 +48,11 @@ namespace FizzBuzzConsole.model
             Guesses[number] = guess;
             TotalPoints += manager.CalculatePoints(guess);
         }
+    }
+    public class FizzBuzzWrapper
+    {
+        [JsonPropertyName("fizz_buzz_games")]
+        public List<FizzBuzzGamePlay>? FizzBuzzGames { get; set; } = [];
     }
 
     /// <summary>

@@ -1,4 +1,5 @@
-﻿using FizzBuzzConsole.data;
+﻿using CommonLibrary.Data;
+using FizzBuzzConsole.data;
 using FizzBuzzConsole.model;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,16 +12,17 @@ namespace FizzBuzzConsole.service
     /// </summary>
     public class FizzBuzzService : IFizzBuzzService
     {
-        private readonly IFizzBuzzRepository _repo;
+        private readonly ISharedRepository<FizzBuzzWrapper, FizzBuzzGamePlay> _fbRepo;
         private readonly List<FizzBuzzGamePlay> _gamePlays;  // Use the FizzBuzzGamePlay model to store sessions
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FizzBuzzService"/> class.
         /// </summary>
-        public FizzBuzzService(IFizzBuzzRepository repo)
+        public FizzBuzzService(ISharedRepository<FizzBuzzWrapper, FizzBuzzGamePlay> fbRepo)
         {
-            _repo = repo;
-            _gamePlays = _repo.LoadResults();  // Load existing results when initializing the service
+            _fbRepo = fbRepo;
+            var fbWrapper = _fbRepo.LoadFromFile().FirstOrDefault();  // Load existing results when initializing the service
+            _gamePlays = fbWrapper?.FizzBuzzGames ?? new List<FizzBuzzGamePlay>();
         }
 
         /// <summary>
@@ -48,7 +50,7 @@ namespace FizzBuzzConsole.service
             }
 
             _gamePlays.Add(newGamePlay);  // Add the new gameplay session to the list
-            _repo.SaveResults(_gamePlays);  // Persist the updated list to the JSON file
+            _fbRepo.SaveToFile();  // Persist the updated list to the JSON file
         }
 
         /// <summary>
@@ -61,7 +63,7 @@ namespace FizzBuzzConsole.service
             if (gamePlay != null)
             {
                 _gamePlays.Remove(gamePlay);  // Remove the specific gameplay session
-                _repo.SaveResults(_gamePlays);  // Persist the updated list
+                _fbRepo.SaveToFile();  // Persist the updated list
             }
         }
 
