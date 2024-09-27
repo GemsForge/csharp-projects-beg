@@ -1,7 +1,7 @@
-﻿using Moq;
+﻿using CommonLibrary.Data;
+using Moq;
 using TaskTrackerConsole.model;
 using TaskTrackerConsole.service;
-using TaskTrackerConsole.services;
 using Task = TaskTrackerConsole.model.Task;
 
 namespace TaskTracker.Tests
@@ -11,103 +11,98 @@ namespace TaskTracker.Tests
     /// </summary>
     public class TaskServiceTests
     {
-        private readonly Mock<ITaskService> _mockTaskManager;
+        private readonly Mock<IGenericRepository<Task>> _mockTaskRepository;
         private readonly TaskService _taskService;
+        private List<Task> _mockTasks;
 
         /// <summary>
         /// Initializes a new instance of the TaskServiceTests class.
         /// </summary>
         public TaskServiceTests()
         {
-            // Mock the TaskManager
-            _mockTaskManager = new Mock<ITaskService>();
-
-            // Initialize TaskService with the mocked TaskManager
-            _taskService = new TaskService(_mockTaskManager.Object);
-        }
-
-        [Fact]
-        public void AddNewTask_ValidData_CallsAddTaskOnTaskManager()
-        {
-            // Arrange
-            string description = "New Task";
-            Status status = Status.TODO;
-
-            // Act
-            _taskService.AddNewTask(description, status);
-
-            // Assert
-            _mockTaskManager.Verify(tm => tm.AddTask(It.Is<Task>(t => t.Description == description && t.Status == status)), Times.Once);
-        }
-
-        [Fact]
-        public void UpdateExistingTask_ValidData_CallsUpdateTaskOnTaskManager()
-        {
-            // Arrange
-            int taskId = 1;
-            string newDescription = "Updated Task";
-            Status newStatus = Status.COMPLETE;
-
-            // Act
-            _taskService.UpdateExistingTask(taskId, newDescription, newStatus);
-
-            // Assert
-            _mockTaskManager.Verify(tm => tm.UpdateTask(taskId, It.Is<Task>(t => t.Description == newDescription && t.Status == newStatus)), Times.Once);
-        }
-
-        [Fact]
-        public void DeleteTaskById_ValidTaskId_CallsDeleteTaskOnTaskManager()
-        {
-            // Arrange
-            int taskId = 1;
-
-            // Act
-            _taskService.DeleteTaskById(taskId);
-
-            // Assert
-            _mockTaskManager.Verify(tm => tm.DeleteTask(taskId), Times.Once);
-        }
-
-        [Fact]
-        public void GetAllTasks_ReturnsMappedTaskDtos()
-        {
-            // Arrange
-            var tasks = new List<Task>
+            // Set up mock tasks
+            _mockTasks = new List<Task>
             {
                 new Task { Id = 1, Description = "Task 1", Status = Status.TODO, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
-                new Task { Id = 2, Description = "Task 2", Status = Status.PENDING, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now }
+                new Task { Id = 2, Description = "Task 2", Status = Status.PENDING, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now },
+                new Task { Id = 3, Description = "Task 3", Status = Status.COMPLETE, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now }
             };
 
-            _mockTaskManager.Setup(tm => tm.GetTasks()).Returns(tasks);
+            // Mock the IGenericRepository<Task>
+            _mockTaskRepository = new Mock<IGenericRepository<Task>>();
+            _mockTaskRepository.Setup(tr => tr.GetAll()).Returns(_mockTasks);
 
-            // Act
-            var result = _taskService.GetAllTasks().ToList();
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(2, result.Count);
-            Assert.Equal("Task 1", result[0].Description);
-            Assert.Equal(Status.TODO.ToString(), result[0].Status);
-            _mockTaskManager.Verify(tm => tm.GetTasks(), Times.Once);
+            // Initialize TaskService with the mocked repository
+            _taskService = new TaskService(_mockTaskRepository.Object);
         }
 
         [Fact]
-        public void GetTaskById_ValidTaskId_ReturnsMappedTaskDto()
+        public void AddNewTask_ValidData_CallsAddOnRepository()
+        {
+            // Arrange
+            var newTask = new Task { Description = "New Task", Status = Status.TODO };
+
+            // Act
+            _taskService.AddTask(newTask);
+
+            // Assert: Verify that the Add method was called on the repository
+            _mockTaskRepository.Verify(repo => repo.Add(It.Is<Task>(t => t.Description == "New Task" && t.Status == Status.TODO)), Times.Once);
+        }
+
+        [Fact]
+        public void UpdateExistingTask_ValidData_CallsUpdateOnRepository()
+        {
+            // Arrange
+            var updatedTask = new Task { Id = 1, Description = "Updated Task", Status = Status.COMPLETE };
+
+            // Act
+            _taskService.UpdateTask(1, updatedTask);
+
+            // Assert: Verify that the Update method was called on the repository
+            _mockTaskRepository.Verify(repo => repo.Update(1, It.Is<Task>(t => t.Description == "Updated Task" && t.Status == Status.COMPLETE)), Times.Once);
+        }
+
+        [Fact]
+        public void DeleteTaskById_ValidTaskId_CallsRemoveOnRepository()
         {
             // Arrange
             int taskId = 1;
-            var task = new Task { Id = taskId, Description = "Task 1", Status = Status.TODO, CreatedAt = DateTime.Now, UpdatedAt = DateTime.Now };
-
-            _mockTaskManager.Setup(tm => tm.GetTask(taskId)).Returns(task);
 
             // Act
-            var result = _taskService.GetTaskById(taskId);
+            _taskService.DeleteTask(taskId);
+
+            // Assert: Verify that the Remove method was called on the repository
+            _mockTaskRepository.Verify(repo => repo.Remove(taskId), Times.Once);
+        }
+
+        [Fact]
+        public void GetAllTasks_ReturnsAllTasks()
+        {
+            // Act
+            var tasks = _taskService.GetTasks().ToList();
+
+            // Assert: Verify that the tasks list contains the expected number of tasks
+            Assert.Equal(3, tasks.Count);
+            Assert.Equal("Task 1", tasks[0].Description);
+            _mockTaskRepository.Verify(repo => repo.GetAll(), Times.Once);
+        }
+
+        [Fact]
+        public void GetTaskById_ValidTaskId_ReturnsCorrectTask()
+        {
+            // Arrange
+            var taskId = 1;
+            var task = new Task { Id = taskId, Description = "Task 1", Status = Status.TODO };
+            _mockTaskRepository.Setup(repo => repo.GetById(taskId)).Returns(task);
+
+            // Act
+            var result = _taskService.GetTask(taskId);
 
             // Assert
             Assert.NotNull(result);
             Assert.Equal(taskId, result.Id);
             Assert.Equal("Task 1", result.Description);
-            _mockTaskManager.Verify(tm => tm.GetTask(taskId), Times.Once);
+            _mockTaskRepository.Verify(repo => repo.GetById(taskId), Times.Once);
         }
 
         [Fact]
@@ -115,14 +110,14 @@ namespace TaskTracker.Tests
         {
             // Arrange
             int taskId = 999;
-            _mockTaskManager.Setup(tm => tm.GetTask(taskId)).Returns((Task)null);
+            _mockTaskRepository.Setup(repo => repo.GetById(taskId)).Returns((Task)null);
 
             // Act
-            var result = _taskService.GetTaskById(taskId);
+            var result = _taskService.GetTask(taskId);
 
-            // Assert
+            // Assert: Ensure that a null task is returned
             Assert.Null(result);
-            _mockTaskManager.Verify(tm => tm.GetTask(taskId), Times.Once);
+            _mockTaskRepository.Verify(repo => repo.GetById(taskId), Times.Once);
         }
     }
 }

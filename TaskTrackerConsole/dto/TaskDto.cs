@@ -8,6 +8,40 @@ namespace TaskTrackerConsole.dto;
 /// </summary>
 public class TaskDto
 {
+        public TaskDto(int id, string description, string status, string createdAt, string updatedAt, string createdBy)
+    {
+        if (string.IsNullOrEmpty(description))
+        {
+            throw new ArgumentException($"'{nameof(description)}' cannot be null or empty.", nameof(description));
+        }
+
+        if (string.IsNullOrEmpty(status))
+        {
+            throw new ArgumentException($"'{nameof(status)}' cannot be null or empty.", nameof(status));
+        }
+
+        if (string.IsNullOrEmpty(createdAt))
+        {
+            throw new ArgumentException($"'{nameof(createdAt)}' cannot be null or empty.", nameof(createdAt));
+        }
+
+        if (string.IsNullOrEmpty(updatedAt))
+        {
+            throw new ArgumentException($"'{nameof(updatedAt)}' cannot be null or empty.", nameof(updatedAt));
+        }
+
+        if (string.IsNullOrWhiteSpace(createdBy))
+        {
+            throw new ArgumentException($"'{nameof(createdBy)}' cannot be null or whitespace.", nameof(createdBy));
+        }
+
+        Id = id;
+        Description = description;
+        Status = status;
+        CreatedAt = createdAt;
+        UpdatedAt = updatedAt;
+        CreatedBy = createdBy;
+    }
     /// <summary>
     /// Gets or sets the unique identifier for the task.
     /// </summary>
@@ -40,5 +74,7 @@ public class TaskDto
     /// </summary>
     /// <example>2024-09-12 09:15:30</example>
     public string? UpdatedAt { get; set; }  // Formatted date
-    public string CreatedBy { get; internal set; }
+    public string? CreatedBy { get; internal set; }
+
+
 }

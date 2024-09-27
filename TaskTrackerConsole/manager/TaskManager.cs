@@ -92,12 +92,17 @@ namespace TaskTrackerConsole.manager
         public TaskDto MapToDto(Task task)
         {
             return new TaskDto
+            (
+                task.Id,
+                task.Description,
+                task.Status.ToString(),
+                task.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
+                task.UpdatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
+                task.CreatedBy.ToString()
+            )
             {
-                Id = task.Id,
                 Description = task.Description,
-                Status = task.Status.ToString(),
-                CreatedAt = task.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
-                UpdatedAt = task.UpdatedAt.ToString("yyyy-MM-dd HH:mm:ss")
+                Status = task.Status.ToString()
             };
         }
     }
