@@ -32,7 +32,7 @@ namespace FizzBuzzConsole.service
             FizzBuzzGamePlay newGamePlay = new FizzBuzzGamePlay
             {
                 GamePlayId = gamePlayId,
-                Player = int.Parse(player),
+                Player = player,
                 Guesses = new Dictionary<int, FizzBuzzGuess>(),
                 TotalPoints = 0
             };
@@ -62,7 +62,7 @@ namespace FizzBuzzConsole.service
         /// <returns>A list of FizzBuzzGamePlay objects for the player.</returns>
         public IEnumerable<FizzBuzzGamePlay> GetGamePlaysForPlayer(int player)
         {
-            return _fbRepo.GetAll().Where(gp => gp.Player == player);
+            return _fbRepo.GetAll().Where(gp => int.Parse(gp.Player) == player);
         }
 
         /// <summary>

@@ -1,3 +1,4 @@
+using CommonLibrary.Data;
 using FizzBuzzConsole.data;
 using FizzBuzzConsole.model;
 using FizzBuzzConsole.service;
@@ -10,7 +11,7 @@ namespace FizzBuzzGame.Tests
     /// </summary>
     public class FizzBuzzServiceTests
     {
-        private readonly Mock<IFizzBuzzRepository> _mockRepository;
+        private readonly Mock<IGenericRepository<FizzBuzzGamePlay>> _mockRepository;
         private readonly IFizzBuzzService _fbService;
 
         /// <summary>
@@ -19,8 +20,8 @@ namespace FizzBuzzGame.Tests
         public FizzBuzzServiceTests()
         {
             // Set up mock repository
-            _mockRepository = new Mock<IFizzBuzzRepository>();
-            _mockRepository.Setup(r => r.LoadResults()).Returns(new List<FizzBuzzGamePlay>());
+            _mockRepository = new Mock<IGenericRepository<FizzBuzzGamePlay>>();
+            _mockRepository.Setup(r => r.GetAll()).Returns(new List<FizzBuzzGamePlay>());
 
             // Inject the mocked repository into the service
             _fbService = new FizzBuzzService(_mockRepository.Object);
@@ -34,14 +35,22 @@ namespace FizzBuzzGame.Tests
         {
             // Arrange
             var values = new List<int> { 1, 3, 5, 15 }; // Test values for FizzBuzz
-            var player = "testPlayer";
+            var player = "1";  // Assuming the player is passed as an ID string
+            var newGamePlay = new FizzBuzzGamePlay
+            {
+                GamePlayId = 1,
+                Player = player,
+                Guesses = new Dictionary<int, FizzBuzzGuess>(),
+                TotalPoints = 0
+            };
 
             // Act
             _fbService.SaveGamePlay(player, values);
 
             // Assert
-            _mockRepository.Verify(r => r.SaveResults(It.IsAny<List<FizzBuzzGamePlay>>()), Times.Once); // Verify the repository save method is called
+            _mockRepository.Verify(r => r.Add(It.IsAny<FizzBuzzGamePlay>()), Times.Once); // Verify that Add method is called
         }
+
 
         /// <summary>
         /// Tests that TallyPoints calculates the total points correctly.
@@ -57,7 +66,7 @@ namespace FizzBuzzGame.Tests
             _fbService.SaveGamePlay(player, values);
 
             // Mock the repository to return the saved game play for TallyPoints test
-            _mockRepository.Setup(r => r.LoadResults()).Returns(new List<FizzBuzzGamePlay>
+            _mockRepository.Setup(r => r.GetAll()).Returns(new List<FizzBuzzGamePlay>
             {
                 new() {
                     Player = player,
@@ -87,13 +96,13 @@ namespace FizzBuzzGame.Tests
         public void GetGamePlaysForPlayer_Should_Return_All_GamePlays_For_Player()
         {
             // Arrange
-            var player = "testPlayer";
+            var player = 1;
 
             // Mock the repository to return a gameplay session for the testPlayer
-            _mockRepository.Setup(r => r.LoadResults()).Returns(new List<FizzBuzzGamePlay>
+            _mockRepository.Setup(r => r.GetAll()).Returns(new List<FizzBuzzGamePlay>
             {
                  new() {
-                    Player = player,
+                    Player = player.ToString(),
                     GamePlayId = 1,
                     Guesses = new Dictionary<int, FizzBuzzGuess>
                     {
@@ -105,7 +114,7 @@ namespace FizzBuzzGame.Tests
                     TotalPoints = 21
                 },
                 new() {
-                    Player = player,
+                    Player = player.ToString(),
                     GamePlayId = 2,
                     Guesses = new Dictionary<int, FizzBuzzGuess>
                     {
