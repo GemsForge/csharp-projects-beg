@@ -1,8 +1,8 @@
 ﻿using Task = TaskTrackerConsole.model.Task;
 using Microsoft.AspNetCore.Mvc;
-using TaskTrackerConsole.data;
 using TaskTrackerConsole.model;
 using TaskTrackerConsole.dto;
+using TaskTrackerConsole.service;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,7 +12,7 @@ namespace TaskTrackerAPI.Controllers
     [ApiController]
     public class TaskTrackerController : ControllerBase
     {
-        private readonly ITaskManager _taskManager;
+        private readonly ITaskService _taskManager;
         private readonly ILogger<TaskTrackerController> _logger;
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace TaskTrackerAPI.Controllers
         /// <param name="taskManager">The task manager service.</param>
         /// <param name="logger">The logger service.</param>
 
-        public TaskTrackerController(ITaskManager taskManager, ILogger<TaskTrackerController> logger)
+        public TaskTrackerController(ITaskService taskManager, ILogger<TaskTrackerController> logger)
         {
             _taskManager = taskManager;
             _logger = logger;

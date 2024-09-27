@@ -17,31 +17,31 @@ namespace SecureUserConsole.model
         /// Gets or sets the first name of the user.
         /// </summary>
         [JsonPropertyName("first_name")]
-        public required string FirstName { get; set; }
+        public string? FirstName { get; set; }
 
         /// <summary>
         /// Gets or sets the last name of the user.
         /// </summary>
         [JsonPropertyName("last_name")]
-        public required string LastName { get; set; }
+        public string? LastName { get; set; }
 
         /// <summary>
         /// Gets or sets the concatenated username for the user (last name + first name).
         /// </summary>
         [JsonPropertyName("username")]
-        public required string Username { get; set; }
+        public string? Username { get; set; }
 
         /// <summary>
         /// Gets or sets the email address of the user.
         /// </summary>
         [JsonPropertyName("email")]
-        public required string Email { get; set; }
+        public string? Email { get; set; }
 
         /// <summary>
         /// Gets or sets the user's password.
         /// </summary>
         [JsonPropertyName("password")]
-        public required string Password { get; set; }
+        public string? Password { get; set; }
 
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace SecureUserConsole.model
         /// </summary>
         [JsonPropertyName("role")]
         [JsonConverter(typeof(JsonStringEnumConverter))]  // For System.Text.Json
-        public required UserRole Role { get;  set; }
+        public UserRole? Role { get;  set; }
     }
     public class UserWrapper
     {

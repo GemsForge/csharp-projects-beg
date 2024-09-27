@@ -1,30 +1,24 @@
-
 using CommonLibrary.Data;
 using TaskTrackerConsole.model;
 using Task = TaskTrackerConsole.model.Task;
 
-namespace TaskTrackerConsole.data
+namespace TaskTrackerConsole.service
 {
     /// <summary>
     /// Manages tasks and provides operations to add, update, delete, and retrieve tasks.
     /// </summary>
-    public class TaskManager : ITaskManager
+    public class TaskService : ITaskService
     {
+        private readonly IGenericRepository<Task> _taskRepo;
         private readonly List<Task> _tasks;
-        //private readonly ITaskRepository _taskRepository;
-        private readonly ISharedRepository<TaskWrapper, Task> _taskRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskManager"/> class.
-        /// Pre-populates the task list with some sample tasks.
         /// </summary>
-        /// <param name="filePath">The path to the JSON file for storing tasks.</param>
-        public TaskManager(ISharedRepository<TaskWrapper, Task> taskRepository)
+        public TaskService(IGenericRepository<Task> taskRepo)
         {
-            _taskRepository = taskRepository;
-            // Load tasks using TaskRepository and extract the list of tasks from the wrapper
-            var taskWrapper = _taskRepository.LoadFromFile().FirstOrDefault();
-            _tasks = taskWrapper?.Tasks ?? [];  // Ensure _tasks is initialized
+            _taskRepo = taskRepo;
+            _tasks = _taskRepo.GetAll().ToList();  // Load tasks from the repository
         }
 
         /// <summary>
@@ -33,12 +27,11 @@ namespace TaskTrackerConsole.data
         /// <param name="newTask">The task to be added.</param>
         public void AddTask(Task newTask)
         {
-            // Generate a new id
+            // Generate a new ID and add the task
             int newId = _tasks.Count > 0 ? _tasks.Max(t => t.Id) + 1 : 1;
             DateTime now = DateTime.Now;
 
-            // Create a new Task
-            Task taskToAdd = new Task
+            Task taskToAdd = new()
             {
                 Id = newId,
                 Description = newTask.Description,
@@ -48,13 +41,8 @@ namespace TaskTrackerConsole.data
                 CreatedBy = newTask.CreatedBy
             };
 
-            // Add the new task to the list
             _tasks.Add(taskToAdd);
-
-            // Add the new task to the json file
-            UpdateTaskListJson();
-
-            // Output success message
+            _taskRepo.Add(taskToAdd);  // Add task to the JSON file through the repository
             Console.WriteLine($"Task '{newTask.Description}' added successfully!");
         }
 
@@ -64,19 +52,12 @@ namespace TaskTrackerConsole.data
         /// <param name="taskId">The identifier of the task to delete.</param>
         public void DeleteTask(int taskId)
         {
-            // Find task in list by id using LINQ
-            Task taskToDelete = GetTask(taskId);
+            var taskToDelete = GetTask(taskId);
 
-            // If taskToDelete matches an existing id...
             if (taskToDelete != null)
             {
-                // Remove task from list by id
                 _tasks.Remove(taskToDelete);
-
-                // Remove task from the json file
-                UpdateTaskListJson();
-
-                // Output DELETION message to console (Successful and Failure)
+                _taskRepo.Remove(taskId);  // Remove from repository
                 Console.WriteLine($"Task with ID {taskId} has been deleted successfully!");
             }
             else
@@ -92,36 +73,22 @@ namespace TaskTrackerConsole.data
         /// <param name="updateTask">The task object containing updated information.</param>
         public void UpdateTask(int taskId, Task updateTask)
         {
-            // Find task in list by id
             var taskToUpdate = GetTask(taskId);
 
-            // If updateTask matches an existing id...
-            if (taskToUpdate == null)
+            if (taskToUpdate != null)
             {
-                Console.WriteLine($"Task with ID {taskId} not found.");
+                taskToUpdate.Description = updateTask.Description;
+                taskToUpdate.Status = updateTask.Status;
+                taskToUpdate.UpdatedAt = DateTime.Now;
+
+                _taskRepo.Update(taskId, taskToUpdate);  // Update the repository
+                Console.WriteLine($"Task with ID {taskId} has been updated successfully!");
             }
             else
             {
-                // Replace task in list with new task
-                if (updateTask != null)
-                {
-                    taskToUpdate.Description = updateTask.Description;
-                    taskToUpdate.Status = updateTask.Status;
-                    taskToUpdate.UpdatedAt = DateTime.Now;
-
-                    // Update the Task List JSON file
-                    UpdateTaskListJson();
-                    // Output UPDATE message to console
-                    Console.WriteLine($"Task with ID {taskId} has been updated successfully!");
-                }
-                else
-                {
-                    Console.WriteLine("The updateTask object provided is null.");
-                }
+                Console.WriteLine($"Task with ID {taskId} not found.");
             }
         }
-
-        #region Helper Methods
 
         /// <summary>
         /// Gets a task by its identifier.
@@ -130,8 +97,7 @@ namespace TaskTrackerConsole.data
         /// <returns>The task with the specified identifier, or null if not found.</returns>
         public Task GetTask(int taskId)
         {
-            var task = _tasks.FirstOrDefault(existingTask => existingTask.Id == taskId);
-            return task;
+            return _tasks.FirstOrDefault(task => task.Id == taskId);
         }
 
         /// <summary>
@@ -141,15 +107,6 @@ namespace TaskTrackerConsole.data
         public IEnumerable<Task> GetTasks()
         {
             return _tasks;
-        }
-        /// <summary>
-        /// Update task list in JSON file.
-        /// </summary>
-        private void UpdateTaskListJson()
-        {
-            // Add the new task to the json file
-            // _taskRepository.save(_tasks);
-            _taskRepository.SaveToFile();
         }
 
         /// <summary>
@@ -163,7 +120,5 @@ namespace TaskTrackerConsole.data
                 Console.WriteLine($"ID: {task.Id}, Description: {task.Description}, Status: {task.Status}, Created At: {task.CreatedAt}, Updated At: {task.UpdatedAt}");
             }
         }
-
-        #endregion
     }
 }

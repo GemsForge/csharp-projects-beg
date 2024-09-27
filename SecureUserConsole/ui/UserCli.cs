@@ -1,4 +1,5 @@
 ﻿using CommonLibrary;
+using SecureUserConsole.manager;
 using SecureUserConsole.model;
 using SecureUserConsole.service;
 
@@ -137,7 +138,7 @@ namespace SecureUserConsole.ui
         private void ListUsers()
         {
             Console.WriteLine("User List:");
-            var users = _userService.GetUsers();
+            IEnumerable<User> users = _userService.GetUsers();
             foreach (var user in users)
             {
                 Console.WriteLine($" Name: {user.FirstName} {user.LastName}, Username: {user.Username}, Email: {user.Email}, Password: {user.Password}");

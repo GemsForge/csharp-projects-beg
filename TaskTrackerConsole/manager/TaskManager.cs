@@ -1,25 +1,25 @@
 ﻿using Task = TaskTrackerConsole.model.Task;
-using TaskTrackerConsole.data;
 using TaskTrackerConsole.model;
 using TaskTrackerConsole.dto;
+using TaskTrackerConsole.service;
 
-namespace TaskTrackerConsole.services
+namespace TaskTrackerConsole.manager
 {
     /// <summary>
     /// Service class for managing tasks and business logic.
     /// </summary>
-    public class TaskService : ITaskService
+    public class TaskManager : ITaskManager
     {
-         
-        private readonly ITaskManager _taskManager;
+
+        private readonly ITaskService _taskService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskService"/> class.
         /// </summary>
         /// <param name="taskManager">The task manager responsible for data operations.</param>
-        public TaskService(ITaskManager taskManager)
+        public TaskManager(ITaskService taskService)
         {
-            _taskManager = taskManager;
+            _taskService = taskService;
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace TaskTrackerConsole.services
                 Description = description,
                 Status = status
             };
-            _taskManager.AddTask(newTask);
+            _taskService.AddTask(newTask);
 
         }
 
@@ -51,7 +51,7 @@ namespace TaskTrackerConsole.services
                 Description = newDescription,
                 Status = newStatus
             };
-            _taskManager.UpdateTask(taskId, updatedTask);
+            _taskService.UpdateTask(taskId, updatedTask);
         }
 
         /// <summary>
@@ -60,16 +60,17 @@ namespace TaskTrackerConsole.services
         /// <param name="taskId">The identifier of the task to delete.</param>
         public void DeleteTaskById(int taskId)
         {
-            _taskManager.DeleteTask(taskId);
+            _taskService.DeleteTask(taskId);
         }
 
         /// <summary>
         /// Gets all tasks and maps them to a list of TaskDto objects.
         /// </summary>
         /// <returns>A list of TaskDto objects representing all tasks.</returns>
-        public IEnumerable<TaskDto> GetAllTasks()
+        public IEnumerable<Task> GetAllTasks()
         {
-            return _taskManager.GetTasks().Select(task => MapToDto(task));
+            return _taskService.GetTasks();
+            //return _taskService.GetTasks().Select(task => MapToDto(task));
         }
 
         /// <summary>
@@ -77,10 +78,10 @@ namespace TaskTrackerConsole.services
         /// </summary>
         /// <param name="taskId">The identifier of the task to retrieve.</param>
         /// <returns>A TaskDto object if found; otherwise, null.</returns>
-        public TaskDto? GetTaskById(int taskId)
+        public Task? GetTaskById(int taskId)
         {
-            var task = _taskManager.GetTask(taskId);
-            return task != null ? MapToDto(task) : null;
+            return _taskService.GetTask(taskId);
+            //return task != null ? MapToDto(task) : null;
         }
 
         /// <summary>

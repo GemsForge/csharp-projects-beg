@@ -1,6 +1,6 @@
-﻿using TaskTrackerConsole.services;
-using TaskTrackerConsole.model;
-using TaskTrackerConsole.dto;
+﻿using TaskTrackerConsole.model;
+using TaskTrackerConsole.manager;
+using Task = TaskTrackerConsole.model.Task;
 
 namespace TaskTrackerConsole.ui
 {
@@ -9,15 +9,15 @@ namespace TaskTrackerConsole.ui
     /// </summary>
     public class TaskCLI
     {
-        private readonly ITaskService _taskService;
+        private readonly ITaskManager _taskManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskCLI"/> class.
         /// </summary>
         /// <param name="taskService">The task service responsible for business logic operations.</param>
-        public TaskCLI(ITaskService taskService)
+        public TaskCLI(ITaskManager taskManager)
         {
-            _taskService = taskService;
+            _taskManager = taskManager;
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace TaskTrackerConsole.ui
                 Console.WriteLine("Invalid status. Please enter a valid number (0, 1, or 2).");
             }
 
-            _taskService.AddNewTask(description, status);
+            _taskManager.AddNewTask(description, status);
             Console.WriteLine("Task added successfully.");
         }
 
@@ -84,7 +84,7 @@ namespace TaskTrackerConsole.ui
         public void UpdateTask()
         {
             int taskId;
-            TaskDto existingTask = null;
+            Task existingTask = null;
 
             // Loop to get a valid task ID and ensure the task exists
             while (true)
@@ -96,7 +96,7 @@ namespace TaskTrackerConsole.ui
                     continue; // Continue the loop to prompt again
                 }
 
-                existingTask = _taskService.GetTaskById(taskId);
+                existingTask = _taskManager.GetTaskById(taskId);
                 if (existingTask == null)
                 {
                     Console.WriteLine($"Task with ID {taskId} not found.");
@@ -118,24 +118,24 @@ namespace TaskTrackerConsole.ui
                     newDescription = existingTask.Description;  // Retain existing description if input is blank
                 }
 
-                // Convert the string status from TaskDto to Status enum
-                if (!Enum.TryParse<Status>(existingTask.Status, true, out Status currentStatus))
-                {
-                    Console.WriteLine("Invalid current status. Unable to update the task.");
-                    return;  // Exit if the current status cannot be parsed
-                }
+                //// Convert the string status from  to Status enum
+                //if (existingTask.Status)
+                //{
+                //    Console.WriteLine("Invalid current status. Unable to update the task.");
+                //    return;  // Exit if the current status cannot be parsed
+                //}
 
                 Status newStatus;
 
                 // Loop until a valid status is entered
                 while (true)
                 {
-                    Console.Write($"Enter new task status (0 = {Status.TODO}, 1 = {Status.PENDING}, 2 = {Status.COMPLETE}) (current: {currentStatus}): ");
+                    Console.Write($"Enter new task status (0 = {Status.TODO}, 1 = {Status.PENDING}, 2 = {Status.COMPLETE}) (current: {existingTask.Status}): ");
                     string statusInput = Console.ReadLine();
 
                     if (string.IsNullOrWhiteSpace(statusInput))
                     {
-                        newStatus = currentStatus;  // Retain existing status if input is blank
+                        newStatus = existingTask.Status;  // Retain existing status if input is blank
                         break;
                     }
 
@@ -151,7 +151,7 @@ namespace TaskTrackerConsole.ui
                 }
 
                 // Update the task with the new description and status
-                _taskService.UpdateExistingTask(taskId, newDescription, newStatus);
+                _taskManager.UpdateExistingTask(taskId, newDescription, newStatus);
                 Console.WriteLine("Task updated successfully.");
                 updating = false; // Exit the update loop after a successful update
             }
@@ -181,7 +181,7 @@ namespace TaskTrackerConsole.ui
                 }
 
                 // Retrieve task to check if it exists
-                var taskToBeDeleted = _taskService.GetTaskById(taskId);
+                var taskToBeDeleted = _taskManager.GetTaskById(taskId);
                 if (taskToBeDeleted == null)
                 {
                     Console.WriteLine($"Task ID {taskId} was not found. Enter another ID.");
@@ -189,7 +189,7 @@ namespace TaskTrackerConsole.ui
                 }
 
                 // If task is found, delete it and break out of the loop
-                _taskService.DeleteTaskById(taskId);
+                _taskManager.DeleteTaskById(taskId);
                 Console.WriteLine("Task deleted successfully.");
                 return;  // Exit the method after a successful deletion
             }
@@ -198,15 +198,12 @@ namespace TaskTrackerConsole.ui
             Console.WriteLine("Exceeded maximum attempts. Task deletion aborted.");
         }
 
-
-
-
         /// <summary>
         /// Lists all tasks via user input.
         /// </summary>
         public void ListTasks()
         {
-            var tasks = _taskService.GetAllTasks();  // Ensure this returns IEnumerable<TaskDto>
+            var tasks = _taskManager.GetAllTasks();  // Ensure this returns IEnumerable<TaskDto>
 
             // Use .Count() method to count the number of elements in the IEnumerable
             if (!tasks.Any())

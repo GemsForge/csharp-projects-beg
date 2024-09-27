@@ -1,66 +1,7 @@
 [
   {
-    "game_play_id": 2,
-    "player": "user456",
-    "guesses": {
-      "2": "NONE",
-      "9": "FIZZ",
-      "10": "BUZZ",
-      "30": "FIZZBUZZ"
-    },
-    "total_points": 21
-  },
-  {
-    "game_play_id": 3,
-    "player": "4",
-    "guesses": {
-      "3": "FIZZ",
-      "90": "FIZZBUZZ",
-      "87": "FIZZ",
-      "62": "NONE",
-      "51": "FIZZ"
-    },
-    "total_points": 26
-  },
-  {
-    "game_play_id": 4,
-    "player": "4",
-    "guesses": {
-      "43": "NONE",
-      "82": "NONE",
-      "12": "FIZZ",
-      "90": "FIZZBUZZ",
-      "47": "NONE"
-    },
-    "total_points": 18
-  },
-  {
-    "game_play_id": 5,
-    "player": "1",
-    "guesses": {
-      "1": "NONE",
-      "3": "FIZZ",
-      "5": "BUZZ",
-      "15": "FIZZBUZZ",
-      "7": "NONE"
-    },
-    "total_points": 22
-  },
-  {
-    "game_play_id": 6,
-    "player": "1",
-    "guesses": {
-      "22": "NONE",
-      "94": "NONE",
-      "17": "NONE",
-      "30": "FIZZBUZZ",
-      "75": "FIZZBUZZ"
-    },
-    "total_points": 23
-  },
-  {
-    "game_play_id": 7,
-    "player": "1",
+    "game_play_id": 1,
+    "player": 4,
     "guesses": {
       "3": "FIZZ",
       "15": "FIZZBUZZ",

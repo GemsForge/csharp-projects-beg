@@ -1,13 +1,16 @@
 ﻿using CommonLibrary.Data;
+using FizzBuzzConsole.manager;
 using FizzBuzzConsole.model;
 using FizzBuzzConsole.service;
 using GemConnectAPI.Mappers.SecureUser;
 using GemConnectAPI.Mappers.TaskTracker;
 using GemConnectAPI.Services.SecureUser;
+using SecureUserConsole.manager;
 using SecureUserConsole.model;
 using SecureUserConsole.service;
-using TaskTrackerConsole.data;
+using TaskTrackerConsole.manager;
 using TaskTrackerConsole.model;
+using TaskTrackerConsole.service;
 using Task = TaskTrackerConsole.model.Task;
 
 namespace GemConnectAPI.Extensions
@@ -17,9 +20,10 @@ namespace GemConnectAPI.Extensions
         public static IServiceCollection AddTaskTrackerServices(this IServiceCollection services, IConfiguration configuration)
         {
             // Register Task Tracker repository and manager
-            string? taskFilePath = configuration.GetValue<string>("SharedJosn");
-            services.AddScoped<ISharedRepository<TaskWrapper, Task>>(provider => new JsonSharedRepository<TaskWrapper, Task>(taskFilePath));
-            services.AddScoped<ITaskManager, TaskManager>();
+            string? taskFilePath = configuration.GetValue<string>("TaskFilePath");
+            services.AddScoped<IGenericRepository<Task>>(provider => new GenericJsonRepository<Task>(taskFilePath));
+            services.AddScoped<ITaskManager>(provider => new TaskManager(provider.GetRequiredService<ITaskService>()));
+            services.AddScoped<ITaskService>(provider => new TaskService(provider.GetRequiredService<IGenericRepository<Task>>()));
             services.AddScoped<ITaskMapper, TaskMapper>();
 
             return services;
@@ -27,17 +31,17 @@ namespace GemConnectAPI.Extensions
         //Register FizzBuzzService
         public static IServiceCollection AddFizzBuzzServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IFizzBuzzService, FizzBuzzService>();
-            string? fizzBuzzFilePath = configuration.GetValue<string>("SharedJosn");
-            services.AddScoped<ISharedRepository<FizzBuzzWrapper, FizzBuzzGamePlay>>(provider => new JsonSharedRepository<FizzBuzzWrapper, FizzBuzzGamePlay>(fizzBuzzFilePath));
+            string? fizzBuzzFilePath = configuration.GetValue<string>("FizzBuzzFilePath");
+            services.AddScoped<IFizzBuzzService>(provider => new FizzBuzzService(provider.GetRequiredService<IGenericRepository<FizzBuzzGamePlay>>()));
+            services.AddScoped<IFizzBuzzManager, FizzBuzzManager>();
+            services.AddScoped<IGenericRepository<FizzBuzzGamePlay>>(provider => new GenericJsonRepository<FizzBuzzGamePlay>(fizzBuzzFilePath));
             return services;
         }
         public static IServiceCollection AddUserManagementServices(this IServiceCollection services, IConfiguration configuration)
-        { 
-            string? usersFilePath = configuration.GetValue<string>("SharedJosn");
-
-            services.AddScoped<ISharedRepository<UserWrapper, User>>(provider => new JsonSharedRepository<UserWrapper, User>(usersFilePath));
-            services.AddScoped<IUserService, UserService>();
+        {
+            string? usersFilePath = configuration.GetValue<string>("UserFilePath");
+            services.AddScoped<IGenericRepository<User>>(provider => new GenericJsonRepository<User>(usersFilePath));
+            services.AddScoped<IUserService>(provider => new UserService(provider.GetRequiredService<IGenericRepository<User>>()));
             // Register Password Utility (independent service)
             services.AddScoped<IPasswordUtility, PasswordUtility>();
             // Register services that depend on others (like IUserService, IPasswordResetService, IUserManager)

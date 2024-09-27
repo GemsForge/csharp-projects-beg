@@ -2,6 +2,7 @@
 using GemConnectAPI.Mappers.SecureUser;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SecureUserConsole.manager;
 using SecureUserConsole.model;
 using SecureUserConsole.service;
 
@@ -44,7 +45,6 @@ public class AdminController : ControllerBase
     /// </summary>
     /// <param name="registerDto">An object containing the user's registration details.</param>
     /// <returns>Returns a 201 Created status if the user is successfully registered, or a 400 or 409 status if validation fails.</returns>
-    [Authorize(Policy = "USER")]
     [HttpPost]
     public IActionResult AddUser(RegisterDto registerDto)
     {
@@ -122,7 +122,7 @@ public class AdminController : ControllerBase
         _userService.RemoveUser(username);
         return Ok("User removed successfully.");  // 200 OK
     }
-    
+
     /// <summary>
     /// Updates the role of a user (Admin access only).
     /// </summary>

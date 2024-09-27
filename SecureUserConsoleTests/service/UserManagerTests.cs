@@ -1,4 +1,5 @@
 ﻿using Moq;
+using SecureUserConsole.manager;
 using SecureUserConsole.model;
 using SecureUserConsole.service;
 

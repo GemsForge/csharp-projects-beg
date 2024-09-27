@@ -1,12 +1,13 @@
 ﻿using Task = TaskTrackerConsole.model.Task;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TaskTrackerConsole.data;
+using TaskTrackerConsole.service;
 
 namespace TaskTrackerAPI.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly ITaskManager _taskManager;
+        private readonly ITaskService _taskManager;
         private readonly ITaskRepository _taskRepo;
 
         public List<Task> Tasks { get; set; } = new();
