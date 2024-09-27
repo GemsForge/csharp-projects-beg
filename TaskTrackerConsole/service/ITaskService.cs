@@ -1,7 +1,7 @@
 ﻿using Task = TaskTrackerConsole.model.Task;
-namespace TaskTrackerConsole.data
+namespace TaskTrackerConsole.service
 {
-    public interface ITaskManager
+    public interface ITaskService
     {
         void AddTask(Task task);
         void UpdateTask(int taskId, Task task);

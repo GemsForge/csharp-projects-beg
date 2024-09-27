@@ -1,20 +1,20 @@
 ﻿using Moq;
 using TaskTrackerConsole.dto;
+using TaskTrackerConsole.manager;
 using TaskTrackerConsole.model;
-using TaskTrackerConsole.services;
 using TaskTrackerConsole.ui;
 
 namespace TaskTracker.Tests
 {
     public class TaskCLITests : IDisposable
     {
-        private readonly Mock<ITaskService> _mockTaskService;  // Correctly mocking the interface
+        private readonly Mock<ITaskManager> _mockTaskService;  // Correctly mocking the interface
         private StringWriter _consoleOutput;
         private StringReader _consoleInput;
 
         public TaskCLITests()
         {
-            _mockTaskService = new Mock<ITaskService>(); // Corrected: Mocking the interface without constructor args
+            _mockTaskService = new Mock<ITaskManager>(); // Corrected: Mocking the interface without constructor args
             SetUpConsoleOutput();
 
         }

@@ -1,7 +1,5 @@
-﻿using FizzBuzzConsole.data;
+﻿using CommonLibrary.Data;
 using FizzBuzzConsole.model;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace FizzBuzzConsole.service
 {
@@ -11,16 +9,14 @@ namespace FizzBuzzConsole.service
     /// </summary>
     public class FizzBuzzService : IFizzBuzzService
     {
-        private readonly IFizzBuzzRepository _repo;
-        private readonly List<FizzBuzzGamePlay> _gamePlays;  // Use the FizzBuzzGamePlay model to store sessions
+        private readonly IGenericRepository<FizzBuzzGamePlay> _fbRepo;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FizzBuzzService"/> class.
         /// </summary>
-        public FizzBuzzService(IFizzBuzzRepository repo)
+        public FizzBuzzService(IGenericRepository<FizzBuzzGamePlay> fbRepo)
         {
-            _repo = repo;
-            _gamePlays = _repo.LoadResults();  // Load existing results when initializing the service
+            _fbRepo = fbRepo;
         }
 
         /// <summary>
@@ -30,25 +26,24 @@ namespace FizzBuzzConsole.service
         /// <param name="values">The list of integer values to evaluate.</param>
         public void SaveGamePlay(string player, List<int> values)
         {
-            // Generate the next sequential GamePlayId
-            var gamePlayId = _gamePlays.Count != 0 ? _gamePlays.Max(gp => gp.GamePlayId) + 1 : 1;
+            var gamePlays = _fbRepo.GetAll().ToList(); // Load existing data each time
+            var gamePlayId = gamePlays.Any() ? gamePlays.Max(gp => gp.GamePlayId) + 1 : 1;
 
             FizzBuzzGamePlay newGamePlay = new FizzBuzzGamePlay
             {
                 GamePlayId = gamePlayId,
-                Player = player,
-                Guesses = [],
+                Player = int.Parse(player),
+                Guesses = new Dictionary<int, FizzBuzzGuess>(),
                 TotalPoints = 0
             };
 
             foreach (var value in values)
             {
-                var guess = DetermineGuess(value);  // Determine the FizzBuzz guess
-                newGamePlay.AddGuess(value, guess);  // Add guess and update total points
+                var guess = DetermineGuess(value);
+                newGamePlay.AddGuess(value, guess);
             }
 
-            _gamePlays.Add(newGamePlay);  // Add the new gameplay session to the list
-            _repo.SaveResults(_gamePlays);  // Persist the updated list to the JSON file
+            _fbRepo.Add(newGamePlay); // Directly save using repository
         }
 
         /// <summary>
@@ -57,12 +52,17 @@ namespace FizzBuzzConsole.service
         /// <param name="gamePlayId">The ID of the gameplay session to clear.</param>
         public void ClearGamePlay(int gamePlayId)
         {
-            var gamePlay = _gamePlays.FirstOrDefault(gp => gp.GamePlayId == gamePlayId);
-            if (gamePlay != null)
-            {
-                _gamePlays.Remove(gamePlay);  // Remove the specific gameplay session
-                _repo.SaveResults(_gamePlays);  // Persist the updated list
-            }
+            _fbRepo.Remove(gamePlayId); // Directly remove using repository
+        }
+
+        /// <summary>
+        /// Retrieves all saved gameplay sessions for a specific player.
+        /// </summary>
+        /// <param name="player">The player's ID.</param>
+        /// <returns>A list of FizzBuzzGamePlay objects for the player.</returns>
+        public IEnumerable<FizzBuzzGamePlay> GetGamePlaysForPlayer(int player)
+        {
+            return _fbRepo.GetAll().Where(gp => gp.Player == player);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace FizzBuzzConsole.service
         /// <returns>A tuple containing the counts of Fizz, Buzz, and FizzBuzz.</returns>
         public (int fizzes, int buzzes, int fizzBuzzes) CountFizzBuzzes(int gamePlayId)
         {
-            var gamePlay = _gamePlays.FirstOrDefault(gp => gp.GamePlayId == gamePlayId);
+            var gamePlay = _fbRepo.GetById(gamePlayId);
             if (gamePlay == null)
             {
                 return (0, 0, 0);
@@ -86,23 +86,13 @@ namespace FizzBuzzConsole.service
         }
 
         /// <summary>
-        /// Retrieves all saved gameplay sessions for a specific player.
-        /// </summary>
-        /// <param name="player">The player's ID or username.</param>
-        /// <returns>A list of FizzBuzzGamePlay objects for the player.</returns>
-        public IEnumerable<FizzBuzzGamePlay> GetGamePlaysForPlayer(string player)
-        {
-            return _gamePlays.Where(gp => gp.Player == player);
-        }
-
-        /// <summary>
         /// Calculates the total points for a specific gameplay session.
         /// </summary>
         /// <param name="gamePlayId">The ID of the gameplay session.</param>
         /// <returns>The total calculated points.</returns>
         public int TallyPoints(int gamePlayId)
         {
-            var gamePlay = _gamePlays.FirstOrDefault(gp => gp.GamePlayId == gamePlayId);
+            var gamePlay = _fbRepo.GetById(gamePlayId);
             return gamePlay?.TotalPoints ?? 0;
         }
 

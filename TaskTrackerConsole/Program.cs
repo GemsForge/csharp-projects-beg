@@ -1,7 +1,10 @@
 ﻿using CommonLibrary;
-using TaskTrackerConsole.data;
-using TaskTrackerConsole.services;
+using CommonLibrary.Data;
+using TaskTrackerConsole.manager;
+using TaskTrackerConsole.model;
+using TaskTrackerConsole.service;
 using TaskTrackerConsole.ui;
+using Task = TaskTrackerConsole.model.Task;
 
 namespace TaskTrackerConsole
 {
@@ -22,16 +25,15 @@ namespace TaskTrackerConsole
             LogoPrinter.DisplayLogo();
 
             string filePath = @"C:\Users\Diamond R. Brown\OneDrive\Gem.Professional 🎖️\02 💻 GemsCode\Git Repositories\CSharpProjects\CommonLibrary\TaskTracker\data\Tasks.json";
-
             // Instantiate TaskRepository which implements ITaskRepository
             // Initialize the TaskManager (Data Layer)
-            TaskManager taskManager = new(new TaskRepository(filePath));
-
+            //TaskManager taskManager = new(new TaskRepository(filePath));
+            TaskService taskService = new(new GenericJsonRepository<Task>(filePath));
             // Initialize the TaskService (Service Layer) with TaskManager dependency
-            TaskService taskService = new(taskManager);
+            TaskManager taskManager = new(taskService);
 
             // Initialize the TaskCLI (UI Layer) with TaskService dependency
-            TaskCLI taskCLI = new(taskService);
+            TaskCLI taskCLI = new(taskManager);
 
             // Run the CLI
             taskCLI.Run();

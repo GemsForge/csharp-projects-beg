@@ -1,6 +1,6 @@
 ﻿using Moq;
-using TaskTrackerConsole.data;
 using TaskTrackerConsole.model;
+using TaskTrackerConsole.service;
 using TaskTrackerConsole.services;
 using Task = TaskTrackerConsole.model.Task;
 
@@ -11,7 +11,7 @@ namespace TaskTracker.Tests
     /// </summary>
     public class TaskServiceTests
     {
-        private readonly Mock<ITaskManager> _mockTaskManager;
+        private readonly Mock<ITaskService> _mockTaskManager;
         private readonly TaskService _taskService;
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace TaskTracker.Tests
         public TaskServiceTests()
         {
             // Mock the TaskManager
-            _mockTaskManager = new Mock<ITaskManager>();
+            _mockTaskManager = new Mock<ITaskService>();
 
             // Initialize TaskService with the mocked TaskManager
             _taskService = new TaskService(_mockTaskManager.Object);

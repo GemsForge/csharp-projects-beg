@@ -1,29 +1,29 @@
-[
-  {
-    "id": 1,
-    "first_name": "New",
-    "last_name": "User",
-    "username": "usernew",
-    "email": "newuser@example.com",
-    "password": "xaEgCxxEWIK2WZe8FU\u002BOKQI3fHYI7EooVQYY6Y/dSEck6znd",
-    "role": "USER"
-  },
-  {
-    "id": 3,
-    "first_name": "Charlie",
-    "last_name": "Brown",
-    "username": "browncha",
-    "email": "charliebrown@email.com",
-    "password": "WKm35\u002BJa9r4DRkl72mYB8vr9LizTvSX6Cf4T4JwnY/fghE2f",
-    "role": "USER"
-  },
-  {
-    "id": 4,
-    "first_name": "Gem",
-    "last_name": "Brown",
-    "username": "browngem",
-    "email": "gembrown@email.com",
-    "password": "8edKMVFgy59m5iLJXYFJIdz\u002BJrP/UmI0golaHhP56\u002BGL1q2l",
-    "role": "ADMIN"
-  }
-]
+ [
+    {
+      "id": 1,
+      "first_name": "New",
+      "last_name": "User",
+      "username": "usernew",
+      "email": "newuser@example.com",
+      "password": "xaEgCxxEWIK2WZe8FU\u002BOKQI3fHYI7EooVQYY6Y/dSEck6znd",
+      "role": "USER"
+    },
+    {
+      "id": 3,
+      "first_name": "Charlie",
+      "last_name": "Brown",
+      "username": "browncha",
+      "email": "charliebrown@email.com",
+      "password": "WKm35\u002BJa9r4DRkl72mYB8vr9LizTvSX6Cf4T4JwnY/fghE2f",
+      "role": "USER"
+    },
+    {
+      "id": 4,
+      "first_name": "Gem",
+      "last_name": "Brown",
+      "username": "browngem",
+      "email": "gembrown@email.com",
+      "password": "8edKMVFgy59m5iLJXYFJIdz\u002BJrP/UmI0golaHhP56\u002BGL1q2l",
+      "role": "ADMIN"
+    }
+  ]

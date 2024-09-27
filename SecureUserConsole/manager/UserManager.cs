@@ -1,6 +1,7 @@
 ﻿using SecureUserConsole.model;
+using SecureUserConsole.service;
 
-namespace SecureUserConsole.service
+namespace SecureUserConsole.manager
 {
     /// <summary>
     /// Manages user-specific operations such as registration and login.
@@ -26,7 +27,7 @@ namespace SecureUserConsole.service
         /// <param name="registerInfo">The <see cref="RegisterInfo"/> object containing registration details.</param>
         public string RegisterUser(RegisterInfo registerInfo)
         {
-            if (registerInfo != null && !UserExists(registerInfo.Email))
+            if (registerInfo != null && !_userService.GetUsers().Any(u => u.Email == registerInfo.Email)) // Check if user already exists in service
             {
                 var hashedPassword = _passwordUtility.HashPassword(registerInfo.Password);
                 User newUser = new()
@@ -38,7 +39,8 @@ namespace SecureUserConsole.service
                     Username = CreateUniqueUsername(registerInfo.FirstName, registerInfo.LastName).ToLower(),
                     Role = UserRole.USER
                 };
-                _userService.AddUser(newUser);
+
+                _userService.AddUser(newUser); // Add the new user through the service (which handles persistence)
                 return newUser.Username;  // Return the generated username
             }
             else
@@ -63,6 +65,7 @@ namespace SecureUserConsole.service
             Console.WriteLine("Invalid username or password.");
             return false;
         }
+
         /// <summary>
         /// Updates an existing user's details.
         /// </summary>
@@ -80,7 +83,7 @@ namespace SecureUserConsole.service
                     existingUser.Email = updatedUser.Email;
                     existingUser.Password = hashedPassword;
 
-                    _userService.UpdateUser(existingUser);
+                    _userService.UpdateUser(existingUser); // Update user through the service (which persists changes)
                     Console.WriteLine("User updated successfully.");
                 }
                 else
@@ -89,8 +92,6 @@ namespace SecureUserConsole.service
                 }
             }
         }
-        
-
 
         #region Helper Methods
 
@@ -110,16 +111,6 @@ namespace SecureUserConsole.service
             string username = $"{lastName.ToLower()}{firstNamePart.ToLower()}";
 
             return username;
-        }
-
-        /// <summary>
-        /// Checks whether a user exists based on their email.
-        /// </summary>
-        /// <param name="email">The email of the user to check.</param>
-        /// <returns><c>true</c> if the user exists; otherwise, <c>false</c>.</returns>
-        public bool UserExists(string email)
-        {
-            return _userService.GetUsers().Any(existingUser => existingUser.Email == email);
         }
 
         #endregion

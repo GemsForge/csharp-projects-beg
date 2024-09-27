@@ -85,7 +85,7 @@ namespace FizzBuzzConsole.game
         private int GenerateGamePlayId()
         {
             // This method assumes that the service can generate a new sequential GamePlayId
-            var gamePlays = _fbService.GetGamePlaysForPlayer(_playerId);
+            var gamePlays = _fbService.GetGamePlaysForPlayer(int.Parse(_playerId));
             return gamePlays.Any() ? gamePlays.Max(gp => gp.GamePlayId) + 1 : 1;
         }
     }

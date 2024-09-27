@@ -17,7 +17,7 @@ namespace TaskTrackerConsole.model
         /// Gets or sets the task description.
         /// </summary>
         [JsonPropertyName("description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         /// <summary>
         /// Gets or sets the status of the task.
@@ -47,6 +47,6 @@ namespace TaskTrackerConsole.model
     public class TaskWrapper
     {
         [JsonPropertyName("tasks")]
-        public List<Task> Tasks { get; set; }
+        public List<Task>? Tasks { get; set; } = new List<Task>();
     }
 }

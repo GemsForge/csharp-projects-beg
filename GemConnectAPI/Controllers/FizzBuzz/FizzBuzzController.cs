@@ -53,7 +53,7 @@ namespace GemConnectAPI.Controllers.FizzBuzz
             // Save the gameplay for the logged-in user with sequential GamePlayId
             _fbService.SaveGamePlay(userId, fbDto.Values);
 
-            return CreatedAtAction(nameof(GetSavedValues), new { }, _fbService.GetGamePlaysForPlayer(userId));
+            return CreatedAtAction(nameof(GetSavedValues), new { }, _fbService.GetGamePlaysForPlayer(int.Parse(userId)));
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace GemConnectAPI.Controllers.FizzBuzz
                 return Unauthorized("User not logged in.");
             }
 
-            var savedValues = _fbService.GetGamePlaysForPlayer(userId);
+            var savedValues = _fbService.GetGamePlaysForPlayer(int.Parse(userId));
             return Ok(savedValues);
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using SecureUserConsole.manager;
 using SecureUserConsole.model;
 using SecureUserConsole.service;
 using System.IdentityModel.Tokens.Jwt;

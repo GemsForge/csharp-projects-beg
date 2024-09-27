@@ -1,6 +1,7 @@
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using TaskTrackerConsole.data;
+using TaskTrackerConsole.service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,7 +32,7 @@ builder.Services.AddRazorPages();
 string? taskFilePath = builder.Configuration.GetValue<string>("TaskFilePath");
 //Register Task Tracker repository and manager
 builder.Services.AddScoped<ITaskRepository>(provider => new TaskRepository(taskFilePath));
-builder.Services.AddScoped<ITaskManager, TaskManager>();
+builder.Services.AddScoped<ITaskService, TaskManager>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

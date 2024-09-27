@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using SecureUserConsole.data;
+﻿using CommonLibrary.Data;
 using SecureUserConsole.model;
 
 namespace SecureUserConsole.service
@@ -10,17 +8,15 @@ namespace SecureUserConsole.service
     /// </summary>
     public class UserService : IUserService
     {
-        private readonly List<User> _users;
-        private readonly IUserRepository _userRepo;
+        private readonly IGenericRepository<User> _userRepo;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserService"/> class.
         /// </summary>
         /// <param name="userRepo">The repository used for loading and saving users.</param>
-        public UserService(IUserRepository userRepo)
+        public UserService(IGenericRepository<User> userRepo)
         {
             _userRepo = userRepo;
-            _users = _userRepo.LoadUsersFromFile();
         }
 
         #region Methods
@@ -31,7 +27,7 @@ namespace SecureUserConsole.service
         /// <returns>An <see cref="IEnumerable{User}"/> containing all users.</returns>
         public IEnumerable<User> GetUsers()
         {
-            return _users;
+            return _userRepo.GetAll();
         }
 
         /// <summary>
@@ -41,7 +37,7 @@ namespace SecureUserConsole.service
         /// <returns>The <see cref="User"/> object if found; otherwise, <c>null</c>.</returns>
         public User? GetUserByUsername(string username)
         {
-            return _users.FirstOrDefault(existingUser => existingUser.Username == username);
+            return _userRepo.GetAll().FirstOrDefault(existingUser => existingUser.Username == username);
         }
 
         /// <summary>
@@ -53,13 +49,13 @@ namespace SecureUserConsole.service
             if (user != null && !UserExists(user.Email))
             {
                 // Find the highest existing user ID
-                int lastUserId = _users.Any() ? _users.Max(u => u.Id) : 0;
+                int lastUserId = _userRepo.GetAll().Any() ? _userRepo.GetAll().Max(u => u.Id) : 0;
 
                 // Assign a new sequential ID to the new user
                 user.Id = lastUserId + 1;
 
-                _users.Add(user);
-                _userRepo.SaveUsersToFile(_users);
+                _userRepo.Add(user);
+                Console.WriteLine("User added successfully.");
             }
             else
             {
@@ -76,9 +72,8 @@ namespace SecureUserConsole.service
             var user = GetUserByUsername(username);
             if (user != null)
             {
-                _users.Remove(user);
-                _userRepo.SaveUsersToFile(_users);
-                Console.WriteLine($"User {user.Username} was permanately removed.");
+                _userRepo.Remove(user.Id);
+                Console.WriteLine($"User {user.Username} was permanently removed.");
             }
             else
             {
@@ -103,7 +98,8 @@ namespace SecureUserConsole.service
                     userToUpdate.LastName = user.LastName;
                     userToUpdate.Password = user.Password;
                     userToUpdate.Role = user.Role;
-                    _userRepo.SaveUsersToFile(_users);
+                    _userRepo.Update(user.Id, user);
+                    Console.WriteLine("User updated successfully.");
                 }
             }
             else
@@ -111,7 +107,6 @@ namespace SecureUserConsole.service
                 Console.WriteLine("User does not exist.");
             }
         }
-
 
         #endregion
 
@@ -124,7 +119,7 @@ namespace SecureUserConsole.service
         /// <returns><c>true</c> if the user exists; otherwise, <c>false</c>.</returns>
         private bool UserExists(string email)
         {
-            return _users.Any(existingUser => existingUser.Email == email);
+            return _userRepo.GetAll().Any(existingUser => existingUser.Email == email);
         }
 
         #endregion

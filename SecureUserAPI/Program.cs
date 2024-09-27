@@ -1,6 +1,7 @@
 ﻿using Microsoft.OpenApi.Models;
 using SecureUserAPI.Mappers;
 using SecureUserConsole.data;
+using SecureUserConsole.manager;
 using SecureUserConsole.service;
 using System.Reflection;
 

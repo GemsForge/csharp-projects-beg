@@ -2,18 +2,18 @@
 using TaskTrackerConsole.model;
 using TaskTrackerConsole.dto;
 
-namespace TaskTrackerConsole.services
+namespace TaskTrackerConsole.manager
 {
     /// <summary>
     /// Interface for managing tasks and business logic.
     /// </summary>
-    public interface ITaskService
+    public interface ITaskManager
     {
         void AddNewTask(string description, Status status);
         void UpdateExistingTask(int taskId, string newDescription, Status newStatus);
         void DeleteTaskById(int taskId);
-        IEnumerable<TaskDto> GetAllTasks();
-        TaskDto? GetTaskById(int taskId);
+        IEnumerable<Task> GetAllTasks();
+        Task? GetTaskById(int taskId);
         TaskDto MapToDto(Task task);
     }
 }
