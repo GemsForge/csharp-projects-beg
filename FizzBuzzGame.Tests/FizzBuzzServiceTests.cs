@@ -39,7 +39,7 @@ namespace FizzBuzzGame.Tests
             var newGamePlay = new FizzBuzzGamePlay
             {
                 GamePlayId = 1,
-                Player = player,
+                Player = int.Parse(player),
                 Guesses = new Dictionary<int, FizzBuzzGuess>(),
                 TotalPoints = 0
             };
@@ -60,7 +60,7 @@ namespace FizzBuzzGame.Tests
         {
             // Arrange
             var values = new List<int> { 1, 3, 5, 15 }; // 1 -> 1pt, 3 -> 5pts, 5 -> 5pts, 15 -> 10pts
-            var player = "testPlayer";
+            var player = "1";
 
             // Save the game play
             _fbService.SaveGamePlay(player, values);
@@ -69,7 +69,7 @@ namespace FizzBuzzGame.Tests
             _mockRepository.Setup(r => r.GetAll()).Returns(new List<FizzBuzzGamePlay>
             {
                 new() {
-                    Player = player,
+                    Player = int.Parse(player),
                     GamePlayId = 1,
                     Guesses = new Dictionary<int, FizzBuzzGuess>
                     {
@@ -102,7 +102,7 @@ namespace FizzBuzzGame.Tests
             _mockRepository.Setup(r => r.GetAll()).Returns(new List<FizzBuzzGamePlay>
             {
                  new() {
-                    Player = player.ToString(),
+                    Player = player,
                     GamePlayId = 1,
                     Guesses = new Dictionary<int, FizzBuzzGuess>
                     {
@@ -114,7 +114,7 @@ namespace FizzBuzzGame.Tests
                     TotalPoints = 21
                 },
                 new() {
-                    Player = player.ToString(),
+                    Player = player,
                     GamePlayId = 2,
                     Guesses = new Dictionary<int, FizzBuzzGuess>
                     {
