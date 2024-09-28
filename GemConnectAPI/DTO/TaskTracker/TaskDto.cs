@@ -42,12 +42,16 @@ public class TaskDto
     public string? UpdatedAt { get; set; }  // Formatted date
     public string? CreatedBy { get; internal set; }
 }
-
+/// <summary>
+/// Data Transfer Object for creating a new task.
+/// This DTO is used to capture task details such as the description and status when creating a new task.
+/// </summary>
 public class CreateTaskDto
-{/// <summary>
- /// Gets or sets the description of the task.
- /// </summary>
- /// <example>Implement the new user authentication module</example>
+{
+    /// <summary>
+    /// Gets or sets the description of the task.
+    /// </summary>
+    /// <example>Implement the new user authentication module</example>
     [Required]
     public required string Description { get; set; }
 

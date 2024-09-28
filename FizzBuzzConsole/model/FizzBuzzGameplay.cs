@@ -10,24 +10,31 @@ namespace FizzBuzzConsole.model
     public class FizzBuzzGamePlay
     {
         private readonly IFizzBuzzManager manager = new FizzBuzzManager();
-
-       
         /// <summary>
         /// Gets or sets the ID of the gameplay session.
         /// </summary>
+        /// <example>1</example>
         [JsonPropertyName("game_play_id")]
         public int GamePlayId { get; set; }
 
         /// <summary>
         /// Gets or sets the player associated with the gameplay session.
         /// </summary>
+        /// <example>101</example>
         [JsonPropertyName("player")]
         public int Player { get; set; }
 
         /// <summary>
-        /// Gets or sets the dictionary of guesses made during the gameplay session, where
-        /// the key is the number guessed, and the value is the corresponding FizzBuzz result.
+        /// Gets or sets the dictionary of guesses made during the gameplay session.
+        /// The key is the number guessed, and the value is the corresponding FizzBuzz result.
         /// </summary>
+        /// <example>
+        /// {
+        ///   "3": "Fizz",
+        ///   "5": "Buzz",
+        ///   "15": "FizzBuzz"
+        /// }
+        /// </example>
         [JsonPropertyName("guesses")]
         [JsonConverter(typeof(FizzBuzzGuessConverter))]
         public Dictionary<int, FizzBuzzGuess> Guesses { get; set; } = [];
@@ -35,6 +42,7 @@ namespace FizzBuzzConsole.model
         /// <summary>
         /// Gets or sets the total points earned during the gameplay session.
         /// </summary>
+        /// <example>10</example>
         [JsonPropertyName("total_points")]
         public int TotalPoints { get; set; }
 
@@ -49,11 +57,32 @@ namespace FizzBuzzConsole.model
             TotalPoints += manager.CalculatePoints(guess);
         }
     }
+
+    /// <summary>
+    /// A wrapper class to hold a list of FizzBuzz gameplay sessions.
+    /// </summary>
     public class FizzBuzzWrapper
     {
+        /// <summary>
+        /// Gets or sets the list of FizzBuzz gameplay sessions.
+        /// </summary>
+        /// <example>
+        /// [
+        ///   {
+        ///     "game_play_id": 1,
+        ///     "player": 101,
+        ///     "guesses": {
+        ///       "3": "Fizz",
+        ///       "5": "Buzz"
+        ///     },
+        ///     "total_points": 10
+        ///   }
+        /// ]
+        /// </example>
         [JsonPropertyName("fizz_buzz_games")]
         public List<FizzBuzzGamePlay>? FizzBuzzGames { get; set; } = [];
     }
+
 
     /// <summary>
     /// Converts FizzBuzzGuess values to and from JSON.
